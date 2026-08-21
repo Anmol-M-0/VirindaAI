@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from marina.features import VoiceBenchmark, VoiceEventSample, latency_sample_from_events
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.features import VoiceBenchmark, VoiceEventSample, latency_sample_from_events
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
 
 
 def test_latency_sample_derives_available_stages_only():
@@ -31,20 +31,24 @@ def test_voice_benchmark_summary_reports_percentiles(tmp_path: Path):
     store = SQLiteConversationStore(tmp_path / "bench.sqlite3")
     benchmark = VoiceBenchmark(store.connection, store.lock)
     try:
-        benchmark.record_events([
-            VoiceEventSample("1", "record.started", 10.0),
-            VoiceEventSample("1", "record.ended", 11.0),
-            VoiceEventSample("1", "stt.completed", 11.5),
-            VoiceEventSample("1", "audio.output.started", 12.0),
-            VoiceEventSample("1", "audio.output.ended", 13.0),
-        ])
-        benchmark.record_events([
-            VoiceEventSample("2", "record.started", 20.0),
-            VoiceEventSample("2", "record.ended", 22.0),
-            VoiceEventSample("2", "stt.completed", 23.0),
-            VoiceEventSample("2", "audio.output.started", 25.0),
-            VoiceEventSample("2", "audio.output.ended", 27.0),
-        ])
+        benchmark.record_events(
+            [
+                VoiceEventSample("1", "record.started", 10.0),
+                VoiceEventSample("1", "record.ended", 11.0),
+                VoiceEventSample("1", "stt.completed", 11.5),
+                VoiceEventSample("1", "audio.output.started", 12.0),
+                VoiceEventSample("1", "audio.output.ended", 13.0),
+            ]
+        )
+        benchmark.record_events(
+            [
+                VoiceEventSample("2", "record.started", 20.0),
+                VoiceEventSample("2", "record.ended", 22.0),
+                VoiceEventSample("2", "stt.completed", 23.0),
+                VoiceEventSample("2", "audio.output.started", 25.0),
+                VoiceEventSample("2", "audio.output.ended", 27.0),
+            ]
+        )
         summary = benchmark.summary()
         assert summary["count"] == 2
         assert summary["total_ms"]["p50"] == 5000.0
@@ -56,7 +60,9 @@ def test_voice_benchmark_summary_reports_percentiles(tmp_path: Path):
 def test_voice_event_tools_have_help():
     root = Path(__file__).resolve().parents[1]
     for name in ("voice-event-capture.py", "voice-benchmark.py"):
-        result = subprocess.run([sys.executable, str(root / "scripts" / name), "--help"], capture_output=True, text=True)
+        result = subprocess.run(
+            [sys.executable, str(root / "scripts" / name), "--help"], capture_output=True, text=True
+        )
         assert result.returncode == 0
         assert "usage" in result.stdout.lower()
 
@@ -73,7 +79,14 @@ def test_voice_benchmark_can_fail_targets_when_insufficient_turns(tmp_path: Path
     path.write_text("\n".join(json.dumps(row) for row in events) + "\n", encoding="utf-8")
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(
-        [sys.executable, str(root / "scripts" / "voice-benchmark.py"), str(path), "--fail-on-targets", "--min-turns", "2"],
+        [
+            sys.executable,
+            str(root / "scripts" / "voice-benchmark.py"),
+            str(path),
+            "--fail-on-targets",
+            "--min-turns",
+            "2",
+        ],
         capture_output=True,
         text=True,
     )
@@ -86,19 +99,27 @@ def test_voice_benchmark_can_emit_markdown_report(tmp_path: Path):
     rows = []
     for i in range(30):
         start = float(i * 10)
-        rows.extend([
-            {"turn_id": str(i), "event": "wake.detected", "timestamp": start - 0.05},
-            {"turn_id": str(i), "event": "record.started", "timestamp": start},
-            {"turn_id": str(i), "event": "record.ended", "timestamp": start + 0.2},
-            {"turn_id": str(i), "event": "stt.completed", "timestamp": start + 0.5},
-            {"turn_id": str(i), "event": "llm.first_token", "timestamp": start + 1.0},
-            {"turn_id": str(i), "event": "audio.output.started", "timestamp": start + 1.4},
-            {"turn_id": str(i), "event": "audio.output.ended", "timestamp": start + 2.0},
-        ])
+        rows.extend(
+            [
+                {"turn_id": str(i), "event": "wake.detected", "timestamp": start - 0.05},
+                {"turn_id": str(i), "event": "record.started", "timestamp": start},
+                {"turn_id": str(i), "event": "record.ended", "timestamp": start + 0.2},
+                {"turn_id": str(i), "event": "stt.completed", "timestamp": start + 0.5},
+                {"turn_id": str(i), "event": "llm.first_token", "timestamp": start + 1.0},
+                {"turn_id": str(i), "event": "audio.output.started", "timestamp": start + 1.4},
+                {"turn_id": str(i), "event": "audio.output.ended", "timestamp": start + 2.0},
+            ]
+        )
     path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(
-        [sys.executable, str(root / "scripts" / "voice-benchmark.py"), str(path), "--markdown", "--fail-on-targets"],
+        [
+            sys.executable,
+            str(root / "scripts" / "voice-benchmark.py"),
+            str(path),
+            "--markdown",
+            "--fail-on-targets",
+        ],
         capture_output=True,
         text=True,
     )
@@ -109,13 +130,19 @@ def test_voice_benchmark_can_emit_markdown_report(tmp_path: Path):
 
 def test_voice_preflight_help() -> None:
     root = Path(__file__).resolve().parents[1]
-    result = subprocess.run([sys.executable, str(root / "scripts" / "voice-preflight.py"), "--help"], capture_output=True, text=True)
+    result = subprocess.run(
+        [sys.executable, str(root / "scripts" / "voice-preflight.py"), "--help"],
+        capture_output=True,
+        text=True,
+    )
     assert result.returncode == 0
     assert "preflight" in result.stdout.lower()
 
 
 def test_voice_event_capture_keeps_output_completion_on_interrupted_turn() -> None:
-    module = runpy.run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py"))
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py")
+    )
     correlate_event = module["correlate_event"]
 
     old_turn, current, output = correlate_event(
@@ -145,7 +172,9 @@ def test_voice_event_capture_keeps_output_completion_on_interrupted_turn() -> No
 
 
 def test_voice_event_capture_preserves_wake_turn_across_barge_in_record() -> None:
-    module = runpy.run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py"))
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py")
+    )
     correlate_event = module["correlate_event"]
 
     _, current, output = correlate_event(
@@ -166,7 +195,9 @@ def test_voice_event_capture_preserves_wake_turn_across_barge_in_record() -> Non
 
 
 def test_voice_event_capture_ignores_duplicate_wake_for_active_turn() -> None:
-    module = runpy.run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py"))
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py")
+    )
     correlate_event = module["correlate_event"]
 
     _, current, output = correlate_event(
@@ -179,7 +210,9 @@ def test_voice_event_capture_ignores_duplicate_wake_for_active_turn() -> None:
 
 
 def test_voice_event_capture_correlates_wake_before_record_started() -> None:
-    module = runpy.run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py"))
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "scripts" / "voice-event-capture.py")
+    )
     correlate_event = module["correlate_event"]
 
     event_turn, current, output = correlate_event(
@@ -198,20 +231,30 @@ def test_voice_benchmark_measures_wake_to_record_start(tmp_path: Path) -> None:
     rows = []
     for i in range(30):
         start = float(i * 10)
-        rows.extend([
-            {"turn_id": str(i), "event": "wake.detected", "timestamp": start},
-            {"turn_id": str(i), "event": "record.started", "timestamp": start + 0.05},
-            {"turn_id": str(i), "event": "record.ended", "timestamp": start + 0.3},
-            {"turn_id": str(i), "event": "stt.completed", "timestamp": start + 0.6},
-            {"turn_id": str(i), "event": "llm.first_token", "timestamp": start + 1.0},
-            {"turn_id": str(i), "event": "audio.output.started", "timestamp": start + 1.4},
-            {"turn_id": str(i), "event": "audio.output.ended", "timestamp": start + 2.0},
-        ])
+        rows.extend(
+            [
+                {"turn_id": str(i), "event": "wake.detected", "timestamp": start},
+                {"turn_id": str(i), "event": "record.started", "timestamp": start + 0.05},
+                {"turn_id": str(i), "event": "record.ended", "timestamp": start + 0.3},
+                {"turn_id": str(i), "event": "stt.completed", "timestamp": start + 0.6},
+                {"turn_id": str(i), "event": "llm.first_token", "timestamp": start + 1.0},
+                {"turn_id": str(i), "event": "audio.output.started", "timestamp": start + 1.4},
+                {"turn_id": str(i), "event": "audio.output.ended", "timestamp": start + 2.0},
+            ]
+        )
     path.write_text("\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8")
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(
-        [sys.executable, str(root / "scripts" / "voice-benchmark.py"), str(path), "--json", "--fail-on-targets"],
-        capture_output=True, text=True, check=True,
+        [
+            sys.executable,
+            str(root / "scripts" / "voice-benchmark.py"),
+            str(path),
+            "--json",
+            "--fail-on-targets",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     payload = json.loads(result.stdout)
     assert payload["metrics"]["wake_ms"]["count"] == 30

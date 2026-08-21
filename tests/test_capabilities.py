@@ -1,5 +1,5 @@
-from marina.core.context import POLICIES, ContextMode
-from marina.domain.capabilities import (
+from virinda.core.context import POLICIES, ContextMode
+from virinda.domain.capabilities import (
     Capability,
     CapabilityRegistry,
     CapabilityRisk,
@@ -15,13 +15,21 @@ def test_context_policies_are_safe_defaults():
 
 
 def test_tool_broker_requires_explicit_approval_for_risky_tools():
-    registry = CapabilityRegistry((Capability("browser_control", "browser", CapabilityRisk.EXTERNAL),))
+    registry = CapabilityRegistry(
+        (Capability("browser_control", "browser", CapabilityRisk.EXTERNAL),)
+    )
     broker = ToolBroker(registry)
-    broker.register(ToolDefinition("open_url", "browser_control", "open url", CapabilityRisk.EXTERNAL), lambda url: url)
+    broker.register(
+        ToolDefinition("open_url", "browser_control", "open url", CapabilityRisk.EXTERNAL),
+        lambda url: url,
+    )
     try:
         broker.execute("open_url", url="https://example.com")
     except PermissionError:
         pass
     else:
         raise AssertionError("risky tool executed without approval")
-    assert broker.execute("open_url", approved=True, url="https://example.com") == "https://example.com"
+    assert (
+        broker.execute("open_url", approved=True, url="https://example.com")
+        == "https://example.com"
+    )

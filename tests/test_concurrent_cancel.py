@@ -1,11 +1,11 @@
 import threading
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.domain.models import ProviderRequest
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.domain.models import ProviderRequest
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 class BlockingProvider:
@@ -23,7 +23,7 @@ class BlockingProvider:
 
 def test_cancel_invalidates_late_provider_result(tmp_path: Path) -> None:
     provider = BlockingProvider()
-    store = SQLiteConversationStore(tmp_path / "marina.sqlite3")
+    store = SQLiteConversationStore(tmp_path / "virinda.sqlite3")
     service = AssistantService(
         router=StaticProviderRouter({"blocking": provider}, "blocking"),
         store=store,

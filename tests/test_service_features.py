@@ -1,15 +1,15 @@
 import time
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 def build_service(tmp_path: Path):
-    store = SQLiteConversationStore(tmp_path / "marina.db")
+    store = SQLiteConversationStore(tmp_path / "virinda.db")
     bus = InMemoryEventBus()
     router = StaticProviderRouter({"echo": EchoProvider()}, "echo")
     return AssistantService(router=router, store=store, event_bus=bus)
@@ -32,7 +32,9 @@ def test_context_and_capabilities_are_exposed(tmp_path):
 def test_profile_personalization_and_private_mode(tmp_path):
     s = build_service(tmp_path)
     try:
-        updated = s.update_profile(display_name="Anmol", timezone="Asia/Kolkata", preferred_voice="default")
+        updated = s.update_profile(
+            display_name="Anmol", timezone="Asia/Kolkata", preferred_voice="default"
+        )
         assert updated["display_name"] == "Anmol"
         assert s.profile_snapshot()["timezone"] == "Asia/Kolkata"
         s.set_context_mode("private")

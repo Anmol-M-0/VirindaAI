@@ -6,17 +6,17 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 conflicts = [[
-    { package = "marina-ai", extra = "ovos" },
-    { package = "marina-ai", extra = "ovos-experimental-agent" },
+    { package = "virindai", extra = "ovos" },
+    { package = "virindai", extra = "ovos-experimental-agent" },
 ], [
-    { package = "marina-ai", extra = "ovos-experimental-agent" },
-    { package = "marina-ai", extra = "ovos-stable" },
+    { package = "virindai", extra = "ovos-experimental-agent" },
+    { package = "virindai", extra = "ovos-stable" },
 ], [
-    { package = "marina-ai", extra = "ovos" },
-    { package = "marina-ai", extra = "ovos-local-voice" },
+    { package = "virindai", extra = "ovos" },
+    { package = "virindai", extra = "ovos-local-voice" },
 ], [
-    { package = "marina-ai", extra = "ovos-local-voice" },
-    { package = "marina-ai", extra = "ovos-stable" },
+    { package = "virindai", extra = "ovos-local-voice" },
+    { package = "virindai", extra = "ovos-stable" },
 ]]
 
 [[package]]
@@ -175,7 +175,7 @@ name = "cffi"
 version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pycparser", marker = "implementation_name != 'PyPy' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "pycparser", marker = "implementation_name != 'PyPy' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9e/ef/008a1939e372c06329a3fce4279c02f328488f3526744906eeec3da7ad5f/cffi-2.1.1.tar.gz", hash = "sha256:dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be", size = 530807, upload-time = "2026-08-03T21:21:18.939Z" }
 wheels = [
@@ -279,7 +279,7 @@ name = "click"
 version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/76/d4/81420972a676e8ffea40450d8c8c92943e7218a78fe9b64359836cc9876b/click-8.4.2.tar.gz", hash = "sha256:9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6", size = 338000, upload-time = "2026-06-24T17:45:15.148Z" }
 wheels = [
@@ -651,182 +651,6 @@ wheels = [
 ]
 
 [[package]]
-name = "marina-ai"
-version = "0.26.3"
-source = { editable = "." }
-dependencies = [
-    { name = "ask" },
-    { name = "certifi" },
-    { name = "msgspec" },
-    { name = "python-dotenv" },
-    { name = "pyyaml" },
-    { name = "requests" },
-    { name = "rich" },
-]
-
-[package.optional-dependencies]
-ask = [
-    { name = "ask" },
-]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "ruff" },
-]
-job-backbone = [
-    { name = "nats-py" },
-]
-ovos = [
-    { name = "ovos-audio" },
-    { name = "ovos-audio-plugin-mpv" },
-    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-core", version = "1.3.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-dinkum-listener" },
-    { name = "ovos-gui" },
-    { name = "ovos-messagebus" },
-    { name = "ovos-microphone-plugin-alsa" },
-    { name = "ovos-openai-plugin" },
-    { name = "ovos-persona", version = "0.6.24", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-phal" },
-    { name = "ovos-phal-plugin-system" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-skill-alerts" },
-    { name = "ovos-skill-application-launcher" },
-    { name = "ovos-skill-camera" },
-    { name = "ovos-skill-diagnostics" },
-    { name = "ovos-skill-screenshot" },
-    { name = "ovos-skill-volume" },
-    { name = "ovos-stt-plugin-vosk" },
-    { name = "ovos-vad-plugin-silero", version = "0.0.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-vad-plugin-silero", version = "0.0.6a1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-ww-plugin-openwakeword" },
-]
-ovos-experimental-agent = [
-    { name = "ovos-core", version = "2.1.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-openai-plugin" },
-    { name = "ovos-persona", version = "0.7.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" } },
-]
-ovos-local-voice = [
-    { name = "ovos-stt-plugin-whispercpp" },
-    { name = "phoonnx" },
-]
-ovos-stable = [
-    { name = "ovos-audio" },
-    { name = "ovos-audio-plugin-mpv" },
-    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-core", version = "1.3.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-dinkum-listener" },
-    { name = "ovos-gui" },
-    { name = "ovos-messagebus" },
-    { name = "ovos-microphone-plugin-alsa" },
-    { name = "ovos-openai-plugin" },
-    { name = "ovos-persona", version = "0.6.24", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-phal" },
-    { name = "ovos-phal-plugin-system" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-skill-alerts" },
-    { name = "ovos-skill-application-launcher" },
-    { name = "ovos-skill-camera" },
-    { name = "ovos-skill-diagnostics" },
-    { name = "ovos-skill-screenshot" },
-    { name = "ovos-skill-volume" },
-    { name = "ovos-stt-plugin-vosk" },
-    { name = "ovos-vad-plugin-silero", version = "0.0.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra != 'extra-9-marina-ai-ovos-experimental-agent' and extra != 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-vad-plugin-silero", version = "0.0.6a1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-ww-plugin-openwakeword" },
-]
-providers = [
-    { name = "httpx" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "ask", editable = "../chatgpt-cli" },
-    { name = "ask", marker = "extra == 'ask'", editable = "../chatgpt-cli" },
-    { name = "certifi", specifier = ">=2024.0.0" },
-    { name = "httpx", marker = "extra == 'providers'", specifier = ">=0.27" },
-    { name = "msgspec", specifier = ">=0.18.0" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11" },
-    { name = "nats-py", marker = "extra == 'job-backbone'", specifier = ">=2.15,<2.16" },
-    { name = "ovos-audio", marker = "extra == 'ovos'", specifier = ">=0.4.0,<0.5.0" },
-    { name = "ovos-audio", marker = "extra == 'ovos-stable'", specifier = ">=0.4.0,<0.5.0" },
-    { name = "ovos-audio-plugin-mpv", marker = "extra == 'ovos'", specifier = ">=0.2.1,<0.3.0" },
-    { name = "ovos-audio-plugin-mpv", marker = "extra == 'ovos-stable'", specifier = ">=0.2.1,<0.3.0" },
-    { name = "ovos-bus-client", marker = "extra == 'ovos'", specifier = ">=1.3.4,<1.4.0" },
-    { name = "ovos-bus-client", marker = "extra == 'ovos-stable'", specifier = ">=1.3.4,<1.4.0" },
-    { name = "ovos-core", marker = "extra == 'ovos'", specifier = ">=1.3.1,<1.4.0" },
-    { name = "ovos-core", marker = "extra == 'ovos-experimental-agent'", specifier = ">=1.3.1" },
-    { name = "ovos-core", marker = "extra == 'ovos-stable'", specifier = ">=1.3.1,<1.4.0" },
-    { name = "ovos-dinkum-listener", marker = "extra == 'ovos'", specifier = ">=0.4.0,<0.5.0" },
-    { name = "ovos-dinkum-listener", marker = "extra == 'ovos-stable'", specifier = ">=0.4.0,<0.5.0" },
-    { name = "ovos-gui", marker = "extra == 'ovos'", specifier = ">=1.3.3,<1.4.0" },
-    { name = "ovos-gui", marker = "extra == 'ovos-stable'", specifier = ">=1.3.3,<1.4.0" },
-    { name = "ovos-messagebus", marker = "extra == 'ovos'", specifier = ">=0.0.10,<0.1.0" },
-    { name = "ovos-messagebus", marker = "extra == 'ovos-stable'", specifier = ">=0.0.10,<0.1.0" },
-    { name = "ovos-microphone-plugin-alsa", marker = "extra == 'ovos'", specifier = ">=0.1.2,<0.2.0" },
-    { name = "ovos-microphone-plugin-alsa", marker = "extra == 'ovos-stable'", specifier = ">=0.1.2,<0.2.0" },
-    { name = "ovos-openai-plugin", marker = "extra == 'ovos'", specifier = ">=2.0.3,<2.1.0" },
-    { name = "ovos-openai-plugin", marker = "extra == 'ovos-experimental-agent'", specifier = ">=2.0.3" },
-    { name = "ovos-openai-plugin", marker = "extra == 'ovos-stable'", specifier = ">=2.0.3,<2.1.0" },
-    { name = "ovos-persona", marker = "extra == 'ovos'", specifier = ">=0.6.23,<0.7.0" },
-    { name = "ovos-persona", marker = "extra == 'ovos-experimental-agent'", specifier = ">=0.6.23" },
-    { name = "ovos-persona", marker = "extra == 'ovos-stable'", specifier = ">=0.6.23,<0.7.0" },
-    { name = "ovos-phal", marker = "extra == 'ovos'", specifier = ">=0.2.10,<0.3.0" },
-    { name = "ovos-phal", marker = "extra == 'ovos-stable'", specifier = ">=0.2.10,<0.3.0" },
-    { name = "ovos-phal-plugin-system", marker = "extra == 'ovos'", specifier = ">=1.3.3,<1.4.0" },
-    { name = "ovos-phal-plugin-system", marker = "extra == 'ovos-stable'", specifier = ">=1.3.3,<1.4.0" },
-    { name = "ovos-plugin-manager", marker = "extra == 'ovos'", specifier = ">=0.9.0,<0.10.0" },
-    { name = "ovos-plugin-manager", marker = "extra == 'ovos-experimental-agent'", specifier = ">=0.9.0" },
-    { name = "ovos-plugin-manager", marker = "extra == 'ovos-stable'", specifier = ">=0.9.0,<0.10.0" },
-    { name = "ovos-skill-alerts", marker = "extra == 'ovos'", specifier = ">=0.1.24,<0.2.0" },
-    { name = "ovos-skill-alerts", marker = "extra == 'ovos-stable'", specifier = ">=0.1.24,<0.2.0" },
-    { name = "ovos-skill-application-launcher", marker = "extra == 'ovos'", specifier = ">=0.5.13,<0.6.0" },
-    { name = "ovos-skill-application-launcher", marker = "extra == 'ovos-stable'", specifier = ">=0.5.13,<0.6.0" },
-    { name = "ovos-skill-camera", marker = "extra == 'ovos'", specifier = ">=1.0.4,<1.1.0" },
-    { name = "ovos-skill-camera", marker = "extra == 'ovos-stable'", specifier = ">=1.0.4,<1.1.0" },
-    { name = "ovos-skill-diagnostics", marker = "extra == 'ovos'", specifier = ">=0.0.8,<0.1.0" },
-    { name = "ovos-skill-diagnostics", marker = "extra == 'ovos-stable'", specifier = ">=0.0.8,<0.1.0" },
-    { name = "ovos-skill-screenshot", marker = "extra == 'ovos'", specifier = ">=0.0.7,<0.1.0" },
-    { name = "ovos-skill-screenshot", marker = "extra == 'ovos-stable'", specifier = ">=0.0.7,<0.1.0" },
-    { name = "ovos-skill-volume", marker = "extra == 'ovos'", specifier = ">=0.1.16,<0.2.0" },
-    { name = "ovos-skill-volume", marker = "extra == 'ovos-stable'", specifier = ">=0.1.16,<0.2.0" },
-    { name = "ovos-stt-plugin-vosk", marker = "extra == 'ovos'", specifier = ">=0.2.3,<0.3.0" },
-    { name = "ovos-stt-plugin-vosk", marker = "extra == 'ovos-stable'", specifier = ">=0.2.3,<0.3.0" },
-    { name = "ovos-stt-plugin-whispercpp", marker = "extra == 'ovos-local-voice'", specifier = "==0.0.1" },
-    { name = "ovos-vad-plugin-silero", marker = "extra == 'ovos'", specifier = ">=0.0.5,<0.1.0" },
-    { name = "ovos-vad-plugin-silero", marker = "extra == 'ovos-stable'", specifier = ">=0.0.5,<0.1.0" },
-    { name = "ovos-workshop", marker = "extra == 'ovos'", specifier = ">=3.4.0,<3.5.0" },
-    { name = "ovos-workshop", marker = "extra == 'ovos-stable'", specifier = ">=3.4.0,<3.5.0" },
-    { name = "ovos-ww-plugin-openwakeword", marker = "extra == 'ovos'", specifier = ">=0.4.1,<0.5.0" },
-    { name = "ovos-ww-plugin-openwakeword", marker = "extra == 'ovos-stable'", specifier = ">=0.4.1,<0.5.0" },
-    { name = "phoonnx", marker = "extra == 'ovos-local-voice'", specifier = "==1.3.3" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
-    { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "pyyaml", specifier = ">=6.0" },
-    { name = "requests", specifier = ">=2.31.0" },
-    { name = "rich", specifier = ">=13.0.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
-]
-provides-extras = ["ovos-stable", "ovos", "ovos-local-voice", "ovos-experimental-agent", "job-backbone", "providers", "ask", "dev"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.11" },
-    { name = "pytest", specifier = ">=8.0" },
-    { name = "ruff", specifier = ">=0.6" },
-]
-
-[[package]]
 name = "markdown-it-py"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -904,7 +728,7 @@ version = "2.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ast-serialize" },
-    { name = "librt", marker = "platform_python_implementation != 'PyPy' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "librt", marker = "platform_python_implementation != 'PyPy' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "mypy-extensions" },
     { name = "pathspec" },
     { name = "typing-extensions" },
@@ -967,34 +791,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e0/e6/fe51d2bb1a3b446f59c5c8165999a9fee208bc346af90a7cbf7657bc0d75/nltk-3.10.3.tar.gz", hash = "sha256:bb9327a461c3811c2fa4900e03840401f2126adfb30c0072827c433bd2444ea4", size = 5137152, upload-time = "2026-08-12T23:46:37.258Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b6/6d/ebd2af4640b12168fdf0cb74b6118df2f32a2f62ec7e0c06fbfd80706639/nltk-3.10.3-py3-none-any.whl", hash = "sha256:ff9598a8e20518ee0d557745890cc4435b9578489e2dcbc69c4f81fa060caf7c", size = 1798643, upload-time = "2026-08-12T23:44:13.478Z" },
-]
-
-[[package]]
-name = "numpy"
-version = "1.26.4"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
-]
-sdist = { url = "https://files.pythonhosted.org/packages/65/6e/09db70a523a96d25e115e71cc56a6f9031e7b8cd166c1ac8438307c14058/numpy-1.26.4.tar.gz", hash = "sha256:2a02aba9ed12e4ac4eb3ea9421c420301a0c6460d9830d74a9df87efa4912010", size = 15786129, upload-time = "2024-02-06T00:26:44.495Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/11/57/baae43d14fe163fa0e4c47f307b6b2511ab8d7d30177c491960504252053/numpy-1.26.4-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:4c66707fabe114439db9068ee468c26bbdf909cac0fb58686a42a24de1760c71", size = 20630554, upload-time = "2024-02-05T23:51:50.149Z" },
-    { url = "https://files.pythonhosted.org/packages/1a/2e/151484f49fd03944c4a3ad9c418ed193cfd02724e138ac8a9505d056c582/numpy-1.26.4-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:edd8b5fe47dab091176d21bb6de568acdd906d1887a4584a15a9a96a1dca06ef", size = 13997127, upload-time = "2024-02-05T23:52:15.314Z" },
-    { url = "https://files.pythonhosted.org/packages/79/ae/7e5b85136806f9dadf4878bf73cf223fe5c2636818ba3ab1c585d0403164/numpy-1.26.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7ab55401287bfec946ced39700c053796e7cc0e3acbef09993a9ad2adba6ca6e", size = 14222994, upload-time = "2024-02-05T23:52:47.569Z" },
-    { url = "https://files.pythonhosted.org/packages/3a/d0/edc009c27b406c4f9cbc79274d6e46d634d139075492ad055e3d68445925/numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:666dbfb6ec68962c033a450943ded891bed2d54e6755e35e5835d63f4f6931d5", size = 18252005, upload-time = "2024-02-05T23:53:15.637Z" },
-    { url = "https://files.pythonhosted.org/packages/09/bf/2b1aaf8f525f2923ff6cfcf134ae5e750e279ac65ebf386c75a0cf6da06a/numpy-1.26.4-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:96ff0b2ad353d8f990b63294c8986f1ec3cb19d749234014f4e7eb0112ceba5a", size = 13885297, upload-time = "2024-02-05T23:53:42.16Z" },
-    { url = "https://files.pythonhosted.org/packages/df/a0/4e0f14d847cfc2a633a1c8621d00724f3206cfeddeb66d35698c4e2cf3d2/numpy-1.26.4-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:60dedbb91afcbfdc9bc0b1f3f402804070deed7392c23eb7a7f07fa857868e8a", size = 18093567, upload-time = "2024-02-05T23:54:11.696Z" },
-    { url = "https://files.pythonhosted.org/packages/d2/b7/a734c733286e10a7f1a8ad1ae8c90f2d33bf604a96548e0a4a3a6739b468/numpy-1.26.4-cp311-cp311-win32.whl", hash = "sha256:1af303d6b2210eb850fcf03064d364652b7120803a0b872f5211f5234b399f20", size = 5968812, upload-time = "2024-02-05T23:54:26.453Z" },
-    { url = "https://files.pythonhosted.org/packages/3f/6b/5610004206cf7f8e7ad91c5a85a8c71b2f2f8051a0c0c4d5916b76d6cbb2/numpy-1.26.4-cp311-cp311-win_amd64.whl", hash = "sha256:cd25bcecc4974d09257ffcd1f098ee778f7834c3ad767fe5db785be9a4aa9cb2", size = 15811913, upload-time = "2024-02-05T23:54:53.933Z" },
-    { url = "https://files.pythonhosted.org/packages/95/12/8f2020a8e8b8383ac0177dc9570aad031a3beb12e38847f7129bacd96228/numpy-1.26.4-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:b3ce300f3644fb06443ee2222c2201dd3a89ea6040541412b8fa189341847218", size = 20335901, upload-time = "2024-02-05T23:55:32.801Z" },
-    { url = "https://files.pythonhosted.org/packages/75/5b/ca6c8bd14007e5ca171c7c03102d17b4f4e0ceb53957e8c44343a9546dcc/numpy-1.26.4-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:03a8c78d01d9781b28a6989f6fa1bb2c4f2d51201cf99d3dd875df6fbd96b23b", size = 13685868, upload-time = "2024-02-05T23:55:56.28Z" },
-    { url = "https://files.pythonhosted.org/packages/79/f8/97f10e6755e2a7d027ca783f63044d5b1bc1ae7acb12afe6a9b4286eac17/numpy-1.26.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9fad7dcb1aac3c7f0584a5a8133e3a43eeb2fe127f47e3632d43d677c66c102b", size = 13925109, upload-time = "2024-02-05T23:56:20.368Z" },
-    { url = "https://files.pythonhosted.org/packages/0f/50/de23fde84e45f5c4fda2488c759b69990fd4512387a8632860f3ac9cd225/numpy-1.26.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:675d61ffbfa78604709862923189bad94014bef562cc35cf61d3a07bba02a7ed", size = 17950613, upload-time = "2024-02-05T23:56:56.054Z" },
-    { url = "https://files.pythonhosted.org/packages/4c/0c/9c603826b6465e82591e05ca230dfc13376da512b25ccd0894709b054ed0/numpy-1.26.4-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:ab47dbe5cc8210f55aa58e4805fe224dac469cde56b9f731a4c098b91917159a", size = 13572172, upload-time = "2024-02-05T23:57:21.56Z" },
-    { url = "https://files.pythonhosted.org/packages/76/8c/2ba3902e1a0fc1c74962ea9bb33a534bb05984ad7ff9515bf8d07527cadd/numpy-1.26.4-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:1dda2e7b4ec9dd512f84935c5f126c8bd8b9f2fc001e9f54af255e8c5f16b0e0", size = 17786643, upload-time = "2024-02-05T23:57:56.585Z" },
-    { url = "https://files.pythonhosted.org/packages/28/4a/46d9e65106879492374999e76eb85f87b15328e06bd1550668f79f7b18c6/numpy-1.26.4-cp312-cp312-win32.whl", hash = "sha256:50193e430acfc1346175fcbdaa28ffec49947a06918b7b92130744e81e640110", size = 5677803, upload-time = "2024-02-05T23:58:08.963Z" },
-    { url = "https://files.pythonhosted.org/packages/16/2e/86f24451c2d530c88daf997cb8d6ac622c1d40d19f5a031ed68a4b73a374/numpy-1.26.4-cp312-cp312-win_amd64.whl", hash = "sha256:08beddf13648eb95f8d867350f6a018a4be2e5ad54c8d8caed89ebca558b2818", size = 15517754, upload-time = "2024-02-05T23:58:36.364Z" },
 ]
 
 [[package]]
@@ -1074,15 +870,14 @@ version = "1.20.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "coloredlogs", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "flatbuffers", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "packaging", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "protobuf", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "sympy", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "coloredlogs", marker = "python_full_version < '3.12'" },
+    { name = "flatbuffers", marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "packaging", marker = "python_full_version < '3.12'" },
+    { name = "protobuf", marker = "python_full_version < '3.12'" },
+    { name = "sympy", marker = "python_full_version < '3.12'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/95/8d/2634e2959b34aa8a0037989f4229e9abcfa484e9c228f99633b3241768a6/onnxruntime-1.20.1-cp311-cp311-macosx_13_0_universal2.whl", hash = "sha256:06bfbf02ca9ab5f28946e0f912a562a5f005301d0c419283dc57b3ed7969bb7b", size = 30998725, upload-time = "2024-11-21T00:48:51.013Z" },
@@ -1105,12 +900,12 @@ resolution-markers = [
     "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "coloredlogs", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "flatbuffers", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "packaging", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "protobuf", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "sympy", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "coloredlogs", marker = "python_full_version >= '3.12'" },
+    { name = "flatbuffers", marker = "python_full_version >= '3.12'" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "packaging", marker = "python_full_version >= '3.12'" },
+    { name = "protobuf", marker = "python_full_version >= '3.12'" },
+    { name = "sympy", marker = "python_full_version >= '3.12'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/82/ff/4a1a6747e039ef29a8d4ee4510060e9a805982b6da906a3da2306b7a3be6/onnxruntime-1.22.1-cp311-cp311-macosx_13_0_universal2.whl", hash = "sha256:f4581bccb786da68725d8eac7c63a8f31a89116b8761ff8b4989dc58b61d49a0", size = 34324148, upload-time = "2025-07-10T19:15:26.584Z" },
@@ -1133,8 +928,8 @@ resolution-markers = [
 ]
 dependencies = [
     { name = "flatbuffers" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice')" },
     { name = "packaging" },
     { name = "protobuf" },
 ]
@@ -1156,12 +951,12 @@ name = "openwakeword"
 version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "onnxruntime", version = "1.20.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "onnxruntime", version = "1.22.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "onnxruntime", version = "1.20.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "onnxruntime", version = "1.22.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "requests" },
     { name = "scikit-learn" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "tflite-runtime", marker = "sys_platform == 'linux'" },
     { name = "tqdm" },
 ]
@@ -1265,10 +1060,10 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "pyee", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "websocket-client", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "pyee", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "websocket-client", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a8/43/d1f5eff30100a5980a81b1c6801153bb165168e98f6d2d36ba03f3df1eb8/ovos_bus_client-1.3.7.tar.gz", hash = "sha256:38125a73ee87c619d01c8b56bc13591fa95172dc81a1f632cf8d73e92a1249b0", size = 49328, upload-time = "2025-11-06T21:40:42.693Z" }
 wheels = [
@@ -1284,10 +1079,10 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "pyee", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "websocket-client", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
+    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "pyee", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "websocket-client", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/5b/ff/6e8ce665f9e2bc9b26c6e338c8f73e9cf29766757ab8c0bf0a4cda1b2e72/ovos_bus_client-1.5.0.tar.gz", hash = "sha256:b07986be7c915d90b0f577cf84a7cddfa4e68daf0229ff9e9bf0428f1733a01f", size = 52292, upload-time = "2026-03-02T20:48:47.597Z" }
 wheels = [
@@ -1298,48 +1093,19 @@ wheels = [
 name = "ovos-classifiers"
 version = "0.0.0a53"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.12'",
-]
 dependencies = [
-    { name = "anyascii", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "joblib", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "nltk", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utils", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "pyahocorasick", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "python-dateutil", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "quebra-frases", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "scikit-learn", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "anyascii" },
+    { name = "joblib" },
+    { name = "nltk" },
+    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-utils" },
+    { name = "pyahocorasick" },
+    { name = "python-dateutil" },
+    { name = "quebra-frases" },
+    { name = "scikit-learn" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d2/ad/664ca034e00a353cffa130672f944ea76a392f02e3aa43dc7264a8eba996/ovos_classifiers-0.0.0a53-py3-none-any.whl", hash = "sha256:7fcedb73bf866b8f2e66fa93bd84c4fe24b3fe8eb87aea3d94b07ec0a29b9f25", size = 115853, upload-time = "2024-02-06T10:43:46.494Z" },
-]
-
-[[package]]
-name = "ovos-classifiers"
-version = "0.0.0a59"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
-]
-dependencies = [
-    { name = "anyascii", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "joblib", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "nltk", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utils", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utterance-normalizer", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "pyahocorasick", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "python-dateutil", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "quebra-frases", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "scikit-learn", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/0c/3b0040a0634e3ee4afb3f00285b078b1e0f79e069c73afb2bbc83327da0b/ovos_classifiers-0.0.0a59-py3-none-any.whl", hash = "sha256:2fa76eed282e22fcd8d7eed702fd5f4771f3436680854d6a53fda594b5a373ec", size = 100223, upload-time = "2024-08-05T15:58:25.154Z" },
 ]
 
 [[package]]
@@ -1367,11 +1133,11 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "combo-lock", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "python-dateutil", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "pyyaml", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "rich-click", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "combo-lock", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "python-dateutil", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "pyyaml", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "rich-click", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/be/a1/790306b22eec316d6885c0fa55075e6d7e0446406d63db55db2c4662fa1f/ovos-config-1.2.2.tar.gz", hash = "sha256:a82e4f5e12b2473111855231a2d0ee1b8a345108c059cafcacb5fccf08a67517", size = 39122, upload-time = "2025-05-27T18:14:26.442Z" }
 wheels = [
@@ -1387,11 +1153,11 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "combo-lock", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "python-dateutil", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "pyyaml", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "rich-click", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
+    { name = "combo-lock", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "python-dateutil", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "pyyaml", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "rich-click", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/47/3a/b8e44e4c3edf5b0b27af56e6f7a9e2adfe4350fcbdb3e5119dc22807a98b/ovos-config-2.1.1.tar.gz", hash = "sha256:dc6b1b33f6a8f1010b1bfff8dbfb8c5fbce3cd22f43ace5d93826213e5509d7f", size = 39735, upload-time = "2025-06-18T01:32:02.037Z" }
 wheels = [
@@ -1415,7 +1181,7 @@ dependencies = [
     { name = "ovos-ocp-pipeline-plugin" },
     { name = "ovos-persona", version = "0.6.24", source = { registry = "https://pypi.org/simple" } },
     { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-utils", extra = ["extras"], marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "ovos-utils", extra = ["extras"], marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
     { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
     { name = "padacioso" },
     { name = "python-dateutil" },
@@ -1459,8 +1225,8 @@ version = "0.29.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dateparser" },
-    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
+    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
     { name = "ovos-number-parser" },
     { name = "python-dateutil" },
     { name = "quebra-frases" },
@@ -1508,7 +1274,7 @@ version = "0.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "langcodes", version = "3.3.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0f/fb/94ac65767315da51829b02144321017f36fcf012cb41c30154ba8d65f7ea/ovos-lang-parser-0.0.2.tar.gz", hash = "sha256:ab96666dc93a00f1881e6cf059091ce7b1701957987f630661270f27e75ad44e", size = 17722, upload-time = "2025-03-06T11:03:49.679Z" }
 wheels = [
@@ -1561,10 +1327,9 @@ name = "ovos-ocp-pipeline-plugin"
 version = "1.1.14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ovos-classifiers", version = "0.0.0a53", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-classifiers", version = "0.0.0a59", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "ovos-classifiers" },
     { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "ovos-utils", extra = ["extras"], marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "ovos-utils", extra = ["extras"], marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
     { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/82/47/f6e168155372b110ae3a158ba2961cb096545546b153be6f0176dfc32885/ovos-ocp-pipeline-plugin-1.1.14.tar.gz", hash = "sha256:93fb6a2a17272d1f9e184a27dbd1024897e84b4f75e95e8345407782735b6dbc", size = 17751181, upload-time = "2025-06-07T14:12:20.566Z" }
@@ -1577,9 +1342,9 @@ name = "ovos-openai-plugin"
 version = "2.0.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "requests", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "requests", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/be/0e/a399ddbf1cca3e716100a01b401b352b268cab16c32a0b1628bf8227a099/ovos_openai_plugin-2.0.6.tar.gz", hash = "sha256:0165fa1798b21b69700e9fe976b960f8ac624d06c52ac961c32eff64501b147b", size = 13284, upload-time = "2025-11-05T01:05:21.737Z" }
 wheels = [
@@ -1663,15 +1428,15 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "combo-lock", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "importlib-metadata", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "langcodes", version = "3.3.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "quebra-frases", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "requests", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "setuptools", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "combo-lock", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "importlib-metadata", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "langcodes", version = "3.3.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-config", version = "1.2.2", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "quebra-frases", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "requests", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "setuptools", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/19/42/9d8ef3780ab7610c2f34b2da101bb7b02af3c708f55edb46a8b2274c23cb/ovos-plugin-manager-0.9.0.tar.gz", hash = "sha256:52ba66f34052a17ba9e3c1251fba0b611045277dec350aa81a1c3dc0663c44a9", size = 89240, upload-time = "2025-05-27T15:07:09.734Z" }
 wheels = [
@@ -1687,15 +1452,15 @@ resolution-markers = [
     "python_full_version < '3.12'",
 ]
 dependencies = [
-    { name = "combo-lock", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "importlib-metadata", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "langcodes", version = "3.5.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-bus-client", version = "1.5.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-utils", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "quebra-frases", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "requests", marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-local-voice' or (extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable')" },
-    { name = "setuptools", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice')" },
+    { name = "combo-lock", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "importlib-metadata", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "langcodes", version = "3.5.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-bus-client", version = "1.5.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-config", version = "2.1.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-utils", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "quebra-frases", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "requests", marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-local-voice' or (extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable')" },
+    { name = "setuptools", marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/99/74/77a5a0aa3ffa33bba398a706a1b4a2703c612611daaccf771edd3d88a8a0/ovos_plugin_manager-2.2.0.tar.gz", hash = "sha256:abc6e9b3b5ff95508f7be147e37ecb49df2d972a23c587be0300276e91a2e556", size = 95007, upload-time = "2026-01-28T22:36:24.187Z" }
 wheels = [
@@ -1797,8 +1562,8 @@ name = "ovos-solver-failure-plugin"
 version = "0.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6c/8b/a805da000e4409e46d3cfba4b900f2fe0b57c3922c10b881ef3dd9ecb8e1/ovos_solver_failure_plugin-0.0.3.tar.gz", hash = "sha256:730280cbbcfb56ceb5a8be637a53b378d57ff6095e1971229443ce1add2b6c7b", size = 7009, upload-time = "2025-11-05T01:12:55.617Z" }
 wheels = [
@@ -1810,10 +1575,10 @@ name = "ovos-solver-yes-no-plugin"
 version = "0.2.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "langcodes", version = "3.3.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "langcodes", version = "3.5.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-stable'" },
-    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-9-marina-ai-ovos-experimental-agent' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "langcodes", version = "3.3.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "langcodes", version = "3.5.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f8/99/5245cc1a7c07094ef6cd61359e86783354b305bb7f252ae5fcf00a1e3ba4/ovos-solver-yes-no-plugin-0.2.8.tar.gz", hash = "sha256:ce1220eef90a58f8a26af0701659d5be8179d48d40c30e234cdf72f3322d04aa", size = 11723, upload-time = "2024-12-26T16:04:55.408Z" }
 wheels = [
@@ -1881,8 +1646,8 @@ extras = [
     { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
     { name = "packaging" },
     { name = "rapidfuzz" },
-    { name = "timezonefinder", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "timezonefinder", version = "8.3.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "timezonefinder", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "timezonefinder", version = "8.3.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 
 [[package]]
@@ -1902,33 +1667,14 @@ wheels = [
 
 [[package]]
 name = "ovos-vad-plugin-silero"
-version = "0.0.5"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
-]
-dependencies = [
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "onnxruntime", version = "1.20.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a0/86/2bfa2f80283df371301f113e7e3e3dc78d6bcef4ffa2eaefd70281c17efa/ovos-vad-plugin-silero-0.0.5.tar.gz", hash = "sha256:2d284f8f8f0a345ec0aafd6adfcd607c695076c694d9a313b883ee967aeb11e6", size = 653690, upload-time = "2025-06-10T21:09:03.117Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/bc/e1/0940d411af8e813b003501ef8517a87a725e981024d16c4a4545f3d7dd37/ovos_vad_plugin_silero-0.0.5-py3-none-any.whl", hash = "sha256:5219071a62e5b9a85205c17ab7fa0a70a90a104f0fca7ea75950220fbeaa5992", size = 653877, upload-time = "2025-06-10T21:09:01.226Z" },
-]
-
-[[package]]
-name = "ovos-vad-plugin-silero"
 version = "0.0.6a1"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.12'",
-]
 dependencies = [
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "onnxruntime", version = "1.22.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "onnxruntime", version = "1.20.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "onnxruntime", version = "1.22.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e3/04/115eebc0da2207f3b8d1c94d2578e58e5b673b6bc8602fb891f0ab225811/ovos-vad-plugin-silero-0.0.6a1.tar.gz", hash = "sha256:a17e2d84936eae2f43697f6074b159a95d4f2d62fabd7af3dbac29da5222f76f", size = 653696, upload-time = "2025-09-06T22:54:06.866Z" }
 wheels = [
@@ -2006,7 +1752,7 @@ name = "padacioso"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "simplematch", marker = "extra == 'extra-9-marina-ai-ovos' or extra == 'extra-9-marina-ai-ovos-experimental-agent' or extra == 'extra-9-marina-ai-ovos-stable'" },
+    { name = "simplematch", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-stable'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/72/be/dcc4e2bed5c87b61b7dca738cc49781e204e4a935b27a09fdfd5353d297f/padacioso-1.0.0.tar.gz", hash = "sha256:29646359f888c539d21fd48443f264a8fc0c95ef6d13afd1713beec86fd1eed5", size = 15844, upload-time = "2024-10-16T09:11:42.339Z" }
 wheels = [
@@ -2040,8 +1786,8 @@ version = "1.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "langcodes", version = "3.5.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice')" },
     { name = "onnxruntime", version = "1.29.0", source = { registry = "https://pypi.org/simple" } },
     { name = "ovos-date-parser" },
     { name = "ovos-number-parser" },
@@ -2263,7 +2009,7 @@ name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "iniconfig" },
     { name = "packaging" },
     { name = "pluggy" },
@@ -2318,8 +2064,8 @@ name = "pywhispercpp"
 version = "1.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version < '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-experimental-agent') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-local-voice') or (python_full_version >= '3.12' and extra != 'extra-8-virindai-ovos' and extra != 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice')" },
     { name = "platformdirs" },
     { name = "requests" },
     { name = "tqdm" },
@@ -2505,7 +2251,7 @@ version = "1.9.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "rich" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f7/ea/21e4867ea0ef881ffd4c0550fc21a061435e50d6324bcd034396633cbc18/rich_click-1.9.8.tar.gz", hash = "sha256:4008f921da88b5d91646c134ec881c1500e5a6b3f093e90e8f29400e09608371", size = 75363, upload-time = "2026-05-28T19:54:59.144Z" }
@@ -2545,10 +2291,10 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "joblib" },
     { name = "narwhals" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "threadpoolctl" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fa/6f/37092bdb25f712817231799fc5674d8e704066a8a70c1d2d40517e18b4ab/scikit_learn-1.9.0.tar.gz", hash = "sha256:8833266989d3a5110178a9fae30783675460724d0e1efb13b14901d2c660c557", size = 7750767, upload-time = "2026-06-02T11:54:32.706Z" }
@@ -2573,10 +2319,9 @@ version = "1.17.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7a/97/5a3609c4f8d58b039179648e62dd220f89864f56f7357f5d4f45c29eb2cc/scipy-1.17.1.tar.gz", hash = "sha256:95d8e012d8cb8816c226aef832200b1d45109ed4464303e997c5b13122b297c0", size = 30573822, upload-time = "2026-02-23T00:26:24.851Z" }
 wheels = [
@@ -2610,7 +2355,7 @@ resolution-markers = [
     "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a7/25/c2700dfaf6442b4effaa91af24ebce5dc9d31bb4a69706313aae70d72cd0/scipy-1.18.0.tar.gz", hash = "sha256:67b2ad2ad54c72ca6d04975a9b2df8c3638c34ddd5b28738e94fc2b57929d378", size = 30774447, upload-time = "2026-06-19T15:01:43.456Z" }
 wheels = [
@@ -2746,8 +2491,8 @@ name = "tflite-runtime"
 version = "2.14.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version < '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos') or (python_full_version >= '3.12' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8f/a6/02d68cb62cd221589a0ff055073251d883936237c9c990e34a1d7cecd06f/tflite_runtime-2.14.0-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:195ab752e7e57329a68e54dd3dd5439fad888b9bff1be0f0dc042a3237a90e4d", size = 2414486, upload-time = "2023-10-03T21:15:44.331Z" },
@@ -2770,13 +2515,12 @@ version = "8.2.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "cffi", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "flatbuffers", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "h3", marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-9-marina-ai-ovos') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos' and extra != 'extra-9-marina-ai-ovos-stable') or (extra != 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "cffi", marker = "python_full_version < '3.12'" },
+    { name = "flatbuffers", marker = "python_full_version < '3.12'" },
+    { name = "h3", marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/8e/d9/b8fbd22d2e2ae79eb693da9a929af36baa7aab46858c0f620ce5392d9910/timezonefinder-8.2.0.tar.gz", hash = "sha256:27b662835ae6e9a820431f5fbc54df05f5744e0a2d2f709f028040231838c05b", size = 53091464, upload-time = "2025-12-23T12:33:49.624Z" }
 wheels = [
@@ -2792,11 +2536,11 @@ resolution-markers = [
     "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "cffi", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "flatbuffers", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "h3", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
-    { name = "timezonefinder-data", marker = "(python_full_version >= '3.12' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "cffi", marker = "python_full_version >= '3.12'" },
+    { name = "flatbuffers", marker = "python_full_version >= '3.12'" },
+    { name = "h3", marker = "python_full_version >= '3.12'" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "timezonefinder-data", marker = "python_full_version >= '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/07/3c/78a7ce494c0d83cec7c1619a7ac76a751df06adbcc11dc7f90733ef3ecb2/timezonefinder-8.3.0.tar.gz", hash = "sha256:827c056552d7ba481336e62fff58f3a7c81687233d5dc000b13fefaa25c89525", size = 764381, upload-time = "2026-08-19T06:17:16.623Z" }
 wheels = [
@@ -2835,7 +2579,7 @@ name = "tqdm"
 version = "4.70.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/21/3b/6c24bec5be5e743ffd99576daa5cc077722fc7d5bbc00bd133fa0c698dc6/tqdm-4.70.0.tar.gz", hash = "sha256:55b0b0dbd97462d06ebee91e4dac24ed4d4702be82b24f07e6c1d27e08cea220", size = 795438, upload-time = "2026-07-27T11:33:15.271Z" }
 wheels = [
@@ -2848,7 +2592,7 @@ version = "0.34.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
-    { name = "cffi", marker = "(implementation_name != 'pypy' and os_name == 'nt') or (implementation_name == 'pypy' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (implementation_name == 'pypy' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (implementation_name == 'pypy' and extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (implementation_name == 'pypy' and extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable') or (os_name != 'nt' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (os_name != 'nt' and extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (os_name != 'nt' and extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (os_name != 'nt' and extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "cffi", marker = "(implementation_name != 'pypy' and os_name == 'nt') or (implementation_name == 'pypy' and extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (implementation_name == 'pypy' and extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (implementation_name == 'pypy' and extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (implementation_name == 'pypy' and extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable') or (os_name != 'nt' and extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (os_name != 'nt' and extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (os_name != 'nt' and extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (os_name != 'nt' and extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "idna" },
     { name = "outcome" },
     { name = "sniffio" },
@@ -2879,7 +2623,7 @@ version = "0.27.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "annotated-doc" },
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
     { name = "rich" },
     { name = "shellingham" },
 ]
@@ -2923,7 +2667,7 @@ name = "tzlocal"
 version = "5.4.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tzdata", marker = "sys_platform == 'win32' or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-experimental-agent') or (extra == 'extra-9-marina-ai-ovos' and extra == 'extra-9-marina-ai-ovos-local-voice') or (extra == 'extra-9-marina-ai-ovos-experimental-agent' and extra == 'extra-9-marina-ai-ovos-stable') or (extra == 'extra-9-marina-ai-ovos-local-voice' and extra == 'extra-9-marina-ai-ovos-stable')" },
+    { name = "tzdata", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/81/5b/879b2f932adfa7a053c360d50bc896c977fa6426109185f7c12ebdd0cb9d/tzlocal-5.4.4.tar.gz", hash = "sha256:8dbb8660838688a7b6ba4fed31d18dedf842afb4d47ca050d6d891c2c15f3be4", size = 31170, upload-time = "2026-06-29T08:03:40.026Z" }
 wheels = [
@@ -2951,6 +2695,180 @@ wheels = [
 [package.optional-dependencies]
 socks = [
     { name = "pysocks" },
+]
+
+[[package]]
+name = "virindai"
+version = "0.26.3"
+source = { editable = "." }
+dependencies = [
+    { name = "ask" },
+    { name = "certifi" },
+    { name = "msgspec" },
+    { name = "python-dotenv" },
+    { name = "pyyaml" },
+    { name = "requests" },
+    { name = "rich" },
+]
+
+[package.optional-dependencies]
+ask = [
+    { name = "ask" },
+]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "ruff" },
+]
+job-backbone = [
+    { name = "nats-py" },
+]
+ovos = [
+    { name = "ovos-audio" },
+    { name = "ovos-audio-plugin-mpv" },
+    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-core", version = "1.3.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-dinkum-listener" },
+    { name = "ovos-gui" },
+    { name = "ovos-messagebus" },
+    { name = "ovos-microphone-plugin-alsa" },
+    { name = "ovos-openai-plugin" },
+    { name = "ovos-persona", version = "0.6.24", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-phal" },
+    { name = "ovos-phal-plugin-system" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-skill-alerts" },
+    { name = "ovos-skill-application-launcher" },
+    { name = "ovos-skill-camera" },
+    { name = "ovos-skill-diagnostics" },
+    { name = "ovos-skill-screenshot" },
+    { name = "ovos-skill-volume" },
+    { name = "ovos-stt-plugin-vosk" },
+    { name = "ovos-vad-plugin-silero" },
+    { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-ww-plugin-openwakeword" },
+]
+ovos-experimental-agent = [
+    { name = "ovos-core", version = "2.1.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-openai-plugin" },
+    { name = "ovos-persona", version = "0.7.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" } },
+]
+ovos-local-voice = [
+    { name = "ovos-stt-plugin-whispercpp" },
+    { name = "phoonnx" },
+]
+ovos-stable = [
+    { name = "ovos-audio" },
+    { name = "ovos-audio-plugin-mpv" },
+    { name = "ovos-bus-client", version = "1.3.7", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-core", version = "1.3.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-dinkum-listener" },
+    { name = "ovos-gui" },
+    { name = "ovos-messagebus" },
+    { name = "ovos-microphone-plugin-alsa" },
+    { name = "ovos-openai-plugin" },
+    { name = "ovos-persona", version = "0.6.24", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-phal" },
+    { name = "ovos-phal-plugin-system" },
+    { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-skill-alerts" },
+    { name = "ovos-skill-application-launcher" },
+    { name = "ovos-skill-camera" },
+    { name = "ovos-skill-diagnostics" },
+    { name = "ovos-skill-screenshot" },
+    { name = "ovos-skill-volume" },
+    { name = "ovos-stt-plugin-vosk" },
+    { name = "ovos-vad-plugin-silero" },
+    { name = "ovos-workshop", version = "3.4.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "ovos-ww-plugin-openwakeword" },
+]
+providers = [
+    { name = "httpx" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "ask", editable = "../chatgpt-cli" },
+    { name = "ask", marker = "extra == 'ask'", editable = "../chatgpt-cli" },
+    { name = "certifi", specifier = ">=2024.0.0" },
+    { name = "httpx", marker = "extra == 'providers'", specifier = ">=0.27" },
+    { name = "msgspec", specifier = ">=0.18.0" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11" },
+    { name = "nats-py", marker = "extra == 'job-backbone'", specifier = ">=2.15,<2.16" },
+    { name = "ovos-audio", marker = "extra == 'ovos'", specifier = ">=0.4.0,<0.5.0" },
+    { name = "ovos-audio", marker = "extra == 'ovos-stable'", specifier = ">=0.4.0,<0.5.0" },
+    { name = "ovos-audio-plugin-mpv", marker = "extra == 'ovos'", specifier = ">=0.2.1,<0.3.0" },
+    { name = "ovos-audio-plugin-mpv", marker = "extra == 'ovos-stable'", specifier = ">=0.2.1,<0.3.0" },
+    { name = "ovos-bus-client", marker = "extra == 'ovos'", specifier = ">=1.3.4,<1.4.0" },
+    { name = "ovos-bus-client", marker = "extra == 'ovos-stable'", specifier = ">=1.3.4,<1.4.0" },
+    { name = "ovos-core", marker = "extra == 'ovos'", specifier = ">=1.3.1,<1.4.0" },
+    { name = "ovos-core", marker = "extra == 'ovos-experimental-agent'", specifier = ">=1.3.1" },
+    { name = "ovos-core", marker = "extra == 'ovos-stable'", specifier = ">=1.3.1,<1.4.0" },
+    { name = "ovos-dinkum-listener", marker = "extra == 'ovos'", specifier = ">=0.4.0,<0.5.0" },
+    { name = "ovos-dinkum-listener", marker = "extra == 'ovos-stable'", specifier = ">=0.4.0,<0.5.0" },
+    { name = "ovos-gui", marker = "extra == 'ovos'", specifier = ">=1.3.3,<1.4.0" },
+    { name = "ovos-gui", marker = "extra == 'ovos-stable'", specifier = ">=1.3.3,<1.4.0" },
+    { name = "ovos-messagebus", marker = "extra == 'ovos'", specifier = ">=0.0.10,<0.1.0" },
+    { name = "ovos-messagebus", marker = "extra == 'ovos-stable'", specifier = ">=0.0.10,<0.1.0" },
+    { name = "ovos-microphone-plugin-alsa", marker = "extra == 'ovos'", specifier = ">=0.1.2,<0.2.0" },
+    { name = "ovos-microphone-plugin-alsa", marker = "extra == 'ovos-stable'", specifier = ">=0.1.2,<0.2.0" },
+    { name = "ovos-openai-plugin", marker = "extra == 'ovos'", specifier = ">=2.0.3,<2.1.0" },
+    { name = "ovos-openai-plugin", marker = "extra == 'ovos-experimental-agent'", specifier = ">=2.0.3" },
+    { name = "ovos-openai-plugin", marker = "extra == 'ovos-stable'", specifier = ">=2.0.3,<2.1.0" },
+    { name = "ovos-persona", marker = "extra == 'ovos'", specifier = ">=0.6.23,<0.7.0" },
+    { name = "ovos-persona", marker = "extra == 'ovos-experimental-agent'", specifier = ">=0.6.23" },
+    { name = "ovos-persona", marker = "extra == 'ovos-stable'", specifier = ">=0.6.23,<0.7.0" },
+    { name = "ovos-phal", marker = "extra == 'ovos'", specifier = ">=0.2.10,<0.3.0" },
+    { name = "ovos-phal", marker = "extra == 'ovos-stable'", specifier = ">=0.2.10,<0.3.0" },
+    { name = "ovos-phal-plugin-system", marker = "extra == 'ovos'", specifier = ">=1.3.3,<1.4.0" },
+    { name = "ovos-phal-plugin-system", marker = "extra == 'ovos-stable'", specifier = ">=1.3.3,<1.4.0" },
+    { name = "ovos-plugin-manager", marker = "extra == 'ovos'", specifier = ">=0.9.0,<0.10.0" },
+    { name = "ovos-plugin-manager", marker = "extra == 'ovos-experimental-agent'", specifier = ">=0.9.0" },
+    { name = "ovos-plugin-manager", marker = "extra == 'ovos-stable'", specifier = ">=0.9.0,<0.10.0" },
+    { name = "ovos-skill-alerts", marker = "extra == 'ovos'", specifier = ">=0.1.24,<0.2.0" },
+    { name = "ovos-skill-alerts", marker = "extra == 'ovos-stable'", specifier = ">=0.1.24,<0.2.0" },
+    { name = "ovos-skill-application-launcher", marker = "extra == 'ovos'", specifier = ">=0.5.13,<0.6.0" },
+    { name = "ovos-skill-application-launcher", marker = "extra == 'ovos-stable'", specifier = ">=0.5.13,<0.6.0" },
+    { name = "ovos-skill-camera", marker = "extra == 'ovos'", specifier = ">=1.0.4,<1.1.0" },
+    { name = "ovos-skill-camera", marker = "extra == 'ovos-stable'", specifier = ">=1.0.4,<1.1.0" },
+    { name = "ovos-skill-diagnostics", marker = "extra == 'ovos'", specifier = ">=0.0.8,<0.1.0" },
+    { name = "ovos-skill-diagnostics", marker = "extra == 'ovos-stable'", specifier = ">=0.0.8,<0.1.0" },
+    { name = "ovos-skill-screenshot", marker = "extra == 'ovos'", specifier = ">=0.0.7,<0.1.0" },
+    { name = "ovos-skill-screenshot", marker = "extra == 'ovos-stable'", specifier = ">=0.0.7,<0.1.0" },
+    { name = "ovos-skill-volume", marker = "extra == 'ovos'", specifier = ">=0.1.16,<0.2.0" },
+    { name = "ovos-skill-volume", marker = "extra == 'ovos-stable'", specifier = ">=0.1.16,<0.2.0" },
+    { name = "ovos-stt-plugin-vosk", marker = "extra == 'ovos'", specifier = ">=0.2.3,<0.3.0" },
+    { name = "ovos-stt-plugin-vosk", marker = "extra == 'ovos-stable'", specifier = ">=0.2.3,<0.3.0" },
+    { name = "ovos-stt-plugin-whispercpp", marker = "extra == 'ovos-local-voice'", specifier = "==0.0.1" },
+    { name = "ovos-vad-plugin-silero", marker = "extra == 'ovos'", specifier = ">=0.0.5,<0.1.0" },
+    { name = "ovos-vad-plugin-silero", marker = "extra == 'ovos-stable'", specifier = ">=0.0.5,<0.1.0" },
+    { name = "ovos-workshop", marker = "extra == 'ovos'", specifier = ">=3.4.0,<3.5.0" },
+    { name = "ovos-workshop", marker = "extra == 'ovos-stable'", specifier = ">=3.4.0,<3.5.0" },
+    { name = "ovos-ww-plugin-openwakeword", marker = "extra == 'ovos'", specifier = ">=0.4.1,<0.5.0" },
+    { name = "ovos-ww-plugin-openwakeword", marker = "extra == 'ovos-stable'", specifier = ">=0.4.1,<0.5.0" },
+    { name = "phoonnx", marker = "extra == 'ovos-local-voice'", specifier = "==1.3.3" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
+    { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "requests", specifier = ">=2.31.0" },
+    { name = "rich", specifier = ">=13.0.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
+]
+provides-extras = ["ovos-stable", "ovos", "ovos-local-voice", "ovos-experimental-agent", "job-backbone", "providers", "ask", "dev"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.11" },
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "ruff", specifier = ">=0.6" },
 ]
 
 [[package]]

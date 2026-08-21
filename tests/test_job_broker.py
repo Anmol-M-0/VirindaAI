@@ -5,8 +5,8 @@ import time
 
 import pytest
 
-from marina.config.settings import Settings
-from marina.infrastructure.jobs import (
+from virinda.config.settings import Settings
+from virinda.infrastructure.jobs import (
     InProcessJobBroker,
     JobEnvelope,
     NatsJetStreamJobBroker,
@@ -15,18 +15,18 @@ from marina.infrastructure.jobs import (
 
 
 def test_subject_matches_supports_wildcards_and_tail() -> None:
-    assert _subject_matches("marina.jobs.>", "marina.jobs.routines.execute")
-    assert _subject_matches("marina.*.execute", "marina.routines.execute")
-    assert not _subject_matches("marina.*.execute", "marina.routines.preview")
-    assert not _subject_matches("marina.jobs", "marina.jobs.extra")
+    assert _subject_matches("virinda.jobs.>", "virinda.jobs.routines.execute")
+    assert _subject_matches("virinda.*.execute", "virinda.routines.execute")
+    assert not _subject_matches("virinda.*.execute", "virinda.routines.preview")
+    assert not _subject_matches("virinda.jobs", "virinda.jobs.extra")
 
 
 def test_inprocess_broker_runs_job() -> None:
     broker = InProcessJobBroker()
     seen = []
     event = threading.Event()
-    broker.start_worker("marina.jobs.>", lambda job: (seen.append(job), event.set()))
-    job = JobEnvelope("marina.jobs.routine", {"routine_id": "r1"})
+    broker.start_worker("virinda.jobs.>", lambda job: (seen.append(job), event.set()))
+    job = JobEnvelope("virinda.jobs.routine", {"routine_id": "r1"})
     assert broker.publish(job) == job.id
     assert event.wait(1.0)
     assert seen[0].payload["routine_id"] == "r1"
@@ -37,9 +37,9 @@ def test_inprocess_broker_deduplicates_idempotency_keys() -> None:
     broker = InProcessJobBroker()
     seen = []
     event = threading.Event()
-    broker.start_worker("marina.jobs.>", lambda job: (seen.append(job), event.set()))
-    first = JobEnvelope("marina.jobs.routine", {}, idempotency_key="same")
-    second = JobEnvelope("marina.jobs.routine", {}, idempotency_key="same")
+    broker.start_worker("virinda.jobs.>", lambda job: (seen.append(job), event.set()))
+    first = JobEnvelope("virinda.jobs.routine", {}, idempotency_key="same")
+    second = JobEnvelope("virinda.jobs.routine", {}, idempotency_key="same")
     broker.publish(first)
     broker.publish(second)
     assert event.wait(1.0)
@@ -52,8 +52,8 @@ def test_inprocess_broker_delayed_job() -> None:
     broker = InProcessJobBroker()
     seen = []
     event = threading.Event()
-    broker.start_worker("marina.jobs.>", lambda job: (seen.append(job), event.set()))
-    job = JobEnvelope("marina.jobs.routine", {}, available_at=time.time() + 0.05)
+    broker.start_worker("virinda.jobs.>", lambda job: (seen.append(job), event.set()))
+    job = JobEnvelope("virinda.jobs.routine", {}, available_at=time.time() + 0.05)
     broker.publish(job)
     assert event.wait(1.0)
     broker.close()
@@ -61,9 +61,13 @@ def test_inprocess_broker_delayed_job() -> None:
 
 def test_nats_backend_fails_clearly_without_optional_dependency(monkeypatch) -> None:
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222")
-    monkeypatch.setattr(broker, "_ensure_started", lambda: (_ for _ in ()).throw(RuntimeError("NATS job broker failed to start")))
+    monkeypatch.setattr(
+        broker,
+        "_ensure_started",
+        lambda: (_ for _ in ()).throw(RuntimeError("NATS job broker failed to start")),
+    )
     with pytest.raises(RuntimeError, match="NATS job broker failed"):
-        broker.publish(JobEnvelope("marina.jobs.test", {}))
+        broker.publish(JobEnvelope("virinda.jobs.test", {}))
 
 
 def test_settings_expose_nats_delivery_policy() -> None:
@@ -90,42 +94,62 @@ def test_redelivered_succeeded_routine_is_idempotent(tmp_path):
     import sqlite3
     from threading import RLock
 
-    from marina.features import Routine, RoutineRunner, RoutineStore
+    from virinda.features import Routine, RoutineRunner, RoutineStore
 
-    conn = sqlite3.connect(':memory:')
+    conn = sqlite3.connect(":memory:")
     store = RoutineStore(conn, RLock())
-    routine = Routine('r1', 'one-shot', 'at:0', 'notify:done|once', True)
+    routine = Routine("r1", "one-shot", "at:0", "notify:done|once", True)
     store.save(routine)
     calls = []
-    runner = RoutineRunner(store, lambda title, body: calls.append((title, body)), lambda *a, **k: None)
+    runner = RoutineRunner(
+        store, lambda title, body: calls.append((title, body)), lambda *a, **k: None
+    )
 
-    assert runner.dispatch(routine, trigger_context={'now': 1}, run_id='run-1') == 'succeeded'
-    assert calls == [('done', 'once')]
-    assert runner.handle_job(type('Job', (), {'payload': {'routine_id': 'r1', 'trigger_context': {'now': 1}, 'approved_run': False, 'run_id': 'run-1'}})()) == 'succeeded'
-    assert calls == [('done', 'once')]
+    assert runner.dispatch(routine, trigger_context={"now": 1}, run_id="run-1") == "succeeded"
+    assert calls == [("done", "once")]
+    assert (
+        runner.handle_job(
+            type(
+                "Job",
+                (),
+                {
+                    "payload": {
+                        "routine_id": "r1",
+                        "trigger_context": {"now": 1},
+                        "approved_run": False,
+                        "run_id": "run-1",
+                    }
+                },
+            )()
+        )
+        == "succeeded"
+    )
+    assert calls == [("done", "once")]
 
 
 def test_pending_approval_persists_for_resume(tmp_path):
     import sqlite3
     from threading import RLock
 
-    from marina.features import Routine, RoutineRunner, RoutineStore
+    from virinda.features import Routine, RoutineRunner, RoutineStore
 
-    conn = sqlite3.connect(':memory:')
+    conn = sqlite3.connect(":memory:")
     store = RoutineStore(conn, RLock())
-    routine = Routine('r2', 'approve', 'at:0', 'approve:tool:open_url|{"url":"https://example.com"}', True)
+    routine = Routine(
+        "r2", "approve", "at:0", 'approve:tool:open_url|{"url":"https://example.com"}', True
+    )
     store.save(routine)
     approvals = []
     runner = RoutineRunner(
         store,
         lambda *a: None,
         lambda *a, **k: approvals.append(k),
-        approval_requester=lambda tool: {'tool': tool, 'token': 'hidden'},
+        approval_requester=lambda tool: {"tool": tool, "token": "hidden"},
     )
 
-    assert runner.dispatch(routine, run_id='run-2') == 'pending_approval'
-    assert runner.resume_approved('run-2') == 'succeeded'
-    assert approvals == [{'approved': True, 'url': 'https://example.com'}]
+    assert runner.dispatch(routine, run_id="run-2") == "pending_approval"
+    assert runner.resume_approved("run-2") == "succeeded"
+    assert approvals == [{"approved": True, "url": "https://example.com"}]
 
 
 def test_nats_consumer_uses_single_message_next_msg_and_acks(monkeypatch):
@@ -136,7 +160,7 @@ def test_nats_consumer_uses_single_message_next_msg_and_acks(monkeypatch):
     seen = []
 
     class FakeMessage:
-        data = json.dumps({"subject": "marina.jobs.test", "payload": {"ok": True}}).encode()
+        data = json.dumps({"subject": "virinda.jobs.test", "payload": {"ok": True}}).encode()
 
         async def ack(self):
             broker._stop.set()
@@ -169,9 +193,9 @@ def test_nats_consumer_uses_single_message_next_msg_and_acks(monkeypatch):
     broker.close()
 
 
-
 def test_nats_consumer_info_projection_is_stable(monkeypatch):
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="marina_jobs", durable="worker")
 
     class Info:
@@ -191,7 +215,7 @@ def test_nats_consumer_info_projection_is_stable(monkeypatch):
             return Info()
 
     broker._js = JS()
-    broker._worker_subject = "marina.jobs.>"
+    broker._worker_subject = "virinda.jobs.>"
     result = asyncio.run(broker._consumer_info())
     assert result["name"] == "worker"
     assert result["num_pending"] == 7
@@ -200,6 +224,7 @@ def test_nats_consumer_info_projection_is_stable(monkeypatch):
     assert result["delivered"] == 42
     assert result["stream_seq"] == 99
     broker.close()
+
 
 def test_inprocess_broker_status_exposes_runtime_metrics() -> None:
     broker = InProcessJobBroker()
@@ -213,8 +238,8 @@ def test_inprocess_broker_status_exposes_runtime_metrics() -> None:
 def test_inprocess_broker_status_counts_processed_jobs() -> None:
     broker = InProcessJobBroker()
     event = threading.Event()
-    broker.start_worker("marina.jobs.>", lambda job: event.set())
-    job = JobEnvelope("marina.jobs.test", {})
+    broker.start_worker("virinda.jobs.>", lambda job: event.set())
+    job = JobEnvelope("virinda.jobs.test", {})
     broker.publish(job)
     assert event.wait(1.0)
     deadline = time.time() + 1.0
@@ -230,7 +255,7 @@ def test_routine_store_reports_stale_active_runs() -> None:
     import sqlite3
     from threading import RLock
 
-    from marina.features import RoutineRun, RoutineStore
+    from virinda.features import RoutineRun, RoutineStore
 
     store = RoutineStore(sqlite3.connect(":memory:"), RLock())
     store.record_run(RoutineRun("old", "routine", "running", 1, 10.0))
@@ -249,9 +274,9 @@ def test_inprocess_worker_survives_failed_handler() -> None:
             raise RuntimeError("boom")
         done.set()
 
-    broker.start_worker("marina.jobs.>", handler)
-    first = JobEnvelope("marina.jobs.test", {})
-    second = JobEnvelope("marina.jobs.test", {})
+    broker.start_worker("virinda.jobs.>", handler)
+    first = JobEnvelope("virinda.jobs.test", {})
+    second = JobEnvelope("virinda.jobs.test", {})
     broker.publish(first)
     broker.publish(second)
     assert done.wait(1.0)
@@ -273,8 +298,8 @@ def test_inprocess_idempotency_key_can_retry_after_failure() -> None:
             raise RuntimeError("retry me")
         done.set()
 
-    broker.start_worker("marina.jobs.>", handler)
-    job = JobEnvelope("marina.jobs.test", {}, idempotency_key="retryable")
+    broker.start_worker("virinda.jobs.>", handler)
+    job = JobEnvelope("virinda.jobs.test", {}, idempotency_key="retryable")
     broker.publish(job)
     deadline = time.time() + 1.0
     while broker.status().failed < 1 and time.time() < deadline:
@@ -288,13 +313,13 @@ def test_inprocess_idempotency_key_can_retry_after_failure() -> None:
 def test_inprocess_cancel_releases_idempotency_key_for_republish() -> None:
     broker = InProcessJobBroker()
     first = JobEnvelope(
-        "marina.jobs.test",
+        "virinda.jobs.test",
         {"x": 1},
         idempotency_key="cancel-republish",
         available_at=time.time() + 60,
     )
     replacement = JobEnvelope(
-        "marina.jobs.test",
+        "virinda.jobs.test",
         {"x": 2},
         idempotency_key="cancel-republish",
         available_at=time.time() + 60,
@@ -309,8 +334,8 @@ def test_inprocess_cancel_releases_idempotency_key_for_republish() -> None:
 
 def test_inprocess_cancel_removes_only_matching_queued_job() -> None:
     broker = InProcessJobBroker()
-    first = JobEnvelope("marina.jobs.test", {"x": 1}, available_at=time.time() + 60)
-    second = JobEnvelope("marina.jobs.test", {"x": 2}, available_at=time.time() + 60)
+    first = JobEnvelope("virinda.jobs.test", {"x": 1}, available_at=time.time() + 60)
+    second = JobEnvelope("virinda.jobs.test", {"x": 2}, available_at=time.time() + 60)
     broker.publish(first)
     broker.publish(second)
     assert broker.cancel(first.id) is True
@@ -323,8 +348,8 @@ def test_inprocess_cancel_removes_only_matching_queued_job() -> None:
 def test_inprocess_delayed_job_is_cancelled_on_close() -> None:
     broker = InProcessJobBroker()
     seen = []
-    broker.start_worker("marina.jobs.>", lambda job: seen.append(job))
-    broker.publish(JobEnvelope("marina.jobs.test", {}, available_at=time.time() + 0.25))
+    broker.start_worker("virinda.jobs.>", lambda job: seen.append(job))
+    broker.publish(JobEnvelope("virinda.jobs.test", {}, available_at=time.time() + 0.25))
     broker.close()
     time.sleep(0.35)
     assert seen == []
@@ -332,9 +357,9 @@ def test_inprocess_delayed_job_is_cancelled_on_close() -> None:
 
 def test_inprocess_rejects_unhandled_subject_when_worker_started() -> None:
     broker = InProcessJobBroker()
-    broker.start_worker("marina.jobs.automation.>", lambda job: None)
+    broker.start_worker("virinda.jobs.automation.>", lambda job: None)
     with pytest.raises(ValueError, match="not handled by worker"):
-        broker.publish(JobEnvelope("marina.jobs.other.test", {}))
+        broker.publish(JobEnvelope("virinda.jobs.other.test", {}))
     broker.close()
 
 
@@ -380,6 +405,7 @@ def test_nats_existing_incompatible_stream_is_rejected() -> None:
             class api:
                 class RetentionPolicy:
                     WORK_QUEUE = "workqueue"
+
         connect = staticmethod(connect_stub)
 
     with pytest.raises(RuntimeError, match="incompatible"):
@@ -388,6 +414,7 @@ def test_nats_existing_incompatible_stream_is_rejected() -> None:
 
 def test_nats_publish_uses_server_side_schedule_for_future_jobs() -> None:
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222")
     captured = {}
 
@@ -397,9 +424,9 @@ def test_nats_publish_uses_server_side_schedule_for_future_jobs() -> None:
 
     broker._js = JS()
     future = time.time() + 60
-    job = JobEnvelope("marina.jobs.test", {"x": 1}, available_at=future)
+    job = JobEnvelope("virinda.jobs.test", {"x": 1}, available_at=future)
     asyncio.run(broker._publish(job))
-    assert captured["subject"].startswith("marina.jobs.schedules.")
+    assert captured["subject"].startswith("virinda.jobs.schedules.")
     assert captured["subject"].endswith(job.id)
     assert captured["headers"]["Nats-Msg-Id"] == job.id
     assert captured["headers"]["Nats-Schedule"].startswith("@at ")
@@ -409,6 +436,7 @@ def test_nats_publish_uses_server_side_schedule_for_future_jobs() -> None:
 
 def test_nats_delayed_jobs_get_unique_schedule_subjects() -> None:
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222")
     captured = []
 
@@ -418,8 +446,8 @@ def test_nats_delayed_jobs_get_unique_schedule_subjects() -> None:
 
     broker._js = JS()
     when = time.time() + 60
-    first = JobEnvelope("marina.jobs.test", {"x": 1}, available_at=when)
-    second = JobEnvelope("marina.jobs.test", {"x": 2}, available_at=when)
+    first = JobEnvelope("virinda.jobs.test", {"x": 1}, available_at=when)
+    second = JobEnvelope("virinda.jobs.test", {"x": 2}, available_at=when)
     asyncio.run(broker._publish(first))
     asyncio.run(broker._publish(second))
     assert captured[0][0] != captured[1][0]
@@ -430,6 +458,7 @@ def test_nats_delayed_jobs_get_unique_schedule_subjects() -> None:
 
 def test_nats_cancel_purges_schedule_by_job_id() -> None:
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222")
     captured = {}
 
@@ -443,14 +472,15 @@ def test_nats_cancel_purges_schedule_by_job_id() -> None:
         loop.run_until_complete(broker._cancel("abc123"))
     finally:
         loop.close()
-    assert captured["subject"] == "marina.jobs.control.cancel"
-    assert captured["headers"]["Nats-Scheduler"] == "marina.jobs.schedules.abc123"
+    assert captured["subject"] == "virinda.jobs.control.cancel"
+    assert captured["headers"]["Nats-Scheduler"] == "virinda.jobs.schedules.abc123"
     assert captured["headers"]["Nats-Schedule-Next"] == "purge"
     broker.close()
 
 
 def test_nats_publish_keeps_immediate_jobs_unscheduled() -> None:
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222")
     captured = {}
 
@@ -459,7 +489,7 @@ def test_nats_publish_keeps_immediate_jobs_unscheduled() -> None:
             captured.update(subject=subject, headers=headers)
 
     broker._js = JS()
-    job = JobEnvelope("marina.jobs.test", {}, available_at=time.time() - 1)
+    job = JobEnvelope("virinda.jobs.test", {}, available_at=time.time() - 1)
     asyncio.run(broker._publish(job))
     assert captured["subject"] == job.subject
     assert "Nats-Schedule" not in captured["headers"]
@@ -468,10 +498,11 @@ def test_nats_publish_keeps_immediate_jobs_unscheduled() -> None:
 
 def test_nats_existing_stream_must_enable_message_schedules() -> None:
     import asyncio
+
     broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="marina_jobs")
 
     class Config:
-        subjects = ["marina.jobs.>"]
+        subjects = ["virinda.jobs.>"]
         retention = "workqueue"
         allow_msg_schedules = False
 
@@ -481,6 +512,7 @@ def test_nats_existing_stream_must_enable_message_schedules() -> None:
     class JS:
         async def add_stream(self, **kwargs):
             raise RuntimeError("stream name already in use")
+
         async def stream_info(self, name):
             return Info()
 
@@ -496,6 +528,7 @@ def test_nats_existing_stream_must_enable_message_schedules() -> None:
             class api:
                 class RetentionPolicy:
                     WORK_QUEUE = "workqueue"
+
         connect = staticmethod(connect_stub)
 
     with pytest.raises(RuntimeError, match="allow_msg_schedules"):
@@ -503,7 +536,7 @@ def test_nats_existing_stream_must_enable_message_schedules() -> None:
 
 
 def test_nats_publish_rejects_subject_outside_stream_prefix() -> None:
-    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", subject_prefix="marina.jobs")
+    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", subject_prefix="virinda.jobs")
     with pytest.raises(ValueError, match="outside NATS stream prefix"):
         broker.publish(JobEnvelope("other.jobs.test", {}))
     broker.close()
@@ -524,7 +557,7 @@ def test_nats_existing_consumer_delivery_policy_is_validated() -> None:
         ack_wait = 60.0
         max_deliver = 5
         max_ack_pending = 32
-        filter_subject = "marina.jobs.>"
+        filter_subject = "virinda.jobs.>"
 
     class Info:
         config = Config()
@@ -550,7 +583,7 @@ def test_nats_existing_consumer_filter_is_validated() -> None:
         ack_wait = 120.0
         max_deliver = 5
         max_ack_pending = 32
-        filter_subject = "marina.jobs.automation.>"
+        filter_subject = "virinda.jobs.automation.>"
 
     class Info:
         config = Config()
@@ -560,7 +593,7 @@ def test_nats_existing_consumer_filter_is_validated() -> None:
             return Info()
 
     broker._js = JS()
-    broker._worker_subject = "marina.jobs.>"
+    broker._worker_subject = "virinda.jobs.>"
     with pytest.raises(RuntimeError, match="filter_subject"):
         asyncio.run(broker._validate_consumer_config())
     broker.close()

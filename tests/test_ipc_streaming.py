@@ -3,12 +3,12 @@ from __future__ import annotations
 import threading
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.domain.models import ProviderRequest
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.router import StaticProviderRouter
-from marina.interfaces.ipc import LocalRPCClient, LocalRPCServer
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.domain.models import ProviderRequest
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.router import StaticProviderRouter
+from virinda.interfaces.ipc import LocalRPCClient, LocalRPCServer
 
 
 class StreamingProvider:
@@ -32,7 +32,7 @@ def _service(tmp_path: Path) -> AssistantService:
 
 def test_ipc_stream_delivers_deltas_and_completion(tmp_path: Path) -> None:
     service = _service(tmp_path)
-    path = tmp_path / "marina.sock"
+    path = tmp_path / "virinda.sock"
     server = LocalRPCServer(service, path)
     server.start()
     thread = threading.Thread(target=server.serve_forever, daemon=True)

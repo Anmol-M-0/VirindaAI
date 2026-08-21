@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
 
 
 def test_old_session_schema_is_migrated(tmp_path: Path):

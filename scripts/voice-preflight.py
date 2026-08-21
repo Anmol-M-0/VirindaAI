@@ -4,6 +4,7 @@
 This command is read-only. It inspects the local OVOS installation and PipeWire/ALSA
 surface without changing audio routing or saving recordings.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -13,18 +14,37 @@ import platform
 import shutil
 import subprocess
 import sys
-from pathlib import Path
 
 
 def run(command: list[str], timeout: float = 3.0) -> dict[str, object]:
     exe = shutil.which(command[0])
     if not exe:
-        return {"command": command, "available": False, "returncode": None, "stdout": "", "stderr": f"not found: {command[0]}"}
+        return {
+            "command": command,
+            "available": False,
+            "returncode": None,
+            "stdout": "",
+            "stderr": f"not found: {command[0]}",
+        }
     try:
-        p = subprocess.run([exe, *command[1:]], capture_output=True, text=True, timeout=timeout, check=False)
+        p = subprocess.run(
+            [exe, *command[1:]], capture_output=True, text=True, timeout=timeout, check=False
+        )
     except (OSError, subprocess.TimeoutExpired) as exc:
-        return {"command": command, "available": True, "returncode": None, "stdout": "", "stderr": str(exc)}
-    return {"command": command, "available": True, "returncode": p.returncode, "stdout": p.stdout, "stderr": p.stderr}
+        return {
+            "command": command,
+            "available": True,
+            "returncode": None,
+            "stdout": "",
+            "stderr": str(exc),
+        }
+    return {
+        "command": command,
+        "available": True,
+        "returncode": p.returncode,
+        "stdout": p.stdout,
+        "stderr": p.stderr,
+    }
 
 
 def module_version(name: str) -> dict[str, object]:
@@ -60,7 +80,13 @@ def main() -> int:
     for module in ("ovos_bus_client", "ovos_core", "ovos_dinkum_listener"):
         if not checks[module]["installed"]:
             failures.append(f"missing Python module: {module}")
-    for command_name in ("wpctl", "pipewire_sources", "pipewire_sinks", "alsa_capture", "alsa_playback"):
+    for command_name in (
+        "wpctl",
+        "pipewire_sources",
+        "pipewire_sinks",
+        "alsa_capture",
+        "alsa_playback",
+    ):
         result = checks[command_name]
         if not result["available"] or result["returncode"] != 0:
             failures.append(f"audio check unavailable/failed: {command_name}")

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from marina.ovos.doctor import run_doctor
+from virinda.ovos.doctor import run_doctor
 
 
 def test_doctor_reports_persona_and_model_checks(tmp_path: Path):

@@ -1,15 +1,15 @@
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.domain.events import ResponseCompleted
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.domain.events import ResponseCompleted
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 def test_events_are_persisted_and_reloaded(tmp_path: Path) -> None:
-    store = SQLiteConversationStore(tmp_path / "marina.sqlite3")
+    store = SQLiteConversationStore(tmp_path / "virinda.sqlite3")
     service = AssistantService(
         router=StaticProviderRouter({"echo": EchoProvider()}, "echo"),
         store=store,

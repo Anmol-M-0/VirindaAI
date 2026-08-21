@@ -1,4 +1,4 @@
-from marina.core.tokenizer import StreamingSentenceTokenizer
+from virinda.core.tokenizer import StreamingSentenceTokenizer
 
 
 def test_streaming_sentences() -> None:

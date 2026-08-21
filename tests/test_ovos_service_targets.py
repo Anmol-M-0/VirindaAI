@@ -20,11 +20,13 @@ def test_voice_target_builds_on_core_and_adds_audio_path():
 def test_runtime_smoke_has_core_and_voice_presets():
     text = (Path(__file__).parents[1] / "scripts/ovos-runtime-smoke.py").read_text(encoding="utf-8")
     assert '"core": ["marina-messagebus.service", "marina-core.service"]' in text
-    assert '"voice": ["marina-messagebus.service", "marina-core.service", "marina-listener.service", "marina-audio.service"]' in text
+    assert '"marina-listener.service"' in text
+    assert '"marina-audio.service"' in text
 
 
 def test_service_units_are_templated_for_custom_venv() -> None:
     from pathlib import Path
+
     root = Path(__file__).parents[1]
     service_files = list((root / "deploy" / "ovos").glob("marina-*.service"))
     assert service_files

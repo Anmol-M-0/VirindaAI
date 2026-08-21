@@ -3,13 +3,13 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "marina-ai"
+name = "virindai"
 version = "0.26.3"
 description = "Local-first ambient desktop assistant runtime with pluggable intelligence, speech, and presentation adapters."
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 license = {text = "MIT"}
-authors = [{name = "MarinaAI contributors"}]
+authors = [{name = "VirindaAI contributors"}]
 dependencies = [
   "requests>=2.31.0",
   "certifi>=2024.0.0",
@@ -97,8 +97,10 @@ dev = [
 ]
 
 [project.scripts]
-marina = "marina.__main__:main"
-marinad = "marina.application.daemon:main"
+virinda = "virinda.interfaces.cli:main"
+virindad = "virinda.application.daemon:main"
+marina = "virinda.interfaces.cli:main"
+marinad = "virinda.application.daemon:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

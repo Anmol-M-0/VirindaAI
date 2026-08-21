@@ -1,17 +1,21 @@
 import time
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.features import ContextSignals, VoiceProfile, WakeWordEvaluator, WakeWordResult
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.features import ContextSignals, VoiceProfile, WakeWordEvaluator, WakeWordResult
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 def service(tmp_path: Path) -> AssistantService:
     store = SQLiteConversationStore(tmp_path / "m.db")
-    return AssistantService(router=StaticProviderRouter({"echo": EchoProvider()}, "echo"), store=store, event_bus=InMemoryEventBus())
+    return AssistantService(
+        router=StaticProviderRouter({"echo": EchoProvider()}, "echo"),
+        store=store,
+        event_bus=InMemoryEventBus(),
+    )
 
 
 def test_memory_private_mode_and_semantic_search(tmp_path):
@@ -88,12 +92,14 @@ def test_proactive_context_respects_quiet_mode(tmp_path):
 
 
 def test_wakeword_metrics():
-    metrics = WakeWordEvaluator.evaluate([
-        WakeWordResult(True, True, 100),
-        WakeWordResult(True, False, 0),
-        WakeWordResult(False, True, 0),
-        WakeWordResult(False, False, 0),
-    ])
+    metrics = WakeWordEvaluator.evaluate(
+        [
+            WakeWordResult(True, True, 100),
+            WakeWordResult(True, False, 0),
+            WakeWordResult(False, True, 0),
+            WakeWordResult(False, False, 0),
+        ]
+    )
     assert metrics["false_rejection_rate"] == 0.5
     assert metrics["false_accept_rate"] == 0.5
 
@@ -103,7 +109,15 @@ def test_feature_health_exposes_all_roadmap_planes(tmp_path):
     try:
         health = s.health()["features"]
         assert "live_context" in s.health()
-        assert {"memory", "alerts", "notifications", "routines", "voice_profiles", "voice_benchmark", "meeting"} <= health.keys()
+        assert {
+            "memory",
+            "alerts",
+            "notifications",
+            "routines",
+            "voice_profiles",
+            "voice_benchmark",
+            "meeting",
+        } <= health.keys()
     finally:
         s.close()
 
@@ -144,21 +158,34 @@ def test_multimodal_and_satellite_validation(tmp_path):
 
 
 def test_profile_and_schedule_are_exposed_over_ipc(tmp_path):
-    from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-    from marina.infrastructure.providers.echo import EchoProvider
-    from marina.infrastructure.providers.router import StaticProviderRouter
-    from marina.interfaces.ipc import LocalRPCServer
+    from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+    from virinda.infrastructure.providers.echo import EchoProvider
+    from virinda.infrastructure.providers.router import StaticProviderRouter
+    from virinda.interfaces.ipc import LocalRPCServer
+
     store = SQLiteConversationStore(tmp_path / "ipc-profile.sqlite3")
     service = AssistantService(
         router=StaticProviderRouter({"echo": EchoProvider()}, "echo"),
         store=store,
         event_bus=InMemoryEventBus(),
     )
-    server = LocalRPCServer(service, tmp_path / "marina.sock")
+    server = LocalRPCServer(service, tmp_path / "virinda.sock")
     try:
-        profile = server.dispatch({"id": 1, "method": "profile_update", "params": {"changes": {"display_name": "Marina User"}}})
+        profile = server.dispatch(
+            {
+                "id": 1,
+                "method": "profile_update",
+                "params": {"changes": {"display_name": "Marina User"}},
+            }
+        )
         assert profile["result"]["display_name"] == "Marina User"
-        routine = server.dispatch({"id": 2, "method": "routine_schedule", "params": {"name": "x", "due_at": 1, "action": "notify:T|B"}})
+        routine = server.dispatch(
+            {
+                "id": 2,
+                "method": "routine_schedule",
+                "params": {"name": "x", "due_at": 1, "action": "notify:T|B"},
+            }
+        )
         assert routine["ok"] is True
         assert routine["result"]["trigger"].startswith("at:")
     finally:

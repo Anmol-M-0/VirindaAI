@@ -5,11 +5,11 @@ Requires a provisioned OVOS environment with ovos-messagebus and ovos-core runni
 The probe injects an utterance through the same ``recognizer_loop:utterance`` bus
 entry used by the listener, then waits for a ``speak`` response from the pipeline.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
-import sys
 import shutil
 import subprocess
 import time
@@ -21,9 +21,23 @@ def main() -> int:
     parser.add_argument("utterance", nargs="?", default="marina status")
     parser.add_argument("--timeout", type=float, default=8.0)
     parser.add_argument("--expect", default="")
-    parser.add_argument("--stage", choices=("core", "voice", "custom"), default="core", help="Acceptance stage; core checks bus/core, voice checks listener/audio too")
-    parser.add_argument("--require-services", action="store_true", help="Require OVOS user services to be active before probing the bus")
-    parser.add_argument("--services", nargs="*", default=[], help="User services to require when --require-services is used")
+    parser.add_argument(
+        "--stage",
+        choices=("core", "voice", "custom"),
+        default="core",
+        help="Acceptance stage; core checks bus/core, voice checks listener/audio too",
+    )
+    parser.add_argument(
+        "--require-services",
+        action="store_true",
+        help="Require OVOS user services to be active before probing the bus",
+    )
+    parser.add_argument(
+        "--services",
+        nargs="*",
+        default=[],
+        help="User services to require when --require-services is used",
+    )
     args = parser.parse_args()
 
     try:
@@ -34,29 +48,61 @@ def main() -> int:
 
     preset_services = {
         "core": ["marina-messagebus.service", "marina-core.service"],
-        "voice": ["marina-messagebus.service", "marina-core.service", "marina-listener.service", "marina-audio.service"],
+        "voice": [
+            "marina-messagebus.service",
+            "marina-core.service",
+            "marina-listener.service",
+            "marina-audio.service",
+        ],
     }
-    required_services = list(args.services) if args.services else preset_services.get(args.stage, [])
+    required_services = (
+        list(args.services) if args.services else preset_services.get(args.stage, [])
+    )
 
     if args.require_services:
         systemctl = shutil.which("systemctl")
         if not systemctl:
-            print(json.dumps({"ok": False, "status": "environment_missing", "detail": "systemctl is unavailable"}))
+            print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "status": "environment_missing",
+                        "detail": "systemctl is unavailable",
+                    }
+                )
+            )
             return 2
         service_states = {}
         for unit in required_services:
             try:
                 result = subprocess.run(
                     [systemctl, "--user", "is-active", unit],
-                    capture_output=True, text=True, timeout=3, check=False,
+                    capture_output=True,
+                    text=True,
+                    timeout=3,
+                    check=False,
                 )
             except (OSError, subprocess.TimeoutExpired) as exc:
-                print(json.dumps({"ok": False, "status": "service_probe_failed", "unit": unit, "detail": str(exc)}))
+                print(
+                    json.dumps(
+                        {
+                            "ok": False,
+                            "status": "service_probe_failed",
+                            "unit": unit,
+                            "detail": str(exc),
+                        }
+                    )
+                )
                 return 2
             state = result.stdout.strip() or result.stderr.strip() or "unknown"
             service_states[unit] = state
             if state != "active":
-                print(json.dumps({"ok": False, "status": "services_not_ready", "services": service_states}, indent=2))
+                print(
+                    json.dumps(
+                        {"ok": False, "status": "services_not_ready", "services": service_states},
+                        indent=2,
+                    )
+                )
                 return 2
 
     started_at = time.monotonic()
@@ -74,7 +120,15 @@ def main() -> int:
         client.on("speak", on_speak)
         client.run_in_thread()
         if not client.connected_event.wait(timeout=args.timeout):
-            print(json.dumps({"ok": False, "status": "bus_unavailable", "detail": "message bus did not connect"}))
+            print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "status": "bus_unavailable",
+                        "detail": "message bus did not connect",
+                    }
+                )
+            )
             return 2
         client.emit(
             Message(

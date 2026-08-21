@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from threading import Event, Thread
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.domain.models import ProviderRequest
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.domain.models import ProviderRequest
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 class BlockingProvider:
@@ -24,9 +24,17 @@ class BlockingProvider:
 
 
 def make_service(tmp_path, provider):
-    store = SQLiteConversationStore(tmp_path / "marina.sqlite3")
-    router = StaticProviderRouter({"blocking": provider, "echo": EchoProvider()}, default="blocking")
-    return AssistantService(router=router, store=store, event_bus=InMemoryEventBus(), default_provider="blocking", default_model="test")
+    store = SQLiteConversationStore(tmp_path / "virinda.sqlite3")
+    router = StaticProviderRouter(
+        {"blocking": provider, "echo": EchoProvider()}, default="blocking"
+    )
+    return AssistantService(
+        router=router,
+        store=store,
+        event_bus=InMemoryEventBus(),
+        default_provider="blocking",
+        default_model="test",
+    )
 
 
 def test_late_response_cannot_commit_after_new_generation(tmp_path):

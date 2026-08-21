@@ -14,6 +14,7 @@ def test_runtime_smoke_reports_missing_ovos_cleanly():
     assert result.returncode in {0, 2}
     assert '"status":' in result.stdout
 
+
 import json
 
 
@@ -26,7 +27,7 @@ def test_runtime_smoke_requires_services_reports_missing_systemd_cleanly():
             "marina status",
             "--require-services",
             "--services",
-            "definitely-missing-marina.service",
+            "definitely-missing-virinda.service",
         ],
         capture_output=True,
         text=True,
@@ -34,4 +35,8 @@ def test_runtime_smoke_requires_services_reports_missing_systemd_cleanly():
     )
     assert result.returncode in {2}
     payload = json.loads(result.stdout)
-    assert payload["status"] in {"services_not_ready", "environment_missing", "service_probe_failed"}
+    assert payload["status"] in {
+        "services_not_ready",
+        "environment_missing",
+        "service_probe_failed",
+    }

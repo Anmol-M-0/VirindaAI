@@ -2,12 +2,12 @@ import json
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.desktop import OverlayServer
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.desktop import OverlayServer
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 def build_service(tmp_path: Path):
@@ -19,7 +19,12 @@ def build_service(tmp_path: Path):
 
 
 def post(base, path, payload):
-    req = Request(base + path, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"}, method="POST")
+    req = Request(
+        base + path,
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
     with urlopen(req, timeout=3) as r:
         return json.loads(r.read())
 
@@ -40,11 +45,15 @@ def test_overlay_serves_routine_editor_and_lifecycle_api(tmp_path):
         assert "Routine editor" in html
         assert "Preview" in html
 
-        created = post(base, "/api/routine-save", {
-            "name": "Morning",
-            "trigger": "event:morning",
-            "action": "notify:Marina|Good morning",
-        })
+        created = post(
+            base,
+            "/api/routine-save",
+            {
+                "name": "Morning",
+                "trigger": "event:morning",
+                "action": "notify:Marina|Good morning",
+            },
+        )
         routine_id = created["id"]
         routines = get(base, "/api/routines")
         assert routines[0]["id"] == routine_id
@@ -68,11 +77,15 @@ def test_overlay_run_now_executes_selected_routine(tmp_path):
     host, port = overlay.start()
     base = f"http://{host}:{port}"
     try:
-        created = post(base, "/api/routine-save", {
-            "name": "Immediate",
-            "trigger": "event:manual",
-            "action": "notify:Marina|Run now",
-        })
+        created = post(
+            base,
+            "/api/routine-save",
+            {
+                "name": "Immediate",
+                "trigger": "event:manual",
+                "action": "notify:Marina|Run now",
+            },
+        )
         result = post(base, "/api/routine-run-now", {"id": created["id"]})
         assert result["status"] == "succeeded"
         assert service.notification_summary() == "Marina: Run now"

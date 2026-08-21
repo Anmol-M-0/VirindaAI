@@ -1,17 +1,25 @@
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 README = ROOT / "README.md"
-VERSION_FILE = ROOT / "src" / "marina" / "__init__.py"
+VERSION_FILE = ROOT / "src" / "virinda" / "__init__.py"
 SOURCE_ROOTS = [ROOT / "src", ROOT / "scripts", ROOT / "config", ROOT / "deploy", ROOT / "skills"]
-SOURCE_FILES = [path for source_root in SOURCE_ROOTS for path in source_root.rglob("*.*") if path.is_file()]
-ENV_NAMES = set(re.findall(r"MARINA_[A-Z0-9_]+", "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in SOURCE_FILES)))
-VERSION = re.search(r'__version__\s*=\s*"([^"]+)"', VERSION_FILE.read_text(encoding="utf-8")).group(1)
+SOURCE_FILES = [
+    path for source_root in SOURCE_ROOTS for path in source_root.rglob("*.*") if path.is_file()
+]
+ENV_NAMES = set(
+    re.findall(
+        r"MARINA_[A-Z0-9_]+",
+        "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in SOURCE_FILES),
+    )
+)
+VERSION = re.search(r'__version__\s*=\s*"([^"]+)"', VERSION_FILE.read_text(encoding="utf-8")).group(
+    1
+)
 
 errors: list[str] = []
 
@@ -57,4 +65,6 @@ if errors:
         print(f"- {error}")
     raise SystemExit(1)
 
-print(f"Documentation validation passed: {len(md_files)} markdown files, version v{VERSION}, {len(ENV_NAMES)} environment variables checked")
+print(
+    f"Documentation validation passed: {len(md_files)} markdown files, version v{VERSION}, {len(ENV_NAMES)} environment variables checked"
+)

@@ -17,12 +17,12 @@ Scenario:
 This does not replace Marina's application-level run-id/idempotency tests. It verifies
 that the broker preserves an unacknowledged job across a client restart.
 """
+
 from __future__ import annotations
 
 import argparse
 import asyncio
 import os
-import sys
 import uuid
 
 
@@ -43,7 +43,7 @@ async def run(url: str, timeout: float, ack_wait: float) -> int:
         return 2
 
     stream = f"marina_durability_{uuid.uuid4().hex[:10]}"
-    subject = f"marina.durability.{uuid.uuid4().hex}"
+    subject = f"virinda.durability.{uuid.uuid4().hex}"
     durable = f"marina-durability-{uuid.uuid4().hex[:10]}"
     payload = f"marina-durability-{uuid.uuid4().hex}".encode()
 
@@ -81,7 +81,9 @@ async def run(url: str, timeout: float, ack_wait: float) -> int:
             print("NATS durability: fail (message was not redelivered)")
             return 1
         metadata = getattr(redelivered, "metadata", None)
-        redelivery_count = getattr(metadata, "num_delivered", None) if metadata is not None else None
+        redelivery_count = (
+            getattr(metadata, "num_delivered", None) if metadata is not None else None
+        )
         await redelivered.ack()
 
         try:

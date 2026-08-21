@@ -2,8 +2,8 @@ import json
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-from marina.domain.models import Message, ProviderRequest
-from marina.infrastructure.providers.openai_compatible import OpenAICompatibleProvider
+from virinda.domain.models import Message, ProviderRequest
+from virinda.infrastructure.providers.openai_compatible import OpenAICompatibleProvider
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -12,10 +12,13 @@ class Handler(BaseHTTPRequestHandler):
         payload = json.loads(self.rfile.read(length))
         if payload["stream"]:
             chunks = ["hello", " world", "!"]
-            body = b"".join(
-                f"data: {json.dumps({'choices': [{'delta': {'content': chunk}}]})}\n\n".encode()
-                for chunk in chunks
-            ) + b"data: [DONE]\n\n"
+            body = (
+                b"".join(
+                    f"data: {json.dumps({'choices': [{'delta': {'content': chunk}}]})}\n\n".encode()
+                    for chunk in chunks
+                )
+                + b"data: [DONE]\n\n"
+            )
             self.send_response(200)
             self.send_header("Content-Type", "text/event-stream")
             self.send_header("Content-Length", str(len(body)))
@@ -39,7 +42,10 @@ def test_openai_compatible_provider_streams_sse() -> None:
     thread.start()
     try:
         provider = OpenAICompatibleProvider(
-            name="test", base_url=f"http://127.0.0.1:{server.server_port}", api_key="x", default_model="demo"
+            name="test",
+            base_url=f"http://127.0.0.1:{server.server_port}",
+            api_key="x",
+            default_model="demo",
         )
         request = ProviderRequest(1, "demo", (Message("user", "hello"),))
         assert list(provider.stream(request)) == ["hello", " world", "!"]

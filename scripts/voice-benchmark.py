@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Compute Marina voice latency metrics and optionally enforce P0 acceptance targets."""
+
 from __future__ import annotations
 
 import argparse
@@ -35,13 +36,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="JSONL from voice-event-capture.py")
     parser.add_argument("--json", action="store_true", help="print machine-readable JSON")
-    parser.add_argument("--markdown", action="store_true", help="print a Markdown acceptance report")
-    parser.add_argument("--min-turns", type=int, default=30, help="minimum turns for an acceptance run")
-    parser.add_argument("--fail-on-targets", action="store_true", help="exit non-zero when measured p95 targets fail")
-    parser.add_argument("--allow-incomplete", action="store_true", help="allow missing latency stages")
+    parser.add_argument(
+        "--markdown", action="store_true", help="print a Markdown acceptance report"
+    )
+    parser.add_argument(
+        "--min-turns", type=int, default=30, help="minimum turns for an acceptance run"
+    )
+    parser.add_argument(
+        "--fail-on-targets",
+        action="store_true",
+        help="exit non-zero when measured p95 targets fail",
+    )
+    parser.add_argument(
+        "--allow-incomplete", action="store_true", help="allow missing latency stages"
+    )
     args = parser.parse_args()
     try:
-        from marina.features import VoiceEventSample, latency_sample_from_events
+        from virinda.features import VoiceEventSample, latency_sample_from_events
     except ImportError:
         # Keep repository scripts runnable directly from a source checkout.
         # Installed environments still use the normal package import path.
@@ -49,9 +60,9 @@ def main() -> int:
         if src.is_dir() and str(src) not in sys.path:
             sys.path.insert(0, str(src))
         try:
-            from marina.features import VoiceEventSample, latency_sample_from_events
+            from virinda.features import VoiceEventSample, latency_sample_from_events
         except ImportError:
-            print("Marina package is unavailable; install marina-ai", file=sys.stderr)
+            print("Marina package is unavailable; install virinda-ai", file=sys.stderr)
             return 2
 
     turns: dict[str, list[VoiceEventSample]] = defaultdict(list)
@@ -78,13 +89,21 @@ def main() -> int:
         "tts_first_audio_ms",
         "total_ms",
     )
-    result: dict[str, object] = {"turns": len(samples), "metrics": {}, "targets_ms": TARGETS_MS.copy()}
+    result: dict[str, object] = {
+        "turns": len(samples),
+        "metrics": {},
+        "targets_ms": TARGETS_MS.copy(),
+    }
     failures: list[str] = []
     if len(samples) < args.min_turns:
         failures.append(f"only {len(samples)} turns captured; need at least {args.min_turns}")
 
     for metric in metrics:
-        values = [float(getattr(sample, metric)) for sample in samples if getattr(sample, metric) is not None]
+        values = [
+            float(getattr(sample, metric))
+            for sample in samples
+            if getattr(sample, metric) is not None
+        ]
         stats = {
             "count": len(values),
             "p50": percentile(values, 0.50),
@@ -122,7 +141,9 @@ def main() -> int:
     else:
         print(f"Turns: {result['turns']}")
         for metric, stats in result["metrics"].items():
-            print(f"{metric:24} count={stats['count']:>3} p50={stats['p50']}ms p95={stats['p95']}ms")
+            print(
+                f"{metric:24} count={stats['count']:>3} p50={stats['p50']}ms p95={stats['p95']}ms"
+            )
         if failures:
             print("Acceptance: FAIL")
             for failure in failures:

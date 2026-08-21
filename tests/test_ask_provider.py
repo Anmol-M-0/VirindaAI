@@ -4,8 +4,8 @@ import unittest
 from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
-from marina.domain.models import Message, ProviderRequest
-from marina.infrastructure.providers.ask_adapter import AskCompletionProvider
+from virinda.domain.models import Message, ProviderRequest
+from virinda.infrastructure.providers.ask_adapter import AskCompletionProvider
 
 
 class MockAskBackend:
@@ -14,14 +14,27 @@ class MockAskBackend:
         self.raise_error = raise_error
         self.last_query = None
 
-    def send_query(self, prompt: str, system_prompt: str | None = None, stream: bool = True, model: str | None = None):
-        self.last_query = {"prompt": prompt, "system_prompt": system_prompt, "stream": stream, "model": model}
+    def send_query(
+        self,
+        prompt: str,
+        system_prompt: str | None = None,
+        stream: bool = True,
+        model: str | None = None,
+    ):
+        self.last_query = {
+            "prompt": prompt,
+            "system_prompt": system_prompt,
+            "stream": stream,
+            "model": model,
+        }
         if self.raise_error:
             from ask.providers import ProviderEvent
+
             yield ProviderEvent(type="error", data="Simulated network failure")
             return
 
         from ask.providers import ProviderEvent
+
         for token in self.token_chunks:
             yield ProviderEvent(type="token", data=token)
         yield ProviderEvent(type="complete", data="".join(self.token_chunks))
@@ -44,9 +57,7 @@ class TestAskCompletionProvider(unittest.TestCase):
         system_prompt, prompt = provider._extract_prompts(req)
         self.assertEqual(system_prompt, "You are a helpful ambient assistant.")
         expected_prompt = (
-            "User: What time is it?\n"
-            "Assistant: It is 6:00 PM.\n"
-            "User: Set a timer for 10 minutes."
+            "User: What time is it?\nAssistant: It is 6:00 PM.\nUser: Set a timer for 10 minutes."
         )
         self.assertEqual(prompt, expected_prompt)
 
@@ -55,9 +66,7 @@ class TestAskCompletionProvider(unittest.TestCase):
         req = ProviderRequest(
             generation_id=2,
             model="meta/llama-3.3-70b-instruct",
-            messages=(
-                Message(role="user", content="Hello Marina!"),
-            ),
+            messages=(Message(role="user", content="Hello Marina!"),),
         )
 
         system_prompt, prompt = provider._extract_prompts(req)
@@ -81,17 +90,19 @@ class TestAskCompletionProvider(unittest.TestCase):
         self.assertEqual(prompt, "Tool: Tool result: ok\nUser: Next step")
 
     def test_streaming_tokens_mock_backend(self):
-        provider = AskCompletionProvider(name="ask", ask_provider="mock", default_model="mock-echo-v1")
+        provider = AskCompletionProvider(
+            name="ask", ask_provider="mock", default_model="mock-echo-v1"
+        )
         req = ProviderRequest(
             generation_id=4,
             model="mock-echo-v1",
-            messages=(
-                Message(role="user", content="Echo test"),
-            ),
+            messages=(Message(role="user", content="Echo test"),),
         )
 
         mock_backend = MockAskBackend(["Part1", " ", "Part2"])
-        with patch("marina.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend):
+        with patch(
+            "virinda.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend
+        ):
             tokens = list(provider.stream(req))
 
         self.assertEqual(tokens, ["Part1", " ", "Part2"])
@@ -103,13 +114,13 @@ class TestAskCompletionProvider(unittest.TestCase):
         req = ProviderRequest(
             generation_id=5,
             model="meta/llama-3.3-70b-instruct",
-            messages=(
-                Message(role="user", content="Trigger error"),
-            ),
+            messages=(Message(role="user", content="Trigger error"),),
         )
 
         mock_backend = MockAskBackend(raise_error=True)
-        with patch("marina.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend):
+        with patch(
+            "virinda.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend
+        ):
             with self.assertRaises(RuntimeError) as ctx:
                 list(provider.stream(req))
 
@@ -124,7 +135,9 @@ class TestAskCompletionProvider(unittest.TestCase):
         )
 
         mock_backend = MockAskBackend(["1", "2", "3", "4", "5"])
-        with patch("marina.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend):
+        with patch(
+            "virinda.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend
+        ):
             stream_iter = provider.stream(req)
             first_token = next(stream_iter)
             self.assertEqual(first_token, "1")
@@ -140,7 +153,9 @@ class TestAskCompletionProvider(unittest.TestCase):
         )
 
         mock_backend = MockAskBackend(["ok"])
-        with patch("marina.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend) as mock_get:
+        with patch(
+            "virinda.infrastructure.providers.ask_adapter.get_provider", return_value=mock_backend
+        ) as mock_get:
             tokens = list(provider.stream(req))
             self.assertEqual(tokens, ["ok"])
             mock_get.assert_called_once_with(
@@ -160,7 +175,9 @@ class TestAskCompletionProvider(unittest.TestCase):
                 messages=(Message(role="user", content=f"Hello from {worker_id}"),),
             )
             backend = MockAskBackend([f"w{worker_id}-token1", f"w{worker_id}-token2"])
-            with patch("marina.infrastructure.providers.ask_adapter.get_provider", return_value=backend):
+            with patch(
+                "virinda.infrastructure.providers.ask_adapter.get_provider", return_value=backend
+            ):
                 return "".join(provider.stream(req))
 
         with ThreadPoolExecutor(max_workers=8) as pool:

@@ -10,7 +10,7 @@ def _constraint_map(path: Path) -> dict[str, str]:
         if not line or line.startswith("#"):
             continue
         name = re.split(r"[<>=!~]", line, maxsplit=1)[0].strip().lower().replace("_", "-")
-        result[name] = line[len(name):]
+        result[name] = line[len(name) :]
     return result
 
 
@@ -57,7 +57,12 @@ def test_reliability_tiers_are_disjoint_and_supported_stack_is_in_stable_lock():
     matrix = json.loads((root / "config/ovos/compatibility.json").read_text(encoding="utf-8"))
     stable = _constraint_map(root / matrix["stable_channel"]["constraints_file"])
     tiers = matrix["reliability_policy"]
-    names = ["tier_a_production", "tier_b_stable_local_fallback", "tier_c_marina_addons", "tier_d_experimental_or_legacy"]
+    names = [
+        "tier_a_production",
+        "tier_b_stable_local_fallback",
+        "tier_c_marina_addons",
+        "tier_d_experimental_or_legacy",
+    ]
     sets = [set(tiers[name]) for name in names]
     assert sum(map(len, sets)) == len(set().union(*sets))
     for package, expected in matrix["stable_channel"]["supported_stack"].items():

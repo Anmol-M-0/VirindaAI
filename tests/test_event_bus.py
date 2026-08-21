@@ -1,5 +1,5 @@
-from marina.core.events import InMemoryEventBus
-from marina.domain.events import LifecycleChanged
+from virinda.core.events import InMemoryEventBus
+from virinda.domain.events import LifecycleChanged
 
 
 class BrokenSink:

@@ -9,12 +9,12 @@ Exit codes:
 The test creates a temporary stream/consumer subject, publishes one Marina-style
 job, consumes and acknowledges it, then confirms the durable JetStream path works.
 """
+
 from __future__ import annotations
 
 import argparse
 import asyncio
 import os
-import sys
 import uuid
 
 
@@ -34,7 +34,7 @@ async def run(url: str, timeout: float) -> int:
         return 2
 
     stream = f"marina_accept_{uuid.uuid4().hex[:10]}"
-    subject = f"marina.accept.{uuid.uuid4().hex}"
+    subject = f"virinda.accept.{uuid.uuid4().hex}"
     durable = f"marina-accept-{uuid.uuid4().hex[:10]}"
     nc = None
     try:
@@ -46,7 +46,7 @@ async def run(url: str, timeout: float) -> int:
             retention=api.RetentionPolicy.WORK_QUEUE,
         )
         sub = await js.pull_subscribe(subject, durable=durable, stream=stream)
-        payload = b'{"subject":"marina.jobs.acceptance","payload":{"ok":true}}'
+        payload = b'{"subject":"virinda.jobs.acceptance","payload":{"ok":true}}'
         await js.publish(subject, payload)
         message = await sub.next_msg(timeout=timeout)
         if message.data != payload:

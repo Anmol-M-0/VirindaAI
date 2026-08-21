@@ -1,4 +1,4 @@
-from marina.ovos.audio_diagnostics import AudioCommandResult, inspect_linux_audio
+from virinda.ovos.audio_diagnostics import AudioCommandResult, inspect_linux_audio
 
 
 def test_audio_command_result_is_json_safe() -> None:

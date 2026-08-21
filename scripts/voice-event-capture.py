@@ -5,6 +5,7 @@ This is a hardware acceptance utility, not a second voice pipeline. It subscribe
 passively to the local OVOS MessageBus and writes timestamps only; no PCM audio or
 transcripts are persisted by this utility.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -23,6 +24,7 @@ EVENT_MAP = {
     "ovos.audio.output.ended": "audio.output.ended",
     "mycroft.stop": "barge_in.requested",
 }
+
 
 def correlate_event(
     event: str,
@@ -64,16 +66,17 @@ def correlate_event(
     return current_turn, current_turn, output_turn
 
 
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--duration", type=float, default=60.0, help="capture window in seconds")
-    parser.add_argument("--output", type=str, default="-", help="JSONL output path, or - for stdout")
+    parser.add_argument(
+        "--output", type=str, default="-", help="JSONL output path, or - for stdout"
+    )
     args = parser.parse_args()
     try:
         from ovos_bus_client import MessageBusClient
     except ImportError as exc:  # pragma: no cover - exercised on machines without OVOS
-        print("OVOS bus client is unavailable; install marina-ai[ovos]", file=sys.stderr)
+        print("OVOS bus client is unavailable; install virinda-ai[ovos]", file=sys.stderr)
         return 2
 
     output = sys.stdout if args.output == "-" else open(args.output, "w", encoding="utf-8")

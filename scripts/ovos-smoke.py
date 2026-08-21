@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run a hardware-free smoke test against an installed OVOS + Marina environment."""
+
 from __future__ import annotations
 
 import argparse
@@ -38,7 +39,9 @@ def main() -> int:
         except metadata.PackageNotFoundError:
             checks.append({"package": package, "status": "missing", "expected": spec})
             continue
-        checks.append({"package": package, "status": "installed", "version": installed, "expected": spec})
+        checks.append(
+            {"package": package, "status": "installed", "version": installed, "expected": spec}
+        )
 
     missing = [c for c in checks if c["status"] == "missing"]
     report = {

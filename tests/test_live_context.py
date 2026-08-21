@@ -2,12 +2,12 @@ import threading
 import time
 from pathlib import Path
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
-from marina.interfaces.ipc import LocalRPCClient, LocalRPCServer
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
+from virinda.interfaces.ipc import LocalRPCClient, LocalRPCServer
 
 
 def _service(tmp_path: Path) -> AssistantService:
@@ -47,7 +47,7 @@ def test_meeting_utterances_enter_meeting_transcript_only(tmp_path):
 
 def test_live_context_available_over_ipc(tmp_path):
     service = _service(tmp_path)
-    path = tmp_path / "marina.sock"
+    path = tmp_path / "virinda.sock"
     server = LocalRPCServer(service, path)
     server.start()
     thread = threading.Thread(target=server.serve_forever, daemon=True)

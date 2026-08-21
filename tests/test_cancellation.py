@@ -1,4 +1,4 @@
-from marina.core.cancellation import GenerationController
+from virinda.core.cancellation import GenerationController
 
 
 def test_generation_invalidation_makes_old_work_stale() -> None:

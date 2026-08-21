@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from marina.core.voice import VoiceInteractionController
-from marina.domain.audio import (
+from virinda.core.voice import VoiceInteractionController
+from virinda.domain.audio import (
     AudioFrame,
     AudioInteractionMode,
     AudioPolicy,
@@ -60,7 +60,11 @@ def test_wake_word_opens_listening_and_emits_utterance_after_silence():
 
 def test_push_to_talk_is_a_first_class_entry_mode():
     events = []
-    controller = VoiceInteractionController(mode=AudioInteractionMode.WAKE_WORD) if False else VoiceInteractionController(emit=events.append)
+    controller = (
+        VoiceInteractionController(mode=AudioInteractionMode.WAKE_WORD)
+        if False
+        else VoiceInteractionController(emit=events.append)
+    )
     controller.set_mode(AudioInteractionMode.PUSH_TO_TALK)
     controller.arm()
     controller.push_to_talk_pressed()

@@ -4,16 +4,16 @@ from pathlib import Path
 from threading import Event
 from time import sleep
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.core.tokenizer import StreamingSentenceTokenizer
-from marina.core.voice import VoiceInteractionController, VoiceSignal
-from marina.core.voice_runtime import VoiceTurnRuntime
-from marina.domain.audio import AudioFrame, AudioPolicy, VoiceActivity
-from marina.domain.events import ResponseCompleted, ResponseDelta
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.core.tokenizer import StreamingSentenceTokenizer
+from virinda.core.voice import VoiceInteractionController, VoiceSignal
+from virinda.core.voice_runtime import VoiceTurnRuntime
+from virinda.domain.audio import AudioFrame, AudioPolicy, VoiceActivity
+from virinda.domain.events import ResponseCompleted, ResponseDelta
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 class FakeVad:
@@ -127,9 +127,11 @@ def test_barge_in_stops_tts_and_cancels_service(tmp_path: Path):
     runtime.close()
     service.close()
 
+
 class BlockingRecognizer(FakeRecognizer):
     def __init__(self):
         import threading
+
         self.started = threading.Event()
         self.release = threading.Event()
 
@@ -171,6 +173,7 @@ class BlockingTTS(FakeTTS):
     def __init__(self):
         super().__init__()
         import threading
+
         self.started = threading.Event()
         self.release = threading.Event()
 
@@ -262,6 +265,7 @@ def test_new_tts_worker_cannot_uncancel_old_worker(tmp_path: Path):
     runtime.close()
     service.close()
 
+
 class FailingInterruptibleOutput(InterruptibleOutput):
     def play_interruptible(self, frames, *, cancel_event):
         self.started.set()
@@ -294,6 +298,7 @@ def test_expected_playback_cancel_is_not_reported_as_tts_error(tmp_path: Path):
     assert not any(signal.name == "tts_error" for signal in signals)
     runtime.close()
     service.close()
+
 
 class FirstCallBlockingTTS(FakeTTS):
     def __init__(self):

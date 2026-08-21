@@ -1,1 +1,1 @@
-marina-ai==0.26.3
+virindai==0.26.3

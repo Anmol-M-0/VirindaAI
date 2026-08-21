@@ -2,16 +2,16 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from marina.application.service import AssistantService
-from marina.core.events import InMemoryEventBus
-from marina.core.natural_commands import NaturalCommandParser, parse_due_time
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
-from marina.infrastructure.providers.echo import EchoProvider
-from marina.infrastructure.providers.router import StaticProviderRouter
+from virinda.application.service import AssistantService
+from virinda.core.events import InMemoryEventBus
+from virinda.core.natural_commands import NaturalCommandParser, parse_due_time
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.infrastructure.providers.echo import EchoProvider
+from virinda.infrastructure.providers.router import StaticProviderRouter
 
 
 def build_service(tmp_path: Path):
-    store = SQLiteConversationStore(tmp_path / "marina.db")
+    store = SQLiteConversationStore(tmp_path / "virinda.db")
     return AssistantService(
         router=StaticProviderRouter({"echo": EchoProvider()}, "echo"),
         store=store,
@@ -37,7 +37,9 @@ def test_relative_due_time_is_deterministic():
 
 def test_absolute_due_time_rolls_to_tomorrow_when_passed():
     now = datetime(2026, 8, 21, 20, 45, tzinfo=ZoneInfo("Asia/Kolkata"))
-    due = datetime.fromtimestamp(parse_due_time("at 8:30 pm", now=now, timezone="Asia/Kolkata"), ZoneInfo("Asia/Kolkata"))
+    due = datetime.fromtimestamp(
+        parse_due_time("at 8:30 pm", now=now, timezone="Asia/Kolkata"), ZoneInfo("Asia/Kolkata")
+    )
     assert due.date().isoformat() == "2026-08-22"
     assert due.hour == 20 and due.minute == 30
 
@@ -45,7 +47,10 @@ def test_absolute_due_time_rolls_to_tomorrow_when_passed():
 def test_service_interprets_memory_profile_context_and_reminder(tmp_path: Path):
     s = build_service(tmp_path)
     try:
-        assert s.ask("remember my favorite color is blue") == "I'll remember that your favorite color is blue."
+        assert (
+            s.ask("remember my favorite color is blue")
+            == "I'll remember that your favorite color is blue."
+        )
         assert s.profile_snapshot()["display_name"] is None
         assert s.ask("what is my favorite color?") == "Your favorite color is blue."
         assert s.ask("call me Anmol") == "Got it. I'll call you Anmol."
@@ -67,7 +72,8 @@ def test_recurring_reminder_provider_model_and_tool_request_parser():
 
 
 def test_parse_recurrence_weekday_and_interval():
-    from marina.core.natural_commands import parse_recurrence
+    from virinda.core.natural_commands import parse_recurrence
+
     now = datetime(2026, 8, 21, 5, 10, tzinfo=ZoneInfo("Asia/Kolkata"))  # Friday
     due, interval = parse_recurrence("every weekday at 8 am", now=now, timezone="Asia/Kolkata")
     dt = datetime.fromtimestamp(due, ZoneInfo("Asia/Kolkata"))
@@ -124,9 +130,11 @@ def test_natural_confirmation_completes_pending_tool_request(tmp_path: Path):
     s = build_service(tmp_path)
     try:
         calls = []
+
         def fake_execute(name, **kwargs):
             calls.append((name, kwargs))
             return "opened"
+
         s.tool_execute = fake_execute  # type: ignore[method-assign]
         pending = s.ask("open https://example.com")
         assert "approval" in pending.lower()
@@ -138,7 +146,8 @@ def test_natural_confirmation_completes_pending_tool_request(tmp_path: Path):
 
 
 def test_natural_automation_plan_is_reviewable_and_safe():
-    from marina.core.natural_commands import plan_automation
+    from virinda.core.natural_commands import plan_automation
+
     now = datetime(2026, 8, 21, 5, 10, tzinfo=ZoneInfo("Asia/Kolkata"))
     plan = plan_automation(
         "every weekday at 9 am, open https://example.com and notify me that the dashboard is ready",
@@ -165,12 +174,19 @@ def test_service_saves_automation_only_after_confirmation(tmp_path: Path):
     finally:
         s.close()
 
+
 def test_natural_routine_lifecycle_commands_parse():
-    from marina.core.natural_commands import NaturalCommandParser
+    from virinda.core.natural_commands import NaturalCommandParser
+
     parser = NaturalCommandParser()
     assert parser.parse("disable the routine Morning Review").kind == "disable_routine"
     assert parser.parse("delete the routine Morning Review").args == ("Morning Review",)
-    assert parser.parse("change the routine Morning Review to every weekday at 10 am, notify me to review the dashboard").kind == "edit_routine"
+    assert (
+        parser.parse(
+            "change the routine Morning Review to every weekday at 10 am, notify me to review the dashboard"
+        ).kind
+        == "edit_routine"
+    )
 
 
 def test_preview_routine_command_is_deterministic(tmp_path: Path):

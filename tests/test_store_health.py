@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from marina.domain.models import Message, Session
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
+from virinda.domain.models import Message, Session
+from virinda.infrastructure.persistence.sqlite import SQLiteConversationStore
 
 
 def test_health_and_backup(tmp_path):

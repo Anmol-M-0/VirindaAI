@@ -233,7 +233,7 @@ virinda doctor --audio --services
 The doctor determines the required STT/TTS dependencies from the selected OVOS configuration rather than hard-coding a single engine.
 
 
-Current release: **v0.26.3**. See `docs/FEATURE_CATALOG.md` for the implemented feature plane and `docs/ROADMAP.md` for the remaining live-runtime acceptance work.
+Current release: **v0.27.0**. See `docs/FEATURE_CATALOG.md` for the implemented feature plane and `docs/ROADMAP.md` for release and acceptance validation.
 
 
 ## Natural assistant commands

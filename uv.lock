@@ -279,7 +279,7 @@ name = "click"
 version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/76/d4/81420972a676e8ffea40450d8c8c92943e7218a78fe9b64359836cc9876b/click-8.4.2.tar.gz", hash = "sha256:9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6", size = 338000, upload-time = "2026-06-24T17:45:15.148Z" }
 wheels = [
@@ -1344,7 +1344,7 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ovos-plugin-manager", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-stable'" },
     { name = "ovos-plugin-manager", version = "2.2.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-8-virindai-ovos-experimental-agent' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
-    { name = "requests", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "requests" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/be/0e/a399ddbf1cca3e716100a01b401b352b268cab16c32a0b1628bf8227a099/ovos_openai_plugin-2.0.6.tar.gz", hash = "sha256:0165fa1798b21b69700e9fe976b960f8ac624d06c52ac961c32eff64501b147b", size = 13284, upload-time = "2025-11-05T01:05:21.737Z" }
 wheels = [
@@ -1752,7 +1752,7 @@ name = "padacioso"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "simplematch", marker = "extra == 'extra-8-virindai-ovos' or extra == 'extra-8-virindai-ovos-experimental-agent' or extra == 'extra-8-virindai-ovos-stable'" },
+    { name = "simplematch" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/72/be/dcc4e2bed5c87b61b7dca738cc49781e204e4a935b27a09fdfd5353d297f/padacioso-1.0.0.tar.gz", hash = "sha256:29646359f888c539d21fd48443f264a8fc0c95ef6d13afd1713beec86fd1eed5", size = 15844, upload-time = "2024-10-16T09:11:42.339Z" }
 wheels = [
@@ -2251,7 +2251,7 @@ version = "1.9.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
     { name = "rich" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f7/ea/21e4867ea0ef881ffd4c0550fc21a061435e50d6324bcd034396633cbc18/rich_click-1.9.8.tar.gz", hash = "sha256:4008f921da88b5d91646c134ec881c1500e5a6b3f093e90e8f29400e09608371", size = 75363, upload-time = "2026-05-28T19:54:59.144Z" }
@@ -2579,7 +2579,7 @@ name = "tqdm"
 version = "4.70.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/21/3b/6c24bec5be5e743ffd99576daa5cc077722fc7d5bbc00bd133fa0c698dc6/tqdm-4.70.0.tar.gz", hash = "sha256:55b0b0dbd97462d06ebee91e4dac24ed4d4702be82b24f07e6c1d27e08cea220", size = 795438, upload-time = "2026-07-27T11:33:15.271Z" }
 wheels = [
@@ -2667,7 +2667,7 @@ name = "tzlocal"
 version = "5.4.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tzdata", marker = "sys_platform == 'win32' or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-experimental-agent') or (extra == 'extra-8-virindai-ovos' and extra == 'extra-8-virindai-ovos-local-voice') or (extra == 'extra-8-virindai-ovos-experimental-agent' and extra == 'extra-8-virindai-ovos-stable') or (extra == 'extra-8-virindai-ovos-local-voice' and extra == 'extra-8-virindai-ovos-stable')" },
+    { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/81/5b/879b2f932adfa7a053c360d50bc896c977fa6426109185f7c12ebdd0cb9d/tzlocal-5.4.4.tar.gz", hash = "sha256:8dbb8660838688a7b6ba4fed31d18dedf842afb4d47ca050d6d891c2c15f3be4", size = 31170, upload-time = "2026-06-29T08:03:40.026Z" }
 wheels = [
@@ -2699,10 +2699,9 @@ socks = [
 
 [[package]]
 name = "virindai"
-version = "0.26.3"
+version = "0.27.0"
 source = { editable = "." }
 dependencies = [
-    { name = "ask" },
     { name = "certifi" },
     { name = "msgspec" },
     { name = "python-dotenv" },
@@ -2796,7 +2795,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ask", editable = "../chatgpt-cli" },
     { name = "ask", marker = "extra == 'ask'", editable = "../chatgpt-cli" },
     { name = "certifi", specifier = ">=2024.0.0" },
     { name = "httpx", marker = "extra == 'providers'", specifier = ">=0.27" },

@@ -1,3 +1,12 @@
+## 0.27.0
+
+- Implemented versioned SQLite database migration subsystem with `PRAGMA user_version` tracking, atomic transaction rollback, and integrity validation.
+- Added comprehensive migration safety test suite (`tests/test_sqlite_migration_safety.py`).
+- Added systemd user service unit lifecycle test suite (`tests/test_systemd_lifecycle.py`).
+- Created unified release validation gate (`scripts/release_check.sh`).
+- Implemented 5-scenario voice acceptance test suite (`virinda acceptance voice`) with 30-trial rapid barge-in torture and 20-cycle resource leak soak tests.
+- Added standalone runners (`virinda`, `virindad`) and prefix-configurable installer (`install.sh`).
+- Optimized CLI cold-start latency to < 80ms via lazy runtime imports.
 
 ### Next - v0.26.4-next14
 

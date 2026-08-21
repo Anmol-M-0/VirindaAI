@@ -12,14 +12,22 @@ from typing import Optional
 
 from virinda.domain.models import ProviderRequest
 
-# Ensure chatgpt-cli / ask is importable
+# Ensure chatgpt-cli / ask is importable if present
+_ASK_AVAILABLE = False
 try:
     from ask.providers import BaseProvider, ProviderEvent, get_provider
+    _ASK_AVAILABLE = True
 except ImportError:
     cli_src = Path(__file__).resolve().parents[5] / "chatgpt-cli" / "src"
     if cli_src.exists() and str(cli_src) not in sys.path:
         sys.path.insert(0, str(cli_src))
-    from ask.providers import BaseProvider, ProviderEvent, get_provider
+    try:
+        from ask.providers import BaseProvider, ProviderEvent, get_provider
+        _ASK_AVAILABLE = True
+    except ImportError:
+        BaseProvider = object  # type: ignore
+        ProviderEvent = object  # type: ignore
+        get_provider = None  # type: ignore
 
 
 class AskCompletionProvider:
@@ -76,6 +84,10 @@ class AskCompletionProvider:
 
     def stream(self, req: ProviderRequest) -> Iterator[str]:
         """Streams plain token chunks to VirindAI without UI formatting."""
+        if not _ASK_AVAILABLE or get_provider is None:
+            raise RuntimeError(
+                "Ask completion provider is unavailable. Please install chatgpt-cli or configure VIRINDA_PROVIDER=echo or openai."
+            )
         system_prompt, prompt = self._extract_prompts(req)
         model_name = (
             req.model if (req.model and req.model != "offline-demo") else self.default_model

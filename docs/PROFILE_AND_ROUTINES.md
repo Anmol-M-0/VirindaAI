@@ -70,7 +70,7 @@ The user profile is personalization data, not instruction data. It should never 
 
 Scheduled routines are local automation. They do not create arbitrary shell commands, bypass tool approvals, or disable quiet/private modes.
 
-## Automation engine (v0.26.3)
+## Automation engine (v0.27.0)
 
 Routines are now a small declarative automation engine rather than a single timer callback.
 

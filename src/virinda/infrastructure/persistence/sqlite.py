@@ -9,6 +9,7 @@ from typing import Any
 
 from virinda.domain.events import EVENT_TYPES, AssistantEvent
 from virinda.domain.models import Message, Session
+from virinda.infrastructure.persistence.migrations import migrate_database
 
 
 class SQLiteConversationStore:
@@ -22,61 +23,7 @@ class SQLiteConversationStore:
         self._conn.execute("PRAGMA foreign_keys=ON")
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.execute("PRAGMA synchronous=NORMAL")
-        self._conn.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS sessions (
-                id TEXT PRIMARY KEY,
-                provider TEXT NOT NULL DEFAULT 'echo',
-                model TEXT NOT NULL DEFAULT 'offline-demo',
-                mode TEXT NOT NULL DEFAULT 'text',
-                created_at REAL NOT NULL,
-                updated_at REAL NOT NULL
-            );
-            CREATE TABLE IF NOT EXISTS messages (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT NOT NULL,
-                role TEXT NOT NULL,
-                content TEXT NOT NULL,
-                created_at REAL NOT NULL,
-                FOREIGN KEY(session_id) REFERENCES sessions(id)
-            );
-            CREATE TABLE IF NOT EXISTS events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT NOT NULL,
-                generation_id INTEGER NOT NULL,
-                sequence INTEGER NOT NULL,
-                event_type TEXT NOT NULL,
-                payload_json TEXT NOT NULL,
-                created_at REAL NOT NULL,
-                FOREIGN KEY(session_id) REFERENCES sessions(id)
-            );
-            CREATE INDEX IF NOT EXISTS idx_messages_session_id ON messages(session_id, id);
-            CREATE INDEX IF NOT EXISTS idx_events_session_id ON events(session_id, id);
-            CREATE UNIQUE INDEX IF NOT EXISTS idx_events_session_generation_sequence
-                ON events(session_id, generation_id, sequence);
-            """
-        )
-        self._migrate_schema()
-        self._conn.commit()
-
-    def _migrate_schema(self) -> None:
-        """Apply additive migrations for databases created by earlier releases."""
-        version = int(self._conn.execute("PRAGMA user_version").fetchone()[0])
-        columns = {row[1] for row in self._conn.execute("PRAGMA table_info(sessions)").fetchall()}
-
-        if "provider" not in columns:
-            self._conn.execute(
-                "ALTER TABLE sessions ADD COLUMN provider TEXT NOT NULL DEFAULT 'echo'"
-            )
-        if "model" not in columns:
-            self._conn.execute(
-                "ALTER TABLE sessions ADD COLUMN model TEXT NOT NULL DEFAULT 'offline-demo'"
-            )
-        if "mode" not in columns:
-            self._conn.execute("ALTER TABLE sessions ADD COLUMN mode TEXT NOT NULL DEFAULT 'text'")
-
-        if version < 2:
-            self._conn.execute("PRAGMA user_version=2")
+        self.schema_version = migrate_database(self._conn)
 
     def ensure_session(self, session: Session) -> None:
         with self._lock:

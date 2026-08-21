@@ -15,3 +15,4 @@ __pycache__/
 /target/
 rust/audio-core/target/
 rust/audio-core/Cargo.lock
+.chatgpt-automation-runs/

@@ -77,41 +77,72 @@ class AskCompletionProvider:
     def stream(self, req: ProviderRequest) -> Iterator[str]:
         """Streams plain token chunks to VirindAI without UI formatting."""
         system_prompt, prompt = self._extract_prompts(req)
-        model_name = req.model or self.default_model
+        model_name = req.model if (req.model and req.model != "offline-demo") else self.default_model
         target_provider = req.metadata.get("provider", self.ask_provider) or self.ask_provider
 
-        try:
-            backend: BaseProvider = get_provider(
-                provider_name=target_provider,
-                model=model_name,
-                api_key=self.api_key,
-                headless=self.headless,
-            )
+        candidate_providers = [target_provider]
+        for fb in ("groq", "openrouter"):
+            if fb not in candidate_providers:
+                candidate_providers.append(fb)
 
-            for event in backend.send_query(
-                prompt=prompt,
-                system_prompt=system_prompt,
-                stream=True,
-                model=model_name,
-            ):
-                if isinstance(event, ProviderEvent):
-                    event_type, event_data = event.type, event.data
-                elif isinstance(event, (tuple, list)) and len(event) >= 2:
-                    event_type, event_data = event[0], event[1]
-                else:
-                    continue
+        yielded_any = False
+        last_exception = None
 
-                if event_type == "token":
-                    if event_data:
-                        yield str(event_data)
-                elif event_type == "error":
-                    raise RuntimeError(f"Ask provider '{self.name}' error: {event_data}")
-                elif event_type == "complete" and not req.metadata.get("streamed"):
-                    # Single complete payload fallback if provider did not emit tokens
-                    pass
+        for candidate in candidate_providers:
+            if yielded_any:
+                break
+            try:
+                candidate_model = model_name
+                if candidate == "groq" and "/" not in candidate_model:
+                    candidate_model = "groq/compound-mini"
+                elif candidate == "openrouter" and candidate_model.startswith("groq/"):
+                    candidate_model = "openrouter/free"
 
-        except (KeyboardInterrupt, GeneratorExit):
-            # Normal stream cancellation / generator closure
-            return
-        except Exception as exc:
-            raise RuntimeError(f"VirindAI ask provider ({self.name}) failed: {exc}") from exc
+                backend: BaseProvider = get_provider(
+                    provider_name=candidate,
+                    model=candidate_model,
+                    api_key=self.api_key,
+                    headless=self.headless,
+                )
+
+                for event in backend.send_query(
+                    prompt=prompt,
+                    system_prompt=system_prompt,
+                    stream=True,
+                    model=candidate_model,
+                ):
+                    if isinstance(event, ProviderEvent):
+                        event_type, event_data = event.type, event.data
+                    elif isinstance(event, (tuple, list)) and len(event) >= 2:
+                        event_type, event_data = event[0], event[1]
+                    else:
+                        continue
+
+                    if event_type == "token":
+                        if event_data:
+                            yielded_any = True
+                            yield str(event_data)
+                    elif event_type == "error":
+                        if not yielded_any:
+                            # Allow next candidate provider
+                            raise RuntimeError(f"Ask provider '{candidate}' error: {event_data}")
+                        else:
+                            return
+                    elif event_type == "complete" and not req.metadata.get("streamed"):
+                        if not yielded_any and event_data:
+                            yielded_any = True
+                            yield str(event_data)
+
+                if yielded_any:
+                    return
+
+            except (KeyboardInterrupt, GeneratorExit):
+                return
+            except Exception as exc:
+                last_exception = exc
+                if yielded_any:
+                    return
+                continue
+
+        if not yielded_any and last_exception is not None:
+            raise RuntimeError(f"VirindAI ask provider ({self.name}) failed across candidates: {last_exception}") from last_exception

@@ -1,0 +1,6 @@
+{
+  "headless": true,
+  "profile_strategy": "selective",
+  "network_policy": "allow",
+  "framework_offline": false
+}

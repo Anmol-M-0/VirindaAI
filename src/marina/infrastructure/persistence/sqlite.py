@@ -107,7 +107,11 @@ class SQLiteConversationStore:
             self._conn.execute(
                 """INSERT INTO events(session_id, generation_id, sequence, event_type,
                                       payload_json, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?)""",
+                   VALUES (?, ?, ?, ?, ?, ?)
+                   ON CONFLICT(session_id, generation_id, sequence) DO UPDATE SET
+                       event_type=excluded.event_type,
+                       payload_json=excluded.payload_json,
+                       created_at=excluded.created_at""",
                 (session_id, event.generation_id, event.sequence, type(event).__name__, payload, event.created_at),
             )
             self._touch(session_id)

@@ -43,7 +43,7 @@ def test_alerts_notifications_and_routines(tmp_path):
         n = s.alerts.notify("Hello", "World")
         assert s.notification_summary() == "Hello: World"
         r = s.save_routine("greeting", "keyword:hello", "notify:Greeting|Hi")
-        assert s.run_routines_for_text("hello marina") == [r["id"]]
+        assert s.run_routines_for_text("hello virinda") == [r["id"]]
     finally:
         s.close()
 
@@ -175,10 +175,10 @@ def test_profile_and_schedule_are_exposed_over_ipc(tmp_path):
             {
                 "id": 1,
                 "method": "profile_update",
-                "params": {"changes": {"display_name": "Marina User"}},
+                "params": {"changes": {"display_name": "Virinda User"}},
             }
         )
-        assert profile["result"]["display_name"] == "Marina User"
+        assert profile["result"]["display_name"] == "Virinda User"
         routine = server.dispatch(
             {
                 "id": 2,

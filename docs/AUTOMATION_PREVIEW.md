@@ -1,11 +1,11 @@
 # Automation Preview and Dry Run
 
-Marina can explain a routine without executing it. This is the review boundary for scheduled and event-driven automation.
+Virinda can explain a routine without executing it. This is the review boundary for scheduled and event-driven automation.
 
 ## CLI
 
 ```bash
-marina routines preview <routine-id>
+virinda routines preview <routine-id>
 ```
 
 ## IPC
@@ -26,7 +26,7 @@ The returned object describes the routine, expanded steps, approval requirements
 
 ## Conversational form
 
-Marina also accepts:
+Virinda also accepts:
 
 ```text
 preview the routine Morning Review

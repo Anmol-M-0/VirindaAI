@@ -54,14 +54,14 @@ def main() -> None:
         stop.set()
         service.cancel("shutdown")
         # socketserver.shutdown() must run outside the serve_forever thread.
-        threading.Thread(target=server.shutdown, name="marina-ipc-shutdown", daemon=True).start()
+        threading.Thread(target=server.shutdown, name="virinda-ipc-shutdown", daemon=True).start()
 
     signal.signal(signal.SIGTERM, handle_stop)
     signal.signal(signal.SIGINT, handle_stop)
 
     try:
         server.start()
-        print(f"marinad listening on {server.socket_path}")
+        print(f"virindad listening on {server.socket_path}")
         server.serve_forever()
     finally:
         server.shutdown()

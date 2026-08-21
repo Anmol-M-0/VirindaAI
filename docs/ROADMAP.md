@@ -1,4 +1,4 @@
-# MarinaAI Roadmap — Feature-Complete Application Layer
+# VirindaAI Roadmap — Feature-Complete Application Layer
 
 The original roadmap is now implemented at the application/adapter level. Remaining work is primarily hardware/runtime acceptance, model evaluation, and UX refinement on a real Linux desktop.
 
@@ -41,11 +41,11 @@ The original roadmap is now implemented at the application/adapter level. Remain
 - [x] Multimodal image input and OpenAI-compatible vision adapter
 - [x] Satellite envelope + OVOS bus adapter
 - [x] HMAC-authenticated transport primitive for remote/satellite integration
-- [x] Marina-specific OVOS voice control intents
+- [x] Virinda-specific OVOS voice control intents
 
 ## Live validation still required
 
-- [ ] Real `Hey Marina` model false-positive/false-negative benchmark on representative audio
+- [ ] Real `Hey Virinda` model false-positive/false-negative benchmark on representative audio
 - [ ] End-to-end microphone → wake → VAD → STT → LLM → TTS acceptance run on target Linux hardware
 - [ ] PipeWire/ALSA automatic-device selection tuning
 - [ ] Barge-in latency measurement on target hardware
@@ -88,7 +88,7 @@ The roadmap is now explicitly ordered by user-visible value:
 ### P0 — Voice experience
 
 - [ ] Provision a target Linux desktop with the supported OVOS stack.
-- [ ] Validate a real `Hey Marina` model with representative noise.
+- [ ] Validate a real `Hey Virinda` model with representative noise.
 - [x] Add hardware-independent OVOS event capture + p50/p95 benchmark harness.
 - [x] Add Linux/OVOS/PipeWire preflight and enforceable P0 benchmark thresholds.
 - [ ] Measure wake → STT → first token → first audio → barge-in p50/p95 on target hardware.

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from virinda.interfaces.ipc import LocalRPCClient
-from virinda.ovos.gui import MarinaGUICommand, OVOSGuiBridge
+from virinda.ovos.gui import OVOSGuiBridge, VirindaGUICommand
 
 try:
     from ovos_bus_client.message import Message
@@ -39,7 +39,7 @@ class VirindaOVOSConfig:
     display_name: str = "Virinda"
 
 
-MarinaOVOSConfig = VirindaOVOSConfig
+VirindaOVOSConfig = VirindaOVOSConfig
 
 
 class VirindaSkill(OVOSSkill):
@@ -72,13 +72,13 @@ class VirindaSkill(OVOSSkill):
         self._publish_gui_snapshot()
 
     def _publish_gui_snapshot(self) -> None:
-        """Publish current Marina state to the OVOS GUI namespace."""
+        """Publish current Virinda state to the OVOS GUI namespace."""
         result = self._rpc("status") or {}
         if not isinstance(result, dict):
             result = {"status": str(result)}
         self.gui.publish_state(result)
 
-    def _on_gui_command(self, command: MarinaGUICommand) -> None:
+    def _on_gui_command(self, command: VirindaGUICommand) -> None:
         """Handle trusted local GUI commands over the OVOS MessageBus."""
         allowed = {
             "status",
@@ -112,12 +112,12 @@ class VirindaSkill(OVOSSkill):
             )
 
     def _on_utterance(self, message: Message) -> None:
-        # Keep this event hook intentionally lightweight. Durable Marina history is
+        # Keep this event hook intentionally lightweight. Durable Virinda history is
         # written by an optional persistence bridge rather than blocking the voice bus.
         utterance = self._extract_utterance(message)
         if utterance:
             self._rpc("ovos_utterance", text=utterance, speaker=self._extract_speaker(message))
-        self.log.debug("Marina heard utterance: %s", utterance)
+        self.log.debug("Virinda heard utterance: %s", utterance)
 
     def _on_record_started(self, message: Message | None = None) -> None:
         self._rpc("ovos_listening", active=True)
@@ -138,12 +138,10 @@ class VirindaSkill(OVOSSkill):
         self.log.debug("Virinda speech event received: %s", text)
 
     @intent_handler("VirindaStatusIntent")
-    @intent_handler("MarinaStatusIntent")
     def handle_status(self, message: Message | None = None) -> None:
         self.speak("Virinda is online and running on OpenVoiceOS.")
 
     @intent_handler("VirindaStopIntent")
-    @intent_handler("MarinaStopIntent")
     def handle_stop(self, message: Message | None = None) -> None:
         # Use the standard OVOS stop event so audio, personas and skills all observe
         # the same cancellation semantics.
@@ -151,50 +149,52 @@ class VirindaSkill(OVOSSkill):
         self.bus.emit(Message("mycroft.stop"))
 
     @intent_handler("VirindaPrivateIntent")
-    @intent_handler("MarinaPrivateIntent")
     def handle_private(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="private")
         self.speak("Private mode enabled.")
 
     @intent_handler("VirindaNormalIntent")
-    @intent_handler("MarinaNormalIntent")
     def handle_normal(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="normal")
         self.speak("Normal mode enabled.")
 
     @intent_handler("VirindaFocusIntent")
-    @intent_handler("MarinaFocusIntent")
     def handle_focus(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="focus")
         self.speak("Focus mode enabled.")
 
     @intent_handler("VirindaQuietIntent")
-    @intent_handler("MarinaQuietIntent")
     def handle_quiet(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="quiet")
         self.speak("Quiet mode enabled.")
 
     @intent_handler("VirindaBriefingIntent")
-    @intent_handler("MarinaBriefingIntent")
     def handle_briefing(self, message: Message | None = None) -> None:
         result = self._rpc("briefing")
         self.speak(str(result or "Nothing urgent to report."))
 
     @intent_handler("VirindaMeetingStartIntent")
-    @intent_handler("MarinaMeetingStartIntent")
     def handle_meeting_start(self, message: Message | None = None) -> None:
         self._rpc("meeting_start")
         self.speak("Meeting mode started.")
 
     @intent_handler("VirindaMeetingStopIntent")
-    @intent_handler("MarinaMeetingStopIntent")
     def handle_meeting_stop(self, message: Message | None = None) -> None:
         self._rpc("meeting_stop")
         self.speak("Meeting mode stopped.")
 
     def _rpc(self, method: str, **params: Any) -> Any:
-        data_dir = Path(os.environ.get("VIRINDA_DATA_DIR", os.environ.get("MARINA_DATA_DIR", Path.home() / ".local/share/virinda-ai")))
-        socket_path = Path(os.environ.get("VIRINDA_SOCKET", os.environ.get("MARINA_SOCKET", data_dir / "virinda.sock")))
+        data_dir = Path(
+            os.environ.get(
+                "VIRINDA_DATA_DIR",
+                os.environ.get("VIRINDA_DATA_DIR", Path.home() / ".local/share/virinda-ai"),
+            )
+        )
+        socket_path = Path(
+            os.environ.get(
+                "VIRINDA_SOCKET", os.environ.get("VIRINDA_SOCKET", data_dir / "virinda.sock")
+            )
+        )
         try:
             return LocalRPCClient(socket_path, timeout=3.0).call(method, **params)
         except Exception as exc:
@@ -243,5 +243,4 @@ def validate_skill_layout(root: Path) -> None:
         raise ValueError("unexpected Virinda skill_id")
 
 
-MarinaSkill = VirindaSkill
-
+VirindaSkill = VirindaSkill

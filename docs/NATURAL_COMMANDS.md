@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Marina has a small deterministic command parser that runs before the LLM/provider path. It is intentionally conservative: only commands with high-confidence structure are executed locally. Ambiguous requests continue through the normal provider flow.
+Virinda has a small deterministic command parser that runs before the LLM/provider path. It is intentionally conservative: only commands with high-confidence structure are executed locally. Ambiguous requests continue through the normal provider flow.
 
 ## Supported commands
 
@@ -33,7 +33,7 @@ what is my favorite color?
 what's my timezone?
 ```
 
-When an exact durable fact exists, Marina can answer without invoking the LLM. Unknown or ambiguous questions continue through the normal provider path.
+When an exact durable fact exists, Virinda can answer without invoking the LLM. Unknown or ambiguous questions continue through the normal provider path.
 
 ### Context modes
 
@@ -71,7 +71,7 @@ A clock time that has already passed today is scheduled for the next day. Relati
 
 ## What is intentionally not parsed locally
 
-Marina does not attempt deterministic parsing for ambiguous natural language such as:
+Virinda does not attempt deterministic parsing for ambiguous natural language such as:
 
 ```text
 remind me sometime tomorrow afternoon
@@ -91,7 +91,7 @@ Natural commands respect the active context policy:
 
 ## Implementation boundary
 
-The parser lives in `src/marina/core/natural_commands.py` and returns a typed `LocalCommand`. `AssistantService` is the only component allowed to execute those commands so capability, privacy, persistence, and event semantics remain centralized.
+The parser lives in `src/virinda/core/natural_commands.py` and returns a typed `LocalCommand`. `AssistantService` is the only component allowed to execute those commands so capability, privacy, persistence, and event semantics remain centralized.
 
 ## Testing
 
@@ -99,7 +99,7 @@ The grammar is covered by `tests/test_natural_commands.py`. Release validation a
 
 ### Recurring reminders
 
-Marina can create local recurring reminders without invoking the LLM:
+Virinda can create local recurring reminders without invoking the LLM:
 
 ```text
 remind me to stand up every day
@@ -133,4 +133,4 @@ open https://example.com
 search the web for the latest OVOS release
 ```
 
-Marina returns a short-lived approval token. A trusted UI, CLI, or IPC caller must consume that token before the action executes. Read-only local capabilities remain available without approval.
+Virinda returns a short-lived approval token. A trusted UI, CLI, or IPC caller must consume that token before the action executes. Read-only local capabilities remain available without approval.

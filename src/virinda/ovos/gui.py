@@ -11,7 +11,7 @@ except ImportError:  # pragma: no cover
 
 
 @dataclass(frozen=True, slots=True)
-class MarinaGUICommand:
+class VirindaGUICommand:
     """A GUI command accepted over the local OVOS MessageBus."""
 
     command: str
@@ -20,7 +20,7 @@ class MarinaGUICommand:
 
 
 class OVOSGuiBridge:
-    """Translate Marina UI state/actions to the OVOS GUI/message-bus boundary.
+    """Translate Virinda UI state/actions to the OVOS GUI/message-bus boundary.
 
     Production desktop UI traffic must flow through OVOS `ovos-gui` and the
     MessageBus. The bridge deliberately does not know about HTTP, sockets, or a
@@ -61,7 +61,7 @@ class OVOSGuiBridge:
             payload["error"] = error
         self._emit(self.RESPONSE_TOPIC, payload, session_id=session_id)
 
-    def subscribe(self, handler: Callable[[MarinaGUICommand], None]) -> None:
+    def subscribe(self, handler: Callable[[VirindaGUICommand], None]) -> None:
         def on_message(message: Any) -> None:
             data = getattr(message, "data", {}) or {}
             context = getattr(message, "context", {}) or {}
@@ -79,7 +79,7 @@ class OVOSGuiBridge:
                 if isinstance(session, dict)
                 else "default"
             )
-            handler(MarinaGUICommand(command, payload, session_id))
+            handler(VirindaGUICommand(command, payload, session_id))
 
         self.bus.on(self.COMMAND_TOPIC, on_message)
 

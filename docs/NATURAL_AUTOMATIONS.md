@@ -2,7 +2,7 @@
 
 ## Goal
 
-Marina can translate a small, deterministic subset of natural language into a reviewable automation plan. The plan is shown before persistence and is saved only after explicit confirmation.
+Virinda can translate a small, deterministic subset of natural language into a reviewable automation plan. The plan is shown before persistence and is saved only after explicit confirmation.
 
 ## Examples
 

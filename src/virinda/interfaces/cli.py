@@ -11,12 +11,12 @@ from virinda.ovos.doctor import render_report, run_doctor
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="virinda", description="MarinaAI local-first assistant")
+    parser = argparse.ArgumentParser(prog="virinda", description="VirindaAI local-first assistant")
     parser.add_argument("--data-dir", type=Path, help="override local state directory")
     parser.add_argument(
         "--socket",
         type=Path,
-        help="use a running marinad Unix socket instead of opening SQLite locally",
+        help="use a running virindad Unix socket instead of opening SQLite locally",
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("status")
@@ -25,7 +25,7 @@ def _parser() -> argparse.ArgumentParser:
         "--json", action="store_true", dest="doctor_json", help="emit machine-readable JSON"
     )
     doctor.add_argument(
-        "--services", action="store_true", help="also check Marina OVOS user services"
+        "--services", action="store_true", help="also check Virinda OVOS user services"
     )
     doctor.add_argument(
         "--audio", action="store_true", help="inspect PipeWire/WirePlumber and ALSA audio devices"
@@ -42,7 +42,7 @@ def _parser() -> argparse.ArgumentParser:
     profile = sub.add_parser("profile", help="inspect or change the local user profile")
     profile.add_argument("action", choices=["show", "update", "clear"], nargs="?", default="show")
     profile.add_argument("--json", dest="profile_json", default="{}")
-    sub.add_parser("capabilities", help="list Marina capability contracts")
+    sub.add_parser("capabilities", help="list Virinda capability contracts")
     context = sub.add_parser("context", help="show or change interaction context mode")
     context.add_argument("mode", nargs="?", choices=["normal", "focus", "private", "quiet"])
     ask = sub.add_parser("ask", help="send a text prompt")
@@ -315,7 +315,7 @@ def main() -> None:
             if result:
                 print(result)
         elif args.command == "ask-stream":
-            raise SystemExit("ask-stream requires --socket and a running marinad")
+            raise SystemExit("ask-stream requires --socket and a running virindad")
         elif args.command == "history":
             for message in service.store.load_messages(service.snapshot().session_id):
                 print(f"[{message.role}] {message.content}")
@@ -446,7 +446,7 @@ def main() -> None:
 
             overlay_server = OverlayServer(service, args.host, args.port)
             host, port = overlay_server.start()
-            print(f"Marina diagnostics overlay (localhost only): http://{host}:{port}/")
+            print(f"Virinda diagnostics overlay (localhost only): http://{host}:{port}/")
             try:
                 import threading
 

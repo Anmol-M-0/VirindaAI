@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Marina exposes a loopback-only visual routine editor so users can manage automations without editing JSON, using a second automation engine, or bypassing the existing policy boundary.
+Virinda exposes a loopback-only visual routine editor so users can manage automations without editing JSON, using a second automation engine, or bypassing the existing policy boundary.
 
 ## UI lifecycle
 
@@ -16,7 +16,7 @@ Marina exposes a loopback-only visual routine editor so users can manage automat
 
 ## Transport boundary
 
-Production routine editing is an OVOS GUI client communicating through `ovos-gui` and the OVOS MessageBus. The Marina localhost HTTP overlay remains an optional developer/diagnostics surface only; it does not define the production UI contract or access SQLite directly.
+Production routine editing is an OVOS GUI client communicating through `ovos-gui` and the OVOS MessageBus. The Virinda localhost HTTP overlay remains an optional developer/diagnostics surface only; it does not define the production UI contract or access SQLite directly.
 
 The production transport is OVOS GUI/MessageBus. The HTTP routes below are **developer diagnostics only** and are intentionally not part of the production UI contract.
 

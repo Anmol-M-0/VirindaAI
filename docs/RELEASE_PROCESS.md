@@ -1,10 +1,10 @@
 # Release Process
 
-Marina releases are designed to be reproducible, testable, and easy to audit.
+Virinda releases are designed to be reproducible, testable, and easy to audit.
 
 ## Version source of truth
 
-The Python package version is defined in `src/marina/__init__.py` and must match:
+The Python package version is defined in `src/virinda/__init__.py` and must match:
 
 - `pyproject.toml`
 - `skills/skill-marin-ai/skill.json`
@@ -34,7 +34,7 @@ Validate the built metadata and run the full test suite.
 
 ## OVOS compatibility
 
-Marina must not silently move between OVOS release generations. Before changing the OVOS stack:
+Virinda must not silently move between OVOS release generations. Before changing the OVOS stack:
 
 1. Update the checked-in stable constraints snapshot.
 2. Update the compatibility matrix.

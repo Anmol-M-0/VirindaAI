@@ -24,4 +24,4 @@ This table is the operational companion to `FEATURE_CATALOG.md`.
 | Proactive briefing | Native + adapters | Optional alerts/context | Optional | Optional | deterministic policy tests |
 | Speaker identification | Native primitive | Optional audio feed | Optional | Microphone | algorithm tests + live audio |
 
-| Natural recurring reminders / provider switching / approval-aware tool requests | Marina native | Implemented | Hardware-independent |
+| Natural recurring reminders / provider switching / approval-aware tool requests | Virinda native | Implemented | Hardware-independent |

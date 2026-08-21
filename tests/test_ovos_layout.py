@@ -63,14 +63,14 @@ def test_ovos_installer_installs_bundled_skill_and_profiles():
 def test_installer_can_optionally_install_config_without_overwriting():
     root = Path(__file__).parents[1]
     installer = (root / "scripts/install-ovos.sh").read_text(encoding="utf-8")
-    assert "MARINA_INSTALL_CONFIG" in installer
+    assert "VIRINDA_INSTALL_CONFIG" in installer
     assert "Refusing to overwrite existing OVOS config" in installer
 
 
 def test_installer_provisions_systemd_units_by_default():
     root = Path(__file__).parents[1]
     installer = (root / "scripts/install-ovos.sh").read_text(encoding="utf-8")
-    assert 'INSTALL_SERVICES="${MARINA_INSTALL_SERVICES:-1}"' in installer
+    assert 'INSTALL_SERVICES="${VIRINDA_INSTALL_SERVICES:-1}"' in installer
     assert "deploy/ovos/virinda-*.service" in installer
     assert "deploy/ovos/virinda-*.target" in installer
     assert "systemctl --user daemon-reload" in installer
@@ -80,16 +80,16 @@ def test_uninstaller_preserves_database_and_venv():
     root = Path(__file__).parents[1]
     script = (root / "scripts/uninstall-ovos.sh").read_text(encoding="utf-8")
     assert 'rm -rf "$SKILL_DIR/skill-virinda-ai.openvoiceos"' in script
-    assert 'rm -f "$PERSONA_DIR/Marina.json"' in script
-    assert "virtualenv and Marina database are intentionally preserved" in script
-    assert 'REMOVE_CONFIG="${MARINA_REMOVE_CONFIG:-0}"' in script
+    assert 'rm -f "$PERSONA_DIR/Virinda.json"' in script
+    assert "virtualenv and Virinda database are intentionally preserved" in script
+    assert 'REMOVE_CONFIG="${VIRINDA_REMOVE_CONFIG:-0}"' in script
 
 
 def test_first_boot_delegates_to_installer_and_optional_autostart():
     root = Path(__file__).parents[1]
     script = (root / "scripts/first-boot-ovos.sh").read_text(encoding="utf-8")
     assert "scripts/install-ovos.sh" in script
-    assert "MARINA_AUTO_START" in script
+    assert "VIRINDA_AUTO_START" in script
     assert "virinda-ovos-core.target" in script
     assert "virinda-voice.target" in script
 

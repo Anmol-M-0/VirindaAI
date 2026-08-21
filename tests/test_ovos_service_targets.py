@@ -13,7 +13,9 @@ def test_core_target_owns_bus_and_core():
 
 def test_voice_target_builds_on_core_and_adds_audio_path():
     text = _unit("virinda-voice.target")
-    assert "Requires=virinda-ovos-core.target virinda-listener.service virinda-audio.service" in text
+    assert (
+        "Requires=virinda-ovos-core.target virinda-listener.service virinda-audio.service" in text
+    )
     assert "After=virinda-ovos-core.target virinda-listener.service virinda-audio.service" in text
 
 

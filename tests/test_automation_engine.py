@@ -135,7 +135,7 @@ def test_schedule_trigger_preserves_weekday_semantics():
         store, lambda title, body: notices.append((title, body)), lambda name, **kwargs: None
     )
     routine = store.save(
-        Routine("weekday", "Weekday", "schedule:every weekday at 9 am", "notify:Marina|stand up")
+        Routine("weekday", "Weekday", "schedule:every weekday at 9 am", "notify:Virinda|stand up")
     )
     friday = datetime(2026, 8, 21, 10, 0, tzinfo=UTC).timestamp()
     # The runner's local timezone is the host timezone; this assertion only checks that
@@ -150,13 +150,13 @@ def test_routine_edit_delete_disable_and_conflict_detection():
     conn = sqlite3.connect(":memory:")
     store = RoutineStore(conn, RLock())
     first = store.save(
-        Routine("r1", "Morning", "schedule:every weekday at 9 am", "notify:Marina|hello")
+        Routine("r1", "Morning", "schedule:every weekday at 9 am", "notify:Virinda|hello")
     )
     conflicts = store.conflicts(
-        Routine("r2", "Duplicate", "schedule:every weekday at 9 am", "notify:Marina|bye")
+        Routine("r2", "Duplicate", "schedule:every weekday at 9 am", "notify:Virinda|bye")
     )
     assert [item.id for item in conflicts] == ["r1"]
-    updated = store.update("r1", name="Morning Updated", action="notify:Marina|updated")
+    updated = store.update("r1", name="Morning Updated", action="notify:Virinda|updated")
     assert updated is not None and updated.name == "Morning Updated"
     assert store.disable("r1") is True
     assert store.get("r1").enabled is False
@@ -182,11 +182,11 @@ def test_routine_interpolates_profile_and_context_values():
             "r3",
             "Personal",
             "event:test",
-            "notify:Marina|Hello {{profile.display_name}} ({{context.mode}} mode)",
+            "notify:Virinda|Hello {{profile.display_name}} ({{context.mode}} mode)",
         )
     )
     assert runner.run_event("test") == [routine.id]
-    assert notifications == [("Marina", "Hello Anmol (focus mode)")]
+    assert notifications == [("Virinda", "Hello Anmol (focus mode)")]
 
 
 def test_routine_context_interpolation_unknown_values_become_empty():
@@ -197,10 +197,10 @@ def test_routine_context_interpolation_unknown_values_become_empty():
         store, lambda title, body: notices.append((title, body)), lambda name, **kwargs: None
     )
     routine = store.save(
-        Routine("r4", "Context", "event:test", "notify:Marina|Hello {{missing.value}}")
+        Routine("r4", "Context", "event:test", "notify:Virinda|Hello {{missing.value}}")
     )
     runner.run_event("test")
-    assert notices == [("Marina", "Hello")]
+    assert notices == [("Virinda", "Hello")]
 
 
 def test_routine_preview_is_side_effect_free_and_explains_approval():
@@ -220,7 +220,7 @@ def test_routine_preview_is_side_effect_free_and_explains_approval():
             "preview",
             "Dashboard",
             "schedule:every weekday at 9 am",
-            'notify:Marina|Hello {{profile.display_name}}||approve:tool:browser.open|{"url":"https://example.com"}',
+            'notify:Virinda|Hello {{profile.display_name}}||approve:tool:browser.open|{"url":"https://example.com"}',
         )
     )
     preview = runner.dry_run(routine)
@@ -238,8 +238,8 @@ def test_routine_preview_reports_conflicts():
     conn = sqlite3.connect(":memory:")
     store = RoutineStore(conn, RLock())
     runner = RoutineRunner(store, lambda *args: None, lambda *args, **kwargs: None)
-    store.save(Routine("one", "One", "event:test", "notify:Marina|one"))
-    second = store.save(Routine("two", "Two", "event:test", "notify:Marina|two"))
+    store.save(Routine("one", "One", "event:test", "notify:Virinda|one"))
+    second = store.save(Routine("two", "Two", "event:test", "notify:Virinda|two"))
     preview = runner.explain(second)
     assert [item["name"] for item in preview["conflicts"]] == ["One"]
     assert preview["will_execute"] is False

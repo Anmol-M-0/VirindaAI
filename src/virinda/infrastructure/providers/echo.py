@@ -8,4 +8,4 @@ class EchoProvider:
 
     def stream(self, request: ProviderRequest):
         text = request.messages[-1].content if request.messages else ""
-        yield f"Marina received: {text}"
+        yield f"Virinda received: {text}"

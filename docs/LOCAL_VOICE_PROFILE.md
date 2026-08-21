@@ -1,6 +1,6 @@
 # Local voice profile
 
-Marina's recommended baseline is a fully local Linux voice path:
+Virinda's recommended baseline is a fully local Linux voice path:
 
 ```text
 Microphone
@@ -9,7 +9,7 @@ Microphone
       -> Silero VAD
       -> whisper.cpp STT
   -> OVOS message bus
-      -> Marina skill / Persona
+      -> Virinda skill / Persona
       -> local OpenAI-compatible LLM
   -> ovos-audio
       -> phoonnx TTS
@@ -31,7 +31,7 @@ Do not assume one profile is optimal for every machine. Measure first-token late
 
 ## Local LLM
 
-The included Persona points to an OpenAI-compatible `/v1` server. For a fully local deployment, Ollama, llama.cpp, vLLM, or LocalAI can provide that API. The Marina core should not own the model server lifecycle.
+The included Persona points to an OpenAI-compatible `/v1` server. For a fully local deployment, Ollama, llama.cpp, vLLM, or LocalAI can provide that API. The Virinda core should not own the model server lifecycle.
 
 ## Privacy defaults
 

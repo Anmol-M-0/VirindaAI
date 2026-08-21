@@ -1,8 +1,8 @@
-# Contributing to MarinaAI
+# Contributing to VirindaAI
 
 ## Scope
 
-MarinaAI is a local-first desktop assistant runtime. Keep the control plane deterministic and platform-independent; integrations for audio, desktop UI, and providers belong behind contracts.
+VirindaAI is a local-first desktop assistant runtime. Keep the control plane deterministic and platform-independent; integrations for audio, desktop UI, and providers belong behind contracts.
 
 ## Development
 

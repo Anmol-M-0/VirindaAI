@@ -1,13 +1,13 @@
-# MarinaAI
+# VirindaAI
 
-MarinaAI is a local-first ambient desktop assistant for Linux built on OpenVoiceOS (OVOS). OVOS owns the production voice lifecycle—message bus, wake word, VAD, STT, TTS, and audio—while Marina owns the persona, product-specific skills, durable local state, and optional desktop IPC. The original script-heavy prototype has been replaced with a testable control plane and an explicit OVOS integration.
+VirindaAI is a local-first ambient desktop assistant for Linux built on OpenVoiceOS (OVOS). OVOS owns the production voice lifecycle—message bus, wake word, VAD, STT, TTS, and audio—while Virinda owns the persona, product-specific skills, durable local state, and optional desktop IPC. The original script-heavy prototype has been replaced with a testable control plane and an explicit OVOS integration.
 
 ## What is implemented
 
 - Passive local wake-word interaction with bounded pre-roll and VAD turn detection
 - Push-to-talk, toggle listening, follow-up conversation, and TTS barge-in policy
 - OpenVoiceOS-first production voice integration: OVOS listener, message bus, Persona, and audio services
-- Deployable `skill-marin-ai.openvoiceos` skill and Marina Persona configuration
+- Deployable `skill-marin-ai.openvoiceos` skill and Virinda Persona configuration
 
 - Single authoritative `AssistantService` coordinator
 - Protocol-based provider, persistence, cancellation, tokenization, and event boundaries
@@ -24,7 +24,7 @@ MarinaAI is a local-first ambient desktop assistant for Linux built on OpenVoice
 
 ## Messaging architecture
 
-Marina uses OVOS MessageBus for production interactive voice/GUI/service communication. Durable background work is isolated behind a `JobBroker` abstraction; in-process is the default and NATS JetStream is the supported production backend when durable/distributed work requires a broker; the in-process backend remains the default for development/test. See `docs/JOB_BACKBONE.md`.
+Virinda uses OVOS MessageBus for production interactive voice/GUI/service communication. Durable background work is isolated behind a `JobBroker` abstraction; in-process is the default and NATS JetStream is the supported production backend when durable/distributed work requires a broker; the in-process backend remains the default for development/test. See `docs/JOB_BACKBONE.md`.
 
 ## Architecture
 
@@ -60,11 +60,11 @@ For the intended production voice experience, install the OVOS extra using the s
 ./scripts/install-ovos.sh
 ```
 
-Then configure the user OVOS config from `config/ovos/mycroft.conf.example.json`, install a real `hey_marina` wake model, and review `config/ovos/marina-persona.json`. OVOS officially supports installing the core services separately or through its full `mycroft` extra, and its stable constraints file is the recommended way to keep component versions compatible.
+Then configure the user OVOS config from `config/ovos/mycroft.conf.example.json`, install a real `hey_virinda` wake model, and review `config/ovos/virinda-persona.json`. OVOS officially supports installing the core services separately or through its full `mycroft` extra, and its stable constraints file is the recommended way to keep component versions compatible.
 
 See `docs/OVOS.md` for the complete production architecture.
 
-For the reference local voice profile, Marina now configures OVOS to use `ovos-stt-plugin-whispercpp` with the `base.en` model. A GPU-oriented Faster-Whisper profile remains a documented alternative. See `docs/LOCAL_VOICE_PROFILE.md`.
+For the reference local voice profile, Virinda now configures OVOS to use `ovos-stt-plugin-whispercpp` with the `base.en` model. A GPU-oriented Faster-Whisper profile remains a documented alternative. See `docs/LOCAL_VOICE_PROFILE.md`.
 
 ## Quickstart
 
@@ -73,14 +73,14 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
 
-export MARINA_DATA_DIR="$PWD/.local/marina"
-marina status
-marina ask "Hello Marina"
-marina history
-marina events
-marina capabilities
-marina context
-marina context private
+export VIRINDA_DATA_DIR="$PWD/.local/virinda"
+virinda status
+virinda ask "Hello Virinda"
+virinda history
+virinda events
+virinda capabilities
+virinda context
+virinda context private
 ```
 
 The default path is fully offline and has no mandatory third-party runtime dependency.
@@ -90,17 +90,17 @@ The default path is fully offline and has no mandatory third-party runtime depen
 Use the deterministic offline provider:
 
 ```bash
-export MARINA_PROVIDER=echo
-export MARINA_MODEL=offline-demo
+export VIRINDA_PROVIDER=echo
+export VIRINDA_MODEL=offline-demo
 ```
 
 Or configure an OpenAI-compatible endpoint:
 
 ```bash
-export MARINA_PROVIDER=openai
-export MARINA_OPENAI_BASE_URL=https://example.invalid/v1
-export MARINA_OPENAI_API_KEY=your-key
-export MARINA_OPENAI_MODEL=your-model
+export VIRINDA_PROVIDER=openai
+export VIRINDA_OPENAI_BASE_URL=https://example.invalid/v1
+export VIRINDA_OPENAI_API_KEY=your-key
+export VIRINDA_OPENAI_MODEL=your-model
 ```
 
 See `docs/PROVIDERS.md`.
@@ -142,7 +142,7 @@ See `docs/PERSONALIZATION_AND_APPROVALS.md` for the profile, memory confidence/s
 - `docs/OBSERVABILITY.md` — health, events, voice metrics, and diagnostic methodology
 - `docs/CONTRIBUTOR_GUIDE.md` — code ownership and extension rules
 - `docs/RELEASE_PROCESS.md` — release/version/compatibility process
-- `docs/GLOSSARY.md` — common Marina/OVOS terminology
+- `docs/GLOSSARY.md` — common Virinda/OVOS terminology
 - `docs/DOCUMENTATION_POLICY.md` — documentation quality contract
 - `docs/FAQ.md` — common architecture and deployment questions
 - `docs/README.md` — documentation hub and source-of-truth hierarchy
@@ -162,14 +162,14 @@ MIT.
 
 ## Long-lived daemon
 
-For a desktop client, run `marinad` once and talk to the same application service through its local
+For a desktop client, run `virindad` once and talk to the same application service through its local
 Unix socket. The CLI can use that socket explicitly:
 
 ```bash
-marinad
-marina --socket "$MARINA_DATA_DIR/marina.sock" status
-marina --socket "$MARINA_DATA_DIR/marina.sock" ask "hello"
-marina --socket "$MARINA_DATA_DIR/marina.sock" ask-stream "hello"
+virindad
+virinda --socket "$VIRINDA_DATA_DIR/virinda.sock" status
+virinda --socket "$VIRINDA_DATA_DIR/virinda.sock" ask "hello"
+virinda --socket "$VIRINDA_DATA_DIR/virinda.sock" ask-stream "hello"
 ```
 
 This avoids opening SQLite from multiple UI processes and gives GUI/overlay clients one authoritative
@@ -180,11 +180,11 @@ state owner. See [`docs/reference/IPC.md`](docs/reference/IPC.md).
 The control plane supports passive wake-word interaction, push-to-talk, toggle listening, and short follow-up turns. Configure the policy with environment variables:
 
 ```bash
-MARINA_AUDIO_MODE=wake_word
-MARINA_WAKE_WORD="hey marina"
-MARINA_WAKE_THRESHOLD=0.5
-MARINA_END_SILENCE_MS=750
-MARINA_FOLLOW_UP_WINDOW_MS=8000
+VIRINDA_AUDIO_MODE=wake_word
+VIRINDA_WAKE_WORD="hey virinda"
+VIRINDA_WAKE_THRESHOLD=0.5
+VIRINDA_END_SILENCE_MS=750
+VIRINDA_FOLLOW_UP_WINDOW_MS=8000
 ```
 
 These settings remain useful for the standalone compatibility runtime. In the production OVOS runtime, configure microphone, wake-word, VAD, STT, TTS, and hybrid listening through OVOS configuration. See `docs/OVOS.md`.
@@ -194,38 +194,38 @@ These settings remain useful for the standalone compatibility runtime. In the pr
 After installing the OVOS extra/runtime, run:
 
 ```bash
-marina doctor
+virinda doctor
 ```
 
-The doctor checks the OVOS core/listener/persona/audio modules, Marina's Persona JSON, the OVOS configuration template, and the configured `hey_marina` wake model. A source checkout can run it with `PYTHONPATH=src python -m marina doctor`.
+The doctor checks the OVOS core/listener/persona/audio modules, Virinda's Persona JSON, the OVOS configuration template, and the configured `hey_virinda` wake model. A source checkout can run it with `PYTHONPATH=src python -m virinda doctor`.
 
-A `FAIL` for the wake model is intentional until a real custom `hey_marina` model file is installed. The OVOS OpenWakeWord plugin accepts model files through the `hotwords` configuration, but the repository does not bundle a fake or unrelated model. See `docs/REFERENCES.md` for the upstream OpenWakeWord plugin reference.
+A `FAIL` for the wake model is intentional until a real custom `hey_virinda` model file is installed. The OVOS OpenWakeWord plugin accepts model files through the `hotwords` configuration, but the repository does not bundle a fake or unrelated model. See `docs/REFERENCES.md` for the upstream OpenWakeWord plugin reference.
 
 
 ## OVOS compatibility
 
-Marina supports two OVOS Persona generations, but they are not mixed. The production profile follows the current OVOS stable constraints and uses the legacy OpenAI solver API. The newer `ovos-chat-openai-plugin` agent framework is isolated under `config/ovos/experimental-agent/` until OVOS publishes a stable constraints set that contains compatible Persona and plugin-manager versions. See `docs/OVOS_COMPATIBILITY.md`.
+Virinda supports two OVOS Persona generations, but they are not mixed. The production profile follows the current OVOS stable constraints and uses the legacy OpenAI solver API. The newer `ovos-chat-openai-plugin` agent framework is isolated under `config/ovos/experimental-agent/` until OVOS publishes a stable constraints set that contains compatible Persona and plugin-manager versions. See `docs/OVOS_COMPATIBILITY.md`.
 
 
 ### OVOS runtime smoke test
 
-After installing the OVOS profile, run `python scripts/ovos-smoke.py` from the Marina checkout. It verifies that the expected OVOS and Marina-selected audio distributions are actually installed in the active virtual environment. It does not require a microphone, speaker, wake model, or running message bus.
+After installing the OVOS profile, run `python scripts/ovos-smoke.py` from the Virinda checkout. It verifies that the expected OVOS and Virinda-selected audio distributions are actually installed in the active virtual environment. It does not require a microphone, speaker, wake model, or running message bus.
 
 ## OVOS environment profiles
 
-Marina supports two explicit verification profiles:
+Virinda supports two explicit verification profiles:
 
 ```bash
 python scripts/ovos-smoke.py --profile stable
 python scripts/ovos-smoke.py --profile local-voice
 ```
 
-`stable` checks only the packages in the checked-in OVOS stable lock. `local-voice` additionally checks the Marina-selected Whisper.cpp STT and phoonnx TTS add-ons.
+`stable` checks only the packages in the checked-in OVOS stable lock. `local-voice` additionally checks the Virinda-selected Whisper.cpp STT and phoonnx TTS add-ons.
 
 For hardware diagnostics:
 
 ```bash
-marina doctor --audio --services
+virinda doctor --audio --services
 ```
 
 The doctor determines the required STT/TTS dependencies from the selected OVOS configuration rather than hard-coding a single engine.
@@ -240,6 +240,6 @@ See [`docs/NATURAL_COMMANDS.md`](docs/NATURAL_COMMANDS.md) for the deterministic
 
 ## Product direction
 
-Marina is intentionally product-first. OVOS owns realtime voice; Marina owns personal-assistant behavior;
+Virinda is intentionally product-first. OVOS owns realtime voice; Virinda owns personal-assistant behavior;
 NATS JetStream owns durable background work. See [`docs/PRODUCT_NORTH_STAR.md`](docs/PRODUCT_NORTH_STAR.md)
 and [`docs/PRODUCT_GATES.md`](docs/PRODUCT_GATES.md).

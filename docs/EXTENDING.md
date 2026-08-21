@@ -1,8 +1,8 @@
-# Extending MarinaAI
+# Extending VirindaAI
 
 ## Add a completion provider
 
-Implement `marina.domain.contracts.CompletionProvider`:
+Implement `virinda.domain.contracts.CompletionProvider`:
 
 ```python
 class MyProvider:

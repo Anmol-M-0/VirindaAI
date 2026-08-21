@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Validate a live NATS JetStream environment for Marina.
+"""Validate a live NATS JetStream environment for Virinda.
 
 Exit codes:
   0 = live connectivity and publish/consume path passed
   2 = environment is not provisioned (missing nats-py or nats-server/connectivity)
   1 = provisioned but the acceptance test failed
 
-The test creates a temporary stream/consumer subject, publishes one Marina-style
+The test creates a temporary stream/consumer subject, publishes one Virinda-style
 job, consumes and acknowledges it, then confirms the durable JetStream path works.
 """
 
@@ -20,7 +20,9 @@ import uuid
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--url", default=os.environ.get("MARINA_NATS_URL", "nats://127.0.0.1:4222"))
+    parser.add_argument(
+        "--url", default=os.environ.get("VIRINDA_NATS_URL", "nats://127.0.0.1:4222")
+    )
     parser.add_argument("--timeout", type=float, default=3.0)
     return parser.parse_args()
 
@@ -33,9 +35,9 @@ async def run(url: str, timeout: float) -> int:
         print("NATS acceptance: environment_missing (install the job-backbone extra)")
         return 2
 
-    stream = f"marina_accept_{uuid.uuid4().hex[:10]}"
+    stream = f"virinda_accept_{uuid.uuid4().hex[:10]}"
     subject = f"virinda.accept.{uuid.uuid4().hex}"
-    durable = f"marina-accept-{uuid.uuid4().hex[:10]}"
+    durable = f"virinda-accept-{uuid.uuid4().hex[:10]}"
     nc = None
     try:
         nc = await asyncio.wait_for(nats.connect(url), timeout=timeout)

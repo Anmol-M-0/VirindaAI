@@ -100,7 +100,7 @@ class VoiceTurnRuntime:
                 target=self._transcribe_and_ask,
                 args=(frames, generation),
                 daemon=True,
-                name="marina-stt-turn",
+                name="virinda-stt-turn",
             ).start()
         elif signal.name in {"barge_in", "cancelled"}:
             with self._turn_lock:
@@ -158,7 +158,7 @@ class VoiceTurnRuntime:
                     target=self._tts_loop,
                     args=(stop_event, worker_queue, done_event),
                     daemon=True,
-                    name="marina-tts",
+                    name="virinda-tts",
                 )
                 self._response_complete = False
                 self._tts_worker.start()

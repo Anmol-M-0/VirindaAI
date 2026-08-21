@@ -1,6 +1,6 @@
 # Testing and Verification
 
-Marina uses several test layers because no single test can prove the whole desktop voice stack.
+Virinda uses several test layers because no single test can prove the whole desktop voice stack.
 
 ## Layer 1 — unit and application tests
 
@@ -28,7 +28,7 @@ Build the wheel without network dependency on an already provisioned build envir
 python -m pip wheel . --no-build-isolation --no-deps -w dist
 ```
 
-Verify wheel metadata contains the same version as `src/marina/__init__.py`.
+Verify wheel metadata contains the same version as `src/virinda/__init__.py`.
 
 ## Layer 4 — OVOS environment smoke
 
@@ -45,25 +45,25 @@ This does **not** prove that the message bus or hardware works.
 
 ```bash
 python scripts/ovos-runtime-smoke.py \
-  "marina status" \
-  --expect "Marina is online"
+  "virinda status" \
+  --expect "Virinda is online"
 ```
 
 This validates the application message path:
 
-`MessageBus → ovos-core → Marina skill → response`
+`MessageBus → ovos-core → Virinda skill → response`
 
 ## Layer 6 — live voice acceptance
 
 On a provisioned Linux desktop:
 
-1. Start `marina-voice.target`.
+1. Start `virinda-voice.target`.
 2. Verify the listener is healthy.
 3. Verify the selected microphone.
 4. Trigger the configured wake model.
 5. Speak a deterministic command.
 6. Verify the transcript event.
-7. Verify the Marina response event.
+7. Verify the Virinda response event.
 8. Verify audio output.
 9. Interrupt speech and verify barge-in/cancellation.
 10. Repeat in private/quiet/focus modes.

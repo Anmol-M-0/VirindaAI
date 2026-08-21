@@ -1,11 +1,11 @@
 [Unit]
-Description=MarinaAI assistant daemon
+Description=VirindaAI assistant daemon
 After=pipewire.service pipewire-pulse.service graphical-session.target
 Wants=pipewire.service
 
 [Service]
 Type=simple
-ExecStart=%h/.local/bin/marinad
+ExecStart=%h/.local/bin/virindad
 Restart=on-failure
 RestartSec=1
 NoNewPrivileges=true

@@ -56,8 +56,8 @@ Semantic events include lifecycle changes, final transcripts, response deltas, r
 
 ## Local IPC
 
-`marinad` exposes the same application service over a local Unix domain socket at
-`$MARINA_DATA_DIR/marina.sock` (mode `0600`). The protocol is newline-delimited JSON:
+`virindad` exposes the same application service over a local Unix domain socket at
+`$VIRINDA_DATA_DIR/virinda.sock` (mode `0600`). The protocol is newline-delimited JSON:
 
 ```json
 {"id": 1, "method": "ask", "params": {"text": "hello"}}

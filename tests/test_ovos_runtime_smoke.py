@@ -6,7 +6,7 @@ from pathlib import Path
 def test_runtime_smoke_reports_missing_ovos_cleanly():
     root = Path(__file__).parents[1]
     result = subprocess.run(
-        [sys.executable, str(root / "scripts/ovos-runtime-smoke.py"), "marina status"],
+        [sys.executable, str(root / "scripts/ovos-runtime-smoke.py"), "virinda status"],
         capture_output=True,
         text=True,
         check=False,
@@ -24,7 +24,7 @@ def test_runtime_smoke_requires_services_reports_missing_systemd_cleanly():
         [
             sys.executable,
             str(root / "scripts/ovos-runtime-smoke.py"),
-            "marina status",
+            "virinda status",
             "--require-services",
             "--services",
             "definitely-missing-virinda.service",

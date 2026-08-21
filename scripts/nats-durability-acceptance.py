@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise JetStream durable redelivery and ack semantics for Marina.
+"""Exercise JetStream durable redelivery and ack semantics for Virinda.
 
 Exit codes:
   0 = live durability scenario passed
@@ -14,7 +14,7 @@ Scenario:
   5. Verify the same message is redelivered, then acknowledge it.
   6. Confirm no additional message is delivered after the acknowledgement.
 
-This does not replace Marina's application-level run-id/idempotency tests. It verifies
+This does not replace Virinda's application-level run-id/idempotency tests. It verifies
 that the broker preserves an unacknowledged job across a client restart.
 """
 
@@ -28,7 +28,7 @@ import uuid
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("--url", default=os.environ.get("MARINA_NATS_URL", "nats://127.0.0.1:4222"))
+    p.add_argument("--url", default=os.environ.get("VIRINDA_NATS_URL", "nats://127.0.0.1:4222"))
     p.add_argument("--timeout", type=float, default=4.0)
     p.add_argument("--ack-wait", type=float, default=1.0)
     return p.parse_args()
@@ -42,10 +42,10 @@ async def run(url: str, timeout: float, ack_wait: float) -> int:
         print("NATS durability: environment_missing (install the job-backbone extra)")
         return 2
 
-    stream = f"marina_durability_{uuid.uuid4().hex[:10]}"
+    stream = f"virinda_durability_{uuid.uuid4().hex[:10]}"
     subject = f"virinda.durability.{uuid.uuid4().hex}"
-    durable = f"marina-durability-{uuid.uuid4().hex[:10]}"
-    payload = f"marina-durability-{uuid.uuid4().hex}".encode()
+    durable = f"virinda-durability-{uuid.uuid4().hex[:10]}"
+    payload = f"virinda-durability-{uuid.uuid4().hex}".encode()
 
     nc1 = nc2 = None
     try:

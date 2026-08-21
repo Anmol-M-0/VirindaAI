@@ -55,7 +55,7 @@ def test_tool_approval_token_is_single_use_and_expires():
     from virinda.infrastructure.providers.echo import EchoProvider
     from virinda.infrastructure.providers.router import StaticProviderRouter
 
-    tmp = Path("/tmp/marina-approval-test")
+    tmp = Path("/tmp/virinda-approval-test")
     tmp.mkdir(parents=True, exist_ok=True)
     store = SQLiteConversationStore(tmp / "m.db")
     s = AssistantService(
@@ -69,7 +69,7 @@ def test_tool_approval_token_is_single_use_and_expires():
         result = s.tool_execute(
             "filesystem.write",
             approval_token=token,
-            path=str(Path("/tmp/marina-approval-test/approved.txt")),
+            path=str(Path("/tmp/virinda-approval-test/approved.txt")),
             content="ok",
         )
         assert result is None
@@ -77,7 +77,7 @@ def test_tool_approval_token_is_single_use_and_expires():
             s.tool_execute(
                 "filesystem.write",
                 approval_token=token,
-                path=str(Path("/tmp/marina-approval-test/approved2.txt")),
+                path=str(Path("/tmp/virinda-approval-test/approved2.txt")),
                 content="bad",
             )
     finally:

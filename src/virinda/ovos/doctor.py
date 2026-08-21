@@ -94,17 +94,17 @@ def _experimental_persona_check(path: Path) -> Check:
 
 
 def _wake_model_check(config_path: Path) -> Check:
-    model = os.environ.get("MARINA_WAKE_MODEL", "")
+    model = os.environ.get("VIRINDA_WAKE_MODEL", "")
     if model:
         return _file_check("wake-model", Path(model))
     try:
         payload = json.loads(config_path.read_text(encoding="utf-8"))
-        models = payload["hotwords"]["hey_marina"]["models"]
+        models = payload["hotwords"]["hey_virinda"]["models"]
         configured = models[0] if models else ""
     except (OSError, KeyError, TypeError, json.JSONDecodeError, IndexError):
         configured = ""
     if not configured or configured.startswith("/") is False or "ABSOLUTE" in configured:
-        return Check("wake-model", "fail", "set a real hey_marina model path in OVOS config")
+        return Check("wake-model", "fail", "set a real hey_virinda model path in OVOS config")
     return _file_check("wake-model", Path(configured))
 
 
@@ -196,12 +196,12 @@ def run_doctor(
         ]
     )
     if check_nats:
-        nats_url = os.environ.get("MARINA_NATS_URL", "")
-        checks.append(_nats_check(required=bool(os.environ.get("MARINA_JOB_BROKER") == "nats")))
+        nats_url = os.environ.get("VIRINDA_NATS_URL", "")
+        checks.append(_nats_check(required=bool(os.environ.get("VIRINDA_JOB_BROKER") == "nats")))
         if nats_url:
             checks.append(Check("nats-url", "ok", nats_url, required=False))
         else:
-            checks.append(Check("nats-url", "skip", "MARINA_NATS_URL is not set", required=False))
+            checks.append(Check("nats-url", "skip", "VIRINDA_NATS_URL is not set", required=False))
     if check_audio:
         audio = inspect_linux_audio()
         checks.append(
@@ -227,7 +227,7 @@ def run_doctor(
 
 
 def render_report(report: DoctorReport) -> str:
-    lines = [f"Marina OVOS doctor: {'PASS' if report.ok else 'FAIL'}"]
+    lines = [f"Virinda OVOS doctor: {'PASS' if report.ok else 'FAIL'}"]
     for check in report.checks:
         lines.append(f"[{check.status.upper():4}] {check.name}: {check.detail}")
     return "\n".join(lines)

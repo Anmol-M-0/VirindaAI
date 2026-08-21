@@ -3,21 +3,21 @@
 Start every incident with:
 
 ```bash
-marina doctor --audio --services --json
+virinda doctor --audio --services --json
 python scripts/verify-ovos-compatibility.py
 ```
 
-## Marina CLI works but voice does not
+## Virinda CLI works but voice does not
 
 Check the runtime layers separately:
 
 ```bash
-systemctl --user status marina-ovos-core.target
-systemctl --user status marina-voice.target
-journalctl --user -u marina-messagebus.service -e
-journalctl --user -u marina-core.service -e
-journalctl --user -u marina-listener.service -e
-journalctl --user -u marina-audio.service -e
+systemctl --user status virinda-ovos-core.target
+systemctl --user status virinda-voice.target
+journalctl --user -u virinda-messagebus.service -e
+journalctl --user -u virinda-core.service -e
+journalctl --user -u virinda-listener.service -e
+journalctl --user -u virinda-audio.service -e
 ```
 
 If core works but listener does not, do not debug the LLM first. Fix microphone/wake/VAD/STT first.
@@ -35,14 +35,14 @@ Do not lower thresholds indefinitely; false wake rates matter as much as missed 
 
 ## Wake word fires but nothing is transcribed
 
-The likely boundary is VAD or STT. Check listener state and selected STT plugin. In the stable profile Vosk is the conservative compatibility fallback; Marina's local-voice profile can add Whisper.cpp separately.
+The likely boundary is VAD or STT. Check listener state and selected STT plugin. In the stable profile Vosk is the conservative compatibility fallback; Virinda's local-voice profile can add Whisper.cpp separately.
 
 ## Transcription works but no response
 
 Test the application plane without audio:
 
 ```bash
-python scripts/ovos-runtime-smoke.py "marina status" --expect "Marina is online"
+python scripts/ovos-runtime-smoke.py "virinda status" --expect "Virinda is online"
 ```
 
 If this fails, inspect OVOS Persona/provider configuration rather than the microphone.
@@ -51,7 +51,7 @@ If this fails, inspect OVOS Persona/provider configuration rather than the micro
 
 Check:
 
-- `marina-audio.service` state
+- `virinda-audio.service` state
 - selected audio output device
 - `ovos-audio` logs
 - PipeWire/WirePlumber or ALSA state
@@ -60,16 +60,16 @@ Check:
 Run:
 
 ```bash
-marina doctor --audio
+virinda doctor --audio
 ```
 
 ## The desktop overlay cannot connect
 
-Check the Marina daemon/socket first:
+Check the Virinda daemon/socket first:
 
 ```bash
-systemctl --user status marinad.service
-ls -l "$MARINA_SOCKET"
+systemctl --user status virindad.service
+ls -l "$VIRINDA_SOCKET"
 ```
 
 The socket should be a Unix socket with mode `0600`. The overlay should never open SQLite directly.
@@ -79,18 +79,18 @@ The socket should be a Unix socket with mode `0600`. The overlay should never op
 Verify:
 
 ```bash
-echo "$MARINA_OPENAI_BASE_URL"
-echo "$MARINA_OPENAI_MODEL"
+echo "$VIRINDA_OPENAI_BASE_URL"
+echo "$VIRINDA_OPENAI_MODEL"
 ```
 
-Do not print or log `MARINA_OPENAI_API_KEY`. Use provider diagnostics and a minimal deterministic request. For private/self-hosted endpoints, verify the endpoint is actually reachable and the configured model name exists.
+Do not print or log `VIRINDA_OPENAI_API_KEY`. Use provider diagnostics and a minimal deterministic request. For private/self-hosted endpoints, verify the endpoint is actually reachable and the configured model name exists.
 
 ## Memory appears to be missing
 
 Check the current context mode first:
 
 ```bash
-marina context
+virinda context
 ```
 
 Private mode intentionally avoids durable transcript/memory persistence. Also check whether the queried content exists with the memory inspection API/CLI.
@@ -101,14 +101,14 @@ This is expected when a tool has a risk class requiring approval. Use the approv
 
 ## Upgrade broke an older database
 
-Marina uses additive SQLite migrations. Preserve a backup before investigating:
+Virinda uses additive SQLite migrations. Preserve a backup before investigating:
 
 ```bash
-marina backup
+virinda backup
 ```
 
 Then inspect database health and migration logs. Do not manually delete the database unless data loss is acceptable.
 
 ## OVOS package conflicts
 
-Do not install arbitrary latest versions of individual OVOS repositories. Recreate the environment using the pinned stable constraints and then add Marina-selected optional voice components. The OVOS release tracker explicitly provides constraint files to keep independently released components compatible.
+Do not install arbitrary latest versions of individual OVOS repositories. Recreate the environment using the pinned stable constraints and then add Virinda-selected optional voice components. The OVOS release tracker explicitly provides constraint files to keep independently released components compatible.

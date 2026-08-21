@@ -18,7 +18,7 @@ from threading import Event
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("utterance", nargs="?", default="marina status")
+    parser.add_argument("utterance", nargs="?", default="virinda status")
     parser.add_argument("--timeout", type=float, default=8.0)
     parser.add_argument("--expect", default="")
     parser.add_argument(

@@ -1,6 +1,6 @@
 {
   "listener": {
-    "wake_word": "hey_marina",
+    "wake_word": "hey_virinda",
     "vad_pre_wake_enabled": true,
     "hybrid_listen": true,
     "instant_listen": true,
@@ -18,10 +18,10 @@
     }
   },
   "hotwords": {
-    "hey_marina": {
+    "hey_virinda": {
       "module": "ovos-ww-plugin-openwakeword",
       "models": [
-        "/ABSOLUTE/PATH/TO/hey_marina.tflite"
+        "/ABSOLUTE/PATH/TO/hey_virinda.tflite"
       ],
       "inference_framework": "tflite",
       "threshold": 0.5,
@@ -31,7 +31,7 @@
   "intents": {
     "persona": {
       "handle_fallback": true,
-      "default_persona": "Marina"
+      "default_persona": "Virinda"
     },
     "pipeline": [
       "stop_high",

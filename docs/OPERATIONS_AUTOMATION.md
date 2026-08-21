@@ -1,18 +1,18 @@
 # Automation Operations and Recovery
 
-Marina's automation worker is durable-aware and can report its runtime state without direct SQLite access.
+Virinda's automation worker is durable-aware and can report its runtime state without direct SQLite access.
 
 ## Health
 
-`marina status` exposes `job_broker` and `automation` health objects.
+`virinda status` exposes `job_broker` and `automation` health objects.
 
 `automation.stale_runs` identifies queued/running executions older than the configured reconciliation window.
 
 ## Inspecting runs
 
 ```bash
-marina routines runs
-marina routines health
+virinda routines runs
+virinda routines health
 ```
 
 ## Reconciliation
@@ -20,13 +20,13 @@ marina routines health
 Mark stale queued/running runs as failed:
 
 ```bash
-marina routines reconcile 900
+virinda routines reconcile 900
 ```
 
 Requeue eligible stale runs after first marking the old execution terminal:
 
 ```bash
-marina routines reconcile 900 requeue
+virinda routines reconcile 900 requeue
 ```
 
 Requeue is only attempted for enabled routines. Existing terminal runs remain unchanged.

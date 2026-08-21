@@ -24,7 +24,7 @@ def test_service_persists_turn(tmp_path: Path) -> None:
         event_bus=InMemoryEventBus(),
     )
     result = service.ask("hello")
-    assert result == "Marina received: hello"
+    assert result == "Virinda received: hello"
     messages = store.load_messages(service.snapshot().session_id)
     assert [m.role for m in messages] == ["user", "assistant"]
 
@@ -81,7 +81,7 @@ def test_private_mode_does_not_inject_memory_context(tmp_path: Path) -> None:
 
 
 def test_service_selects_inprocess_job_broker(monkeypatch, tmp_path):
-    monkeypatch.setenv("MARINA_JOB_BROKER", "inprocess")
+    monkeypatch.setenv("VIRINDA_JOB_BROKER", "inprocess")
     service = build_service(tmp_path)
     try:
         from virinda.infrastructure.jobs import InProcessJobBroker
@@ -92,8 +92,8 @@ def test_service_selects_inprocess_job_broker(monkeypatch, tmp_path):
 
 
 def test_service_selects_nats_job_broker(monkeypatch, tmp_path):
-    monkeypatch.setenv("MARINA_JOB_BROKER", "nats")
-    monkeypatch.setenv("MARINA_NATS_URL", "nats://127.0.0.1:4222")
+    monkeypatch.setenv("VIRINDA_JOB_BROKER", "nats")
+    monkeypatch.setenv("VIRINDA_NATS_URL", "nats://127.0.0.1:4222")
     service = build_service(tmp_path)
     try:
         from virinda.infrastructure.jobs import NatsJetStreamJobBroker

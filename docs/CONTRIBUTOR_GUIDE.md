@@ -1,18 +1,18 @@
 # Contributor Guide
 
-Marina is intentionally layered. New code should enter the smallest layer that owns the behavior.
+Virinda is intentionally layered. New code should enter the smallest layer that owns the behavior.
 
 ## Where code belongs
 
 | Need | Location |
 |---|---|
-| domain contract/value | `src/marina/domain/` |
-| state/cancellation/event primitive | `src/marina/core/` |
-| orchestration | `src/marina/application/` |
-| persistence/provider adapter | `src/marina/infrastructure/` |
-| CLI/IPC/GUI edge | `src/marina/interfaces/` or `desktop.py` |
-| OVOS integration | `src/marina/ovos/` and `skills/` |
-| feature bundle | `src/marina/features.py` or a future dedicated feature module |
+| domain contract/value | `src/virinda/domain/` |
+| state/cancellation/event primitive | `src/virinda/core/` |
+| orchestration | `src/virinda/application/` |
+| persistence/provider adapter | `src/virinda/infrastructure/` |
+| CLI/IPC/GUI edge | `src/virinda/interfaces/` or `desktop.py` |
+| OVOS integration | `src/virinda/ovos/` and `skills/` |
+| feature bundle | `src/virinda/features.py` or a future dedicated feature module |
 | tests | `tests/` |
 | deployment | `deploy/`, `scripts/`, `config/ovos/` |
 | architecture decisions | `docs/DECISIONS.md` |
@@ -52,7 +52,7 @@ Before adding a repository:
 
 1. Determine whether it is in the stable constraints file.
 2. Check its release/channel relationship with the current stable profile.
-3. Decide whether it belongs in the stable base or Marina-specific add-ons.
+3. Decide whether it belongs in the stable base or Virinda-specific add-ons.
 4. Add the dependency and compatibility rule.
 5. Add an environment smoke test.
 6. Add a live-runtime probe when possible.

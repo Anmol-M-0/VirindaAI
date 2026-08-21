@@ -1,6 +1,6 @@
 # Local IPC Protocol
 
-MarinaAI's desktop control plane uses a Unix domain socket rather than a TCP listener.
+VirindaAI's desktop control plane uses a Unix domain socket rather than a TCP listener.
 The protocol is deliberately small and dependency-free so a GTK, Qt, overlay, shell client,
 or another local process can talk to the same `AssistantService` instance.
 

@@ -1,12 +1,12 @@
-# MarinaAI Documentation
+# VirindaAI Documentation
 
-This directory is the canonical engineering and operations documentation set for MarinaAI.
+This directory is the canonical engineering and operations documentation set for VirindaAI.
 The project is intentionally documented as two cooperating systems:
 
-1. **Marina application plane** — product behavior, memory, policy, tools, automation, local state, desktop clients, and diagnostics.
+1. **Virinda application plane** — product behavior, memory, policy, tools, automation, local state, desktop clients, and diagnostics.
 2. **OVOS runtime plane** — microphone, wake word, VAD, STT, TTS, audio, message bus, GUI, PHAL, and skill execution.
 
-The guiding rule is that Marina owns product policy and durable application state; OVOS owns the production voice runtime. OVOS MessageBus is the production interactive bus; Marina background work uses the JobBroker abstraction when durable asynchronous execution is required.
+The guiding rule is that Virinda owns product policy and durable application state; OVOS owns the production voice runtime. OVOS MessageBus is the production interactive bus; Virinda background work uses the JobBroker abstraction when durable asynchronous execution is required.
 
 ## Start here
 
@@ -14,12 +14,12 @@ The guiding rule is that Marina owns product policy and durable application stat
 |---|---|
 | Understand the whole system | [Architecture](ARCHITECTURE.md) |
 | Install on Linux | [Installation & First Boot](INSTALLATION.md) |
-| Configure Marina | [Configuration Reference](CONFIGURATION.md) |
+| Configure Virinda | [Configuration Reference](CONFIGURATION.md) |
 | Operate/debug a running system | [Operations](OPERATIONS.md) and [Troubleshooting](TROUBLESHOOTING.md) |
 | Use the CLI/daemon | [CLI](CLI.md) and [IPC](reference/IPC.md) |
 | Understand feature status | [Feature Catalog](FEATURE_CATALOG.md) |
 | Understand async jobs/events | [Async Job Backbone](JOB_BACKBONE.md) |
-| Add/extend a feature | [Extending Marina](EXTENDING.md) |
+| Add/extend a feature | [Extending Virinda](EXTENDING.md) |
 | Integrate with OVOS | [OVOS Integration](OVOS.md) |
 | Verify OVOS compatibility | [OVOS Compatibility](OVOS_COMPATIBILITY.md) |
 | Understand privacy/security | [Security](SECURITY.md) and [Security Model](SECURITY_MODEL.md) |
@@ -55,4 +55,4 @@ The README is intentionally an entry point, not the canonical source for detaile
 
 ## Current release
 
-The current Marina application release documented by this checkout is **0.25.4**.
+The current Virinda application release documented by this checkout is **0.25.4**.

@@ -1,11 +1,11 @@
 {
   "skill_id": "skill-virinda-ai.openvoiceos",
-  "name": "MarinaAI",
+  "name": "VirindaAI",
   "version": "0.26.3",
-  "description": "Marina-specific controls and diagnostics for OpenVoiceOS.",
-  "author": "MarinaAI contributors",
+  "description": "Virinda-specific controls and diagnostics for OpenVoiceOS.",
+  "author": "VirindaAI contributors",
   "license": "MIT",
-  "url": "https://github.com/Anmol-M-0/MarinaAI",
+  "url": "https://github.com/Anmol-M-0/VirindaAI",
   "requirements": [
     "ovos-core",
     "ovos-workshop"

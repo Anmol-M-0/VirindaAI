@@ -55,7 +55,7 @@ def test_service_interprets_memory_profile_context_and_reminder(tmp_path: Path):
         assert s.ask("what is my favorite color?") == "Your favorite color is blue."
         assert s.ask("call me Anmol") == "Got it. I'll call you Anmol."
         assert s.ask("what's my name?") == "You asked me to call you Anmol."
-        assert s.ask("go quiet mode") == "Marina is now in quiet mode."
+        assert s.ask("go quiet mode") == "Virinda is now in quiet mode."
         assert s.context()["mode"] == "quiet"
     finally:
         s.close()
@@ -156,7 +156,7 @@ def test_natural_automation_plan_is_reviewable_and_safe():
     )
     assert plan.trigger == "schedule:every weekday at 9 am"
     assert "approve:tool:browser.open" in plan.action
-    assert "notify:Marina|that the dashboard is ready" in plan.action
+    assert "notify:Virinda|that the dashboard is ready" in plan.action
     assert plan.require_approval is True
 
 
@@ -170,7 +170,7 @@ def test_service_saves_automation_only_after_confirmation(tmp_path: Path):
         assert "Automation saved" in saved
         routines = s.routines_snapshot()
         assert len(routines) == 1
-        assert routines[0]["action"].startswith("notify:Marina|")
+        assert routines[0]["action"].startswith("notify:Virinda|")
     finally:
         s.close()
 
@@ -192,10 +192,10 @@ def test_natural_routine_lifecycle_commands_parse():
 def test_preview_routine_command_is_deterministic(tmp_path: Path):
     s = build_service(tmp_path)
     try:
-        s.save_routine("Morning", "event:morning", "notify:Marina|Hello")
+        s.save_routine("Morning", "event:morning", "notify:Virinda|Hello")
         response = s.ask("preview the routine Morning")
         assert "Morning is enabled" in response
         assert "Trigger: event:morning" in response
-        assert "notify Marina: Hello" in response
+        assert "notify Virinda: Hello" in response
     finally:
         s.close()

@@ -35,7 +35,7 @@ def test_local_rpc_roundtrip_and_cleanup(tmp_path: Path):
         client = LocalRPCClient(path)
         assert "echo" in client.call("providers")
         result = client.call("ask", text="hello")
-        assert result == "Marina received: hello"
+        assert result == "Virinda received: hello"
         history = client.call("history")
         assert [item["role"] for item in history][-2:] == ["user", "assistant"]
         status = client.call("status")

@@ -41,8 +41,8 @@
 - **Why:** copying an open WAL database at the filesystem level is easy to get wrong.
 - **Trade-off:** backup is a little more explicit than a plain file copy, but correctness is worth the small API surface.
 
-### ADR-011: Separate interactive OVOS messaging from durable Marina jobs
+### ADR-011: Separate interactive OVOS messaging from durable Virinda jobs
 - **Decision:** keep OVOS MessageBus as the production interactive bus and introduce a `JobBroker` abstraction for durable/background work. Make NATS JetStream the only supported durable production backend; keep in-process as the default for tests/development.
 - **Why:** voice/GUI traffic has latency and lifecycle semantics that differ from durable jobs, retries, long-running tools, and distributed workers.
-- **Trade-off:** Marina has two messaging boundaries, but each has a narrow purpose and can be tested independently.
+- **Trade-off:** Virinda has two messaging boundaries, but each has a narrow purpose and can be tested independently.
 - **Non-goal:** do not route microphone, realtime audio, or normal GUI state through the job broker.

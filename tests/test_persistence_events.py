@@ -15,7 +15,7 @@ def test_events_are_persisted_and_reloaded(tmp_path: Path) -> None:
         store=store,
         event_bus=InMemoryEventBus(),
     )
-    assert service.ask("hello") == "Marina received: hello"
+    assert service.ask("hello") == "Virinda received: hello"
     events = store.load_events(service.snapshot().session_id)
     assert any(isinstance(event, ResponseCompleted) for event in events)
     service.close()

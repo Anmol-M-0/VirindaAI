@@ -12,7 +12,7 @@ This is the concise architecture companion to `ARCHITECTURE.md`. Use it when onb
                  |                                     |
                  v                                     v
         +-------------------+                  +-------------------+
-        |      OVOS         |                  | Marina IPC/GUI    |
+        |      OVOS         |                  | Virinda IPC/GUI    |
         | message bus       |                  | Unix socket       |
         +---------+---------+                  +---------+---------+
                   |                                      |
@@ -38,8 +38,8 @@ This is the concise architecture companion to `ARCHITECTURE.md`. Use it when onb
 
 ## Ownership invariant
 
-OVOS owns *voice runtime mechanics*. Marina owns *product policy and durable application state*.
+OVOS owns *voice runtime mechanics*. Virinda owns *product policy and durable application state*.
 
-If a new feature requires microphone/VAD/STT/TTS ownership, implement it as an OVOS plugin/configuration rather than adding another competing voice loop to Marina.
+If a new feature requires microphone/VAD/STT/TTS ownership, implement it as an OVOS plugin/configuration rather than adding another competing voice loop to Virinda.
 
-If a new feature requires product memory, permissions, tool policy, user preferences, automation, or desktop state, implement it in Marina and expose only the smallest required OVOS adapter.
+If a new feature requires product memory, permissions, tool policy, user preferences, automation, or desktop state, implement it in Virinda and expose only the smallest required OVOS adapter.

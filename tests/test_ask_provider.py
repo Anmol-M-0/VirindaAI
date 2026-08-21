@@ -66,12 +66,12 @@ class TestAskCompletionProvider(unittest.TestCase):
         req = ProviderRequest(
             generation_id=2,
             model="meta/llama-3.3-70b-instruct",
-            messages=(Message(role="user", content="Hello Marina!"),),
+            messages=(Message(role="user", content="Hello Virinda!"),),
         )
 
         system_prompt, prompt = provider._extract_prompts(req)
         self.assertIsNone(system_prompt)
-        self.assertEqual(prompt, "Hello Marina!")
+        self.assertEqual(prompt, "Hello Virinda!")
 
     def test_extract_prompts_with_custom_and_empty_roles(self):
         provider = AskCompletionProvider(name="ask")

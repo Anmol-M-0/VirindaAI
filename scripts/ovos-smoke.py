@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a hardware-free smoke test against an installed OVOS + Marina environment."""
+"""Run a hardware-free smoke test against an installed OVOS + Virinda environment."""
 
 from __future__ import annotations
 

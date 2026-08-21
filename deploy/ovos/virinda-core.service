@@ -1,5 +1,5 @@
 [Unit]
-Description=Marina OVOS core
+Description=Virinda OVOS core
 After=virinda-messagebus.service
 Requires=virinda-messagebus.service
 

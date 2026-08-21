@@ -52,7 +52,7 @@ class AutomationPlan:
 
 
 class NaturalCommandParser:
-    """Deterministic parser for high-confidence Marina commands.
+    """Deterministic parser for high-confidence Virinda commands.
 
     The parser deliberately handles only phrases whose intent and arguments can be
     established without an LLM. Unknown/ambiguous utterances are returned as
@@ -267,7 +267,7 @@ def plan_automation(text: str, *, now: datetime, timezone: str | None = None) ->
         )
         if notify_match:
             body_text = notify_match.group(1).strip()
-            steps.append(f"notify:Marina|{body_text}")
+            steps.append(f"notify:Virinda|{body_text}")
             continue
         raise ValueError(f"unsupported automation action: {step}")
 
@@ -296,7 +296,7 @@ def plan_automation(text: str, *, now: datetime, timezone: str | None = None) ->
         name = notification_steps[0][:48]
     else:
         url_match = re.search(r"https?://([^\s/]+)", action_text)
-        name = (url_match.group(1) if url_match else "Marina automation")[:48]
+        name = (url_match.group(1) if url_match else "Virinda automation")[:48]
     summary = f"Trigger: {trigger_text}; Actions: " + "; ".join(steps)
     return AutomationPlan(
         name=name,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Preflight a Linux host before Marina P0 voice acceptance.
+"""Preflight a Linux host before Virinda P0 voice acceptance.
 
 This command is read-only. It inspects the local OVOS installation and PipeWire/ALSA
 surface without changing audio routing or saving recordings.

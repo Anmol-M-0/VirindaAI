@@ -99,8 +99,6 @@ dev = [
 [project.scripts]
 virinda = "virinda.interfaces.cli:main"
 virindad = "virinda.application.daemon:main"
-marina = "virinda.interfaces.cli:main"
-marinad = "virinda.application.daemon:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

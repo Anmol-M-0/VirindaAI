@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compute Marina voice latency metrics and optionally enforce P0 acceptance targets."""
+"""Compute Virinda voice latency metrics and optionally enforce P0 acceptance targets."""
 
 from __future__ import annotations
 
@@ -62,7 +62,7 @@ def main() -> int:
         try:
             from virinda.features import VoiceEventSample, latency_sample_from_events
         except ImportError:
-            print("Marina package is unavailable; install virinda-ai", file=sys.stderr)
+            print("Virinda package is unavailable; install virinda-ai", file=sys.stderr)
             return 2
 
     turns: dict[str, list[VoiceEventSample]] = defaultdict(list)
@@ -123,7 +123,7 @@ def main() -> int:
     if args.json:
         print(json.dumps(result, indent=2, sort_keys=True))
     elif args.markdown:
-        print("# Marina Voice Acceptance Report\n")
+        print("# Virinda Voice Acceptance Report\n")
         print(f"- Turns: **{result['turns']}**")
         print(f"- Result: **{'PASS' if not failures else 'FAIL'}**\n")
         print("| Metric | Count | P50 (ms) | P95 (ms) | Target (ms) |")

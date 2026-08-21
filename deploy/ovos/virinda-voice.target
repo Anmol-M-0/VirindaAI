@@ -1,5 +1,5 @@
 [Unit]
-Description=Marina OVOS voice runtime
+Description=Virinda OVOS voice runtime
 Requires=virinda-ovos-core.target virinda-listener.service virinda-audio.service
 After=virinda-ovos-core.target virinda-listener.service virinda-audio.service
 

@@ -45,7 +45,7 @@ def test_wake_word_opens_listening_and_emits_utterance_after_silence():
         emit=events.append,
     )
     controller.arm()
-    wake.detection = WakeDetection("hey marina", 0.95)
+    wake.detection = WakeDetection("hey virinda", 0.95)
     controller.on_audio(frame(), now=0.0)
     assert controller.stage.value == "listening"
 
@@ -79,7 +79,7 @@ def test_speaking_can_be_interrupted_for_barge_in():
     controller = VoiceInteractionController(emit=events.append)
     controller.arm()
     controller.speaking_started()
-    controller.on_wake_while_speaking(WakeDetection("hey marina", 0.9))
+    controller.on_wake_while_speaking(WakeDetection("hey virinda", 0.9))
     assert controller.stage.value == "listening"
     assert any(event.name == "barge_in" for event in events)
 

@@ -1,6 +1,6 @@
 # Product Gates
 
-These gates keep Marina aligned with the product north star.
+These gates keep Virinda aligned with the product north star.
 
 ## P0 voice gate
 

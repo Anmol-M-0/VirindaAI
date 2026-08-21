@@ -388,7 +388,7 @@ class AlertScheduler:
         if self._thread and self._thread.is_alive():
             return
         self._stop.clear()
-        self._thread = Thread(target=self._run, name="marina-alerts", daemon=True)
+        self._thread = Thread(target=self._run, name="virinda-alerts", daemon=True)
         self._thread.start()
 
     def stop(self) -> None:
@@ -614,7 +614,7 @@ def _safe_urlopen(url: str, *, timeout: float = 10.0, max_bytes: int | None = No
     opener = urllib.request.build_opener(_NoRedirect)
     current = url
     for _ in range(4):
-        request = urllib.request.Request(current, headers={"User-Agent": "MarinaAI/1.x"})
+        request = urllib.request.Request(current, headers={"User-Agent": "VirindaAI/1.x"})
         response = opener.open(request, timeout=timeout)
         if response.status not in {301, 302, 303, 307, 308}:
             return response
@@ -720,7 +720,7 @@ class OVOSBusAdapter:
 
 
 class OVOSAlertsAdapter:
-    """Bridge Marina notifications to an OVOS bus; the actual alerts skill owns scheduling/UI."""
+    """Bridge Virinda notifications to an OVOS bus; the actual alerts skill owns scheduling/UI."""
 
     def __init__(self, bus_adapter: OVOSBusAdapter) -> None:
         self.bus = bus_adapter
@@ -798,7 +798,7 @@ class MeetingStore:
 @dataclass(frozen=True, slots=True)
 class VoiceProfile:
     name: str
-    wake_word: str = "hey marina"
+    wake_word: str = "hey virinda"
     wake_threshold: float = 0.5
     tts_voice: str = "default"
     language: str = "en-us"
@@ -878,7 +878,7 @@ class RoutineRun:
 class RoutineStore:
     """Persistent store for the constrained, non-shell automation DSL.
 
-    Schema migration is additive so older Marina databases remain readable.
+    Schema migration is additive so older Virinda databases remain readable.
     """
 
     def __init__(self, conn: sqlite3.Connection, lock: RLock) -> None:
@@ -1420,16 +1420,16 @@ class OVOSBusSatellite:
 OVERLAY_HTML = r"""<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marina</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Virinda</title>
 <style>
 :root{font-family:system-ui,-apple-system,sans-serif;color-scheme:light dark}body{margin:0;background:#0f1115;color:#eef1f5}main{max-width:1100px;margin:0 auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center;gap:16px;position:sticky;top:0;background:#0f1115ee;backdrop-filter:blur(12px);padding:12px 0;z-index:2}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#171a21;border:1px solid #2a3040;border-radius:16px;padding:16px;box-shadow:0 8px 30px #0005}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.muted{opacity:.7;font-size:.9rem}button{font:inherit;border:1px solid #394050;background:#222735;color:inherit;border-radius:10px;padding:9px 12px;cursor:pointer}button.primary{background:#5d7cff;border-color:#6f8cff}button.danger{background:#55262a;border-color:#7c363c}input,textarea{font:inherit;width:100%;box-sizing:border-box;background:#0f1218;color:inherit;border:1px solid #394050;border-radius:10px;padding:10px}.field{margin:10px 0}.pill{display:inline-block;border-radius:999px;padding:4px 8px;background:#252b38;font-size:.8rem}.routine{border:1px solid #2a3040;border-radius:12px;padding:12px;margin:10px 0}.routine-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.steps{white-space:pre-wrap;background:#0f1218;border-radius:10px;padding:10px;margin-top:8px;overflow:auto}.ok{color:#7ce0a3}.warn{color:#ffd16b}.err{color:#ff8d8d}@media(max-width:800px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body><main>
-<header><div><h1 style="margin:0">Marina</h1><div id="state" class="muted">Loading…</div></div><div class="row"><button onclick="setMode('normal')">Normal</button><button onclick="setMode('focus')">Focus</button><button onclick="setMode('private')">Private</button><button onclick="setMode('quiet')">Quiet</button></div></header>
+<header><div><h1 style="margin:0">Virinda</h1><div id="state" class="muted">Loading…</div></div><div class="row"><button onclick="setMode('normal')">Normal</button><button onclick="setMode('focus')">Focus</button><button onclick="setMode('private')">Private</button><button onclick="setMode('quiet')">Quiet</button></div></header>
 <section class="grid">
-<div class="card"><h2>Conversation</h2><div class="row"><input id="q" placeholder="Ask Marina"><button class="primary" onclick="ask()">Ask</button><button onclick="cancelAsk()">Stop</button></div><pre id="out" class="steps"></pre><div id="live" class="muted"></div></div>
-<div class="card"><h2>Routine editor</h2><div class="field"><label>Name</label><input id="rname" placeholder="Morning Review"></div><div class="field"><label>Trigger</label><input id="rtrigger" placeholder="schedule:every weekday at 9 am"></div><div class="field"><label>Actions</label><textarea id="raction" rows="6" placeholder="notify:Marina|Review the dashboard||approve:tool:browser.open|{&quot;url&quot;:&quot;https://example.com&quot;}"></textarea></div><div class="row"><label><input type="checkbox" id="rapproval"> Require approval</label><label><input type="checkbox" id="rconflict"> Allow conflicts</label></div><div class="row"><button class="primary" onclick="saveRoutine()">Save</button><button onclick="previewEditor()">Preview</button><button onclick="clearEditor()">New</button></div><pre id="preview" class="steps"></pre></div>
+<div class="card"><h2>Conversation</h2><div class="row"><input id="q" placeholder="Ask Virinda"><button class="primary" onclick="ask()">Ask</button><button onclick="cancelAsk()">Stop</button></div><pre id="out" class="steps"></pre><div id="live" class="muted"></div></div>
+<div class="card"><h2>Routine editor</h2><div class="field"><label>Name</label><input id="rname" placeholder="Morning Review"></div><div class="field"><label>Trigger</label><input id="rtrigger" placeholder="schedule:every weekday at 9 am"></div><div class="field"><label>Actions</label><textarea id="raction" rows="6" placeholder="notify:Virinda|Review the dashboard||approve:tool:browser.open|{&quot;url&quot;:&quot;https://example.com&quot;}"></textarea></div><div class="row"><label><input type="checkbox" id="rapproval"> Require approval</label><label><input type="checkbox" id="rconflict"> Allow conflicts</label></div><div class="row"><button class="primary" onclick="saveRoutine()">Save</button><button onclick="previewEditor()">Preview</button><button onclick="clearEditor()">New</button></div><pre id="preview" class="steps"></pre></div>
 </section>
 <section class="card" style="margin-top:18px"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Routines</h2><button onclick="loadRoutines()">Refresh</button></div><div id="routines"></div></section>
 <section class="card" style="margin-top:18px"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Recent runs</h2><button onclick="loadRuns()">Refresh</button></div><pre id="runs" class="steps"></pre></section>

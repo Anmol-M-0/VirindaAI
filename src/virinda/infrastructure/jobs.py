@@ -14,7 +14,7 @@ from uuid import uuid4
 
 @dataclass(frozen=True, slots=True)
 class JobEnvelope:
-    """Durable/background work item shared by all Marina JobBroker backends."""
+    """Durable/background work item shared by all Virinda JobBroker backends."""
 
     subject: str
     payload: dict[str, Any]
@@ -46,7 +46,7 @@ JobHandler = Callable[[JobEnvelope], Any]
 
 
 class JobBroker(Protocol):
-    """Protocol for Marina's asynchronous durable-work boundary."""
+    """Protocol for Virinda's asynchronous durable-work boundary."""
 
     def publish(self, job: JobEnvelope) -> str: ...
 
@@ -138,7 +138,7 @@ class InProcessJobBroker:
             self._handler = handler
             self._stop.clear()
             self._worker_started_at = time.time()
-            self._worker = threading.Thread(target=self._run, name="marina-jobs", daemon=True)
+            self._worker = threading.Thread(target=self._run, name="virinda-jobs", daemon=True)
             self._worker.start()
             self._condition.notify_all()
 
@@ -242,7 +242,7 @@ def _subject_matches(pattern: str, subject: str) -> bool:
 class NatsJetStreamJobBroker:
     """NATS JetStream-backed JobBroker.
 
-    The adapter intentionally isolates the broker client behind this module. Marina's
+    The adapter intentionally isolates the broker client behind this module. Virinda's
     domain/application layers never import NATS directly. It uses a durable work-queue
     stream and explicit acknowledgements so failed jobs remain available for redelivery.
 
@@ -257,9 +257,9 @@ class NatsJetStreamJobBroker:
         self,
         url: str,
         *,
-        stream: str = "marina_jobs",
+        stream: str = "virinda_jobs",
         subject_prefix: str = "virinda.jobs",
-        durable: str = "marina-workers",
+        durable: str = "virinda-workers",
         credentials: str | None = None,
         ack_wait_seconds: float = 120.0,
         max_deliver: int = 5,
@@ -301,7 +301,7 @@ class NatsJetStreamJobBroker:
                 self._startup_error = None
                 self._loop = None
                 self._thread = threading.Thread(
-                    target=self._thread_main, name="marina-nats", daemon=True
+                    target=self._thread_main, name="virinda-nats", daemon=True
                 )
                 self._thread.start()
             if not self._ready.wait(timeout=10):
@@ -352,7 +352,7 @@ class NatsJetStreamJobBroker:
         await self._js.publish(publish_subject, body, headers=headers)
 
     def cancel(self, job_id: str) -> bool:
-        """Cancel a server-side JetStream schedule by Marina job id.
+        """Cancel a server-side JetStream schedule by Virinda job id.
 
         NATS implements schedule cancellation through a purge control publish: the
         ``Nats-Scheduler`` header names the schedule-definition subject and

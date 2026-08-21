@@ -14,7 +14,7 @@ def _constraint_map(path: Path) -> dict[str, str]:
     return result
 
 
-def test_checked_in_stable_constraints_match_marina_matrix():
+def test_checked_in_stable_constraints_match_virinda_matrix():
     root = Path(__file__).parents[1]
     matrix = json.loads((root / "config/ovos/compatibility.json").read_text(encoding="utf-8"))
     stable = _constraint_map(root / matrix["stable_channel"]["constraints_file"])
@@ -60,7 +60,7 @@ def test_reliability_tiers_are_disjoint_and_supported_stack_is_in_stable_lock():
     names = [
         "tier_a_production",
         "tier_b_stable_local_fallback",
-        "tier_c_marina_addons",
+        "tier_c_virinda_addons",
         "tier_d_experimental_or_legacy",
     ]
     sets = [set(tiers[name]) for name in names]

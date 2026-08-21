@@ -13,7 +13,7 @@ SOURCE_FILES = [
 ]
 ENV_NAMES = set(
     re.findall(
-        r"MARINA_[A-Z0-9_]+",
+        r"VIRINDA_[A-Z0-9_]+",
         "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in SOURCE_FILES),
     )
 )

@@ -1,6 +1,6 @@
-# Marina Automations
+# Virinda Automations
 
-Marina automations are intentionally local, declarative, permission-aware, and observable.
+Virinda automations are intentionally local, declarative, permission-aware, and observable.
 They are not arbitrary shell scripts.
 
 ## Goals
@@ -67,4 +67,4 @@ Routines cannot:
 
 ## OVOS integration
 
-OVOS remains responsible for the microphone, wake word, VAD, STT, audio output, and message bus. Marina normalizes relevant OVOS events into application-level automation events. This keeps routines portable between standalone and OVOS-backed modes.
+OVOS remains responsible for the microphone, wake word, VAD, STT, audio output, and message bus. Virinda normalizes relevant OVOS events into application-level automation events. This keeps routines portable between standalone and OVOS-backed modes.

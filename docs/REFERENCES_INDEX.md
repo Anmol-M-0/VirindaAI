@@ -1,6 +1,6 @@
 # External References
 
-Marina intentionally depends on a small set of upstream contracts rather than importing the whole ecosystem indiscriminately.
+Virinda intentionally depends on a small set of upstream contracts rather than importing the whole ecosystem indiscriminately.
 
 ## OVOS core references
 
@@ -15,6 +15,6 @@ Marina intentionally depends on a small set of upstream contracts rather than im
 
 - [OVOS installer](https://github.com/OpenVoiceOS/ovos-installer) — reference deployment path for a full OVOS installation.
 
-## Marina rule
+## Virinda rule
 
-When an upstream project changes, update the compatibility matrix and reference documentation before changing Marina's production dependency set.
+When an upstream project changes, update the compatibility matrix and reference documentation before changing Virinda's production dependency set.

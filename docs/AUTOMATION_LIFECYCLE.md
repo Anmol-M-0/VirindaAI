@@ -1,6 +1,6 @@
 # Automation lifecycle
 
-Marina automations are persistent, reviewable objects rather than arbitrary scripts.
+Virinda automations are persistent, reviewable objects rather than arbitrary scripts.
 
 ## Lifecycle
 
@@ -17,7 +17,7 @@ create
 
 ## Conflict detection
 
-Marina rejects creation or edits that reuse an active trigger unless the caller explicitly sets `allow_conflict=true`. This prevents accidental duplicate schedules and duplicate notifications.
+Virinda rejects creation or edits that reuse an active trigger unless the caller explicitly sets `allow_conflict=true`. This prevents accidental duplicate schedules and duplicate notifications.
 
 ## Editing
 

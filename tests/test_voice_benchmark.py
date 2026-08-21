@@ -124,7 +124,7 @@ def test_voice_benchmark_can_emit_markdown_report(tmp_path: Path):
         text=True,
     )
     assert result.returncode == 0
-    assert "# Marina Voice Acceptance Report" in result.stdout
+    assert "# Virinda Voice Acceptance Report" in result.stdout
     assert "| total_ms |" in result.stdout
 
 

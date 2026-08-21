@@ -1,12 +1,12 @@
-# Marina Voice Acceptance
+# Virinda Voice Acceptance
 
-This document defines the P0 hardware-validation workflow for Marina's voice experience.
+This document defines the P0 hardware-validation workflow for Virinda's voice experience.
 
-Marina does **not** replace the OVOS listener. Dinkum Listener already owns microphone input, wake word, VAD and STT, and publishes the resulting lifecycle through the OVOS MessageBus. urlDinkum Listenerhttps://github.com/OpenVoiceOS/ovos-dinkum-listener
+Virinda does **not** replace the OVOS listener. Dinkum Listener already owns microphone input, wake word, VAD and STT, and publishes the resulting lifecycle through the OVOS MessageBus. urlDinkum Listenerhttps://github.com/OpenVoiceOS/ovos-dinkum-listener
 
 ## 1. Capture real OVOS events
 
-On a provisioned Linux desktop running the Marina OVOS profile:
+On a provisioned Linux desktop running the Virinda OVOS profile:
 
 ```bash
 python scripts/voice-event-capture.py --duration 180 --output voice-events.jsonl
@@ -36,7 +36,7 @@ audio.output.ended
 barge_in.requested
 ```
 
-An event such as `wake.detected` or `llm.first_token` may be supplied by a future deeper integration, but Marina deliberately does not fabricate those measurements when the underlying OVOS service does not expose them.
+An event such as `wake.detected` or `llm.first_token` may be supplied by a future deeper integration, but Virinda deliberately does not fabricate those measurements when the underlying OVOS service does not expose them.
 
 ## 3. P0 acceptance targets
 
@@ -59,19 +59,19 @@ A separate test set must measure:
 
 - false accepts per hour of representative background audio;
 - false rejects across multiple speakers;
-- performance while Marina is speaking;
+- performance while Virinda is speaking;
 - performance with keyboard/music/room noise;
 - performance after device sleep/wake;
 - cold-start and warm-start behavior.
 
-The dedicated `hey_marina` model is required for production. Do not silently substitute another wake phrase.
+The dedicated `hey_virinda` model is required for production. Do not silently substitute another wake phrase.
 
 ## 5. Barge-in
 
 During TTS playback:
 
 1. user speaks or presses the configured interruption control;
-2. OVOS/Marina stops playback;
+2. OVOS/Virinda stops playback;
 3. the current assistant generation is cancelled;
 4. the listener returns to capture;
 5. no stale response may resume playback.
@@ -103,7 +103,7 @@ Run at least 30 turns per hardware profile and report p50/p95. Repeat with:
 - normal conversation/background noise;
 - music playing;
 - keyboard/desk noise;
-- Marina speaking while the user interrupts;
+- Virinda speaking while the user interrupts;
 - follow-up conversation without repeating the wake word.
 
 The authoritative voice gate remains the P0 product gate; this harness only supplies the measurements required to make that gate objective.

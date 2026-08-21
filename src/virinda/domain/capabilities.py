@@ -18,7 +18,7 @@ class CapabilityRisk(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class Capability:
-    """Machine-readable feature/tool capability advertised by Marina."""
+    """Machine-readable feature/tool capability advertised by Virinda."""
 
     name: str
     description: str

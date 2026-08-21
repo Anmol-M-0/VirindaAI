@@ -1,14 +1,14 @@
 [Unit]
-Description=VirindAI Ambient Desktop Assistant Daemon (marinad)
+Description=VirindAI Ambient Desktop Assistant Daemon (virindad)
 Documentation=https://github.com/Anmol-M-0/VirindaAI
 After=network.target sound.target pipewire.service
 
 [Service]
 Type=simple
 WorkingDirectory=%h/dev/active_projects/github/VirindAI
-EnvironmentFile=-%h/.config/marina/.env
+EnvironmentFile=-%h/.config/virinda/.env
 EnvironmentFile=-%h/dev/active_projects/github/.env
-ExecStart=%h/dev/active_projects/github/VirindAI/.venv/bin/marinad
+ExecStart=%h/dev/active_projects/github/VirindAI/.venv/bin/virindad
 Restart=on-failure
 RestartSec=3s
 KillMode=mixed

@@ -1,5 +1,5 @@
 [Unit]
-Description=Marina OVOS core runtime
+Description=Virinda OVOS core runtime
 Requires=virinda-messagebus.service virinda-core.service
 After=virinda-messagebus.service virinda-core.service
 

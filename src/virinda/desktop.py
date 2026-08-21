@@ -12,7 +12,7 @@ class OverlayServer:
     """Optional loopback developer/diagnostics UI.
 
     Production OVOS desktop interaction must use ``ovos-gui``/MessageBus; this
-    server exists for debugging Marina without an OVOS GUI client.
+    server exists for debugging Virinda without an OVOS GUI client.
     """
 
     def __init__(self, service, host: str = "127.0.0.1", port: int = 8765) -> None:
@@ -214,7 +214,7 @@ class OverlayServer:
 
         self._server = ThreadingHTTPServer((self.host, self.port), Handler)
         self._thread = threading.Thread(
-            target=self._server.serve_forever, name="marina-overlay", daemon=True
+            target=self._server.serve_forever, name="virinda-overlay", daemon=True
         )
         self._thread.start()
         return self.host, self._server.server_port

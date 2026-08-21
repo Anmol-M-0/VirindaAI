@@ -11,7 +11,7 @@ class LiveSessionContext:
     """Ephemeral context shared by the OVOS voice path, daemon, and UI.
 
     This is intentionally separate from durable conversation history. It lets OVOS
-    events update Marina's live state without forcing duplicate transcript writes.
+    events update Virinda's live state without forcing duplicate transcript writes.
     """
 
     session_id: str

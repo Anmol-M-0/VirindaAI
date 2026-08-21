@@ -16,9 +16,9 @@ def test_doctor_reports_persona_and_model_checks(tmp_path: Path):
 
 def test_doctor_accepts_explicit_wake_model(monkeypatch, tmp_path: Path):
     root = Path(__file__).parents[1]
-    model = tmp_path / "hey_marina.tflite"
+    model = tmp_path / "hey_virinda.tflite"
     model.write_bytes(b"model")
-    monkeypatch.setenv("MARINA_WAKE_MODEL", str(model))
+    monkeypatch.setenv("VIRINDA_WAKE_MODEL", str(model))
     report = run_doctor(root)
     wake = next(check for check in report.checks if check.name == "wake-model")
     assert wake.status == "ok"
@@ -32,7 +32,7 @@ def test_doctor_can_emit_service_checks_without_systemd(tmp_path: Path):
 
 
 def test_nats_doctor_is_optional(monkeypatch, tmp_path):
-    monkeypatch.setenv("MARINA_JOB_BROKER", "inprocess")
+    monkeypatch.setenv("VIRINDA_JOB_BROKER", "inprocess")
     report = run_doctor(tmp_path, check_nats=True)
     names = {check.name for check in report.checks}
     assert "nats-py" in names
@@ -40,7 +40,7 @@ def test_nats_doctor_is_optional(monkeypatch, tmp_path):
 
 
 def test_nats_doctor_marks_backend_required(monkeypatch, tmp_path):
-    monkeypatch.setenv("MARINA_JOB_BROKER", "nats")
+    monkeypatch.setenv("VIRINDA_JOB_BROKER", "nats")
     report = run_doctor(tmp_path, check_nats=True)
     nats_check = next(check for check in report.checks if check.name == "nats-py")
     assert nats_check.required is True

@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This document describes the user-facing assistant behaviors added on top of the OVOS runtime. These behaviors are local Marina application features; OVOS remains responsible for microphone, wake-word, VAD, STT, TTS, and the message bus.
+This document describes the user-facing assistant behaviors added on top of the OVOS runtime. These behaviors are local Virinda application features; OVOS remains responsible for microphone, wake-word, VAD, STT, TTS, and the message bus.
 
 ## Memory capture
 
-Marina accepts high-confidence deterministic memory statements such as:
+Virinda accepts high-confidence deterministic memory statements such as:
 
 ```text
 remember my favorite color is blue
@@ -17,7 +17,7 @@ Statements beginning with `I think` or `I believe` are stored with medium confid
 
 ### Secrets are never stored
 
-Marina rejects deterministic capture of common secrets, including:
+Virinda rejects deterministic capture of common secrets, including:
 
 - passwords
 - PINs/passcodes
@@ -60,7 +60,7 @@ What's my morning briefing?
 Give me my daily briefing.
 ```
 
-The same briefing is available through the CLI, Unix IPC, desktop overlay, and Marina's OVOS intent.
+The same briefing is available through the CLI, Unix IPC, desktop overlay, and Virinda's OVOS intent.
 
 ## Conversational approvals
 
@@ -70,9 +70,9 @@ Example:
 
 ```text
 User: open https://example.com
-Marina: I need your approval before opening that URL. Say yes to continue.
+Virinda: I need your approval before opening that URL. Say yes to continue.
 User: yes
-Marina: Done: ...
+Virinda: Done: ...
 ```
 
 The raw token is not spoken or displayed in the natural-language path. Trusted UI/IPC clients may still use the explicit token APIs when a programmatic approval workflow is required.

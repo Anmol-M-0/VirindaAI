@@ -154,7 +154,7 @@ class LocalRPCServer:
             finally:
                 queue.put(sentinel)
 
-        worker = threading.Thread(target=run, name="marina-rpc-stream", daemon=True)
+        worker = threading.Thread(target=run, name="virinda-rpc-stream", daemon=True)
         worker.start()
         try:
             while True:

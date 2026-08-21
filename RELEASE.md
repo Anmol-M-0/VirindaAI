@@ -1,4 +1,4 @@
-# MarinaAI 0.26.2 Release
+# VirindaAI 0.26.2 Release
 
 ## Highlights
 
@@ -16,8 +16,8 @@ This release is a correctness hardening pass over the JobBroker implementation d
 - Delayed local jobs are cancelled cleanly on shutdown.
 - Subject mismatches fail fast instead of starving the worker queue.
 - NATS startup/subscription initialization is synchronized.
-- Existing JetStream streams are validated before Marina accepts them.
-- `available_at` uses native NATS 2.14+ message scheduling, so delayed jobs survive Marina process restarts.
+- Existing JetStream streams are validated before Virinda accepts them.
+- `available_at` uses native NATS 2.14+ message scheduling, so delayed jobs survive Virinda process restarts.
 - Delivery is explicitly documented as at-least-once with application-level idempotency, not exactly-once.
 - The roadmap now has one authoritative async milestone and explicitly returns priority to the P0 voice experience after JobBroker correctness work.
 

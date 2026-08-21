@@ -1,12 +1,12 @@
-# MarinaAI Audio Interaction Design
+# VirindaAI Audio Interaction Design
 
 ## Design decision
 
-Marina's production audio experience is implemented by OpenVoiceOS, not by a second Marina voice loop.
+Virinda's production audio experience is implemented by OpenVoiceOS, not by a second Virinda voice loop.
 
 OVOS's Dinkum Listener already provides a modular microphone → wake word → VAD → STT pipeline, while `ovos-audio` owns TTS and sound output. OVOS also supports hybrid listening for follow-up turns without repeatedly requiring a wake word.
 
-Marina therefore defines **interaction policy and UX expectations**, while OVOS provides the actual audio machinery.
+Virinda therefore defines **interaction policy and UX expectations**, while OVOS provides the actual audio machinery.
 
 ## Target user experience
 
@@ -18,7 +18,7 @@ The default experience should feel like a classic ambient assistant:
           v
     local wake detector
           |
-   "Hey Marina" detected
+   "Hey Virinda" detected
           |
           v
        listening
@@ -61,24 +61,24 @@ After a response, keep the listener open for a short configurable window. Dinkum
 
 ### Barge-in
 
-The user must be able to interrupt TTS. The correct implementation is to stop audio playback and cancel the current conversation generation, then return to listening. The Marina standalone service already has generation fencing for this; the OVOS path should use the standard `mycroft.stop` / listener lifecycle rather than inventing a parallel cancellation bus.
+The user must be able to interrupt TTS. The correct implementation is to stop audio playback and cancel the current conversation generation, then return to listening. The Virinda standalone service already has generation fencing for this; the OVOS path should use the standard `mycroft.stop` / listener lifecycle rather than inventing a parallel cancellation bus.
 For the standalone compatibility audio boundary, playback adapters may implement `play_interruptible(..., cancel_event=...)`. A production adapter must make `stop()` and the worker cancellation event interrupt any already-running playback; checking generation only before playback is insufficient for strict interruption latency.
 
 ### Text fallback
 
 CLI, Unix IPC, and future GUI clients remain first-class. Audio is a transport, not the assistant's only interface.
 
-## Wake word: “Hey Marina”
+## Wake word: “Hey Virinda”
 
-OVOS can load openWakeWord models through `ovos-ww-plugin-openwakeword`. The plugin supports arbitrary `.onnx` or `.tflite` model paths and configurable thresholds. The current plugin ships example pretrained models such as `hey_jarvis`, not a built-in `hey_marina` model.
+OVOS can load openWakeWord models through `ovos-ww-plugin-openwakeword`. The plugin supports arbitrary `.onnx` or `.tflite` model paths and configurable thresholds. The current plugin ships example pretrained models such as `hey_jarvis`, not a built-in `hey_virinda` model.
 
-Marina therefore ships an explicit model placeholder:
+Virinda therefore ships an explicit model placeholder:
 
 ```json
 "hotwords": {
-  "hey_marina": {
+  "hey_virinda": {
     "module": "ovos-ww-plugin-openwakeword",
-    "models": ["/ABSOLUTE/PATH/TO/hey_marina.tflite"],
+    "models": ["/ABSOLUTE/PATH/TO/hey_virinda.tflite"],
     "inference_framework": "tflite",
     "threshold": 0.5,
     "listen": true
@@ -86,7 +86,7 @@ Marina therefore ships an explicit model placeholder:
 }
 ```
 
-Do not silently map `hey marina` to another phrase. A dedicated model should be trained/selected and evaluated for false accept and false reject rates before calling the feature production-ready.
+Do not silently map `hey virinda` to another phrase. A dedicated model should be trained/selected and evaluated for false accept and false reject rates before calling the feature production-ready.
 
 ## VAD and STT
 
@@ -111,15 +111,15 @@ The application should measure the following instead of guessing about quality:
 
 OVOS audio should receive sentence-sized or appropriately chunked text as soon as the persona produces it. Do not wait for the entire answer when the underlying engine and TTS pipeline support incremental playback.
 
-The current Marina tokenizer and streamed IPC are still useful for desktop clients, but an OVOS-native path should prefer the native `speak`/audio pipeline.
+The current Virinda tokenizer and streamed IPC are still useful for desktop clients, but an OVOS-native path should prefer the native `speak`/audio pipeline.
 
 ### Current TTS direction
 
-The former `ovos-tts-plugin-piper` repository is archived and documents migration to `ovos-tts-plugin-phoonnx`. Marina's OVOS configuration therefore uses `ovos-tts-plugin-phoonnx` and Piper-compatible voice IDs through phoonnx.
+The former `ovos-tts-plugin-piper` repository is archived and documents migration to `ovos-tts-plugin-phoonnx`. Virinda's OVOS configuration therefore uses `ovos-tts-plugin-phoonnx` and Piper-compatible voice IDs through phoonnx.
 
 ## Audio UX states
 
-Marina's UI should expose, at minimum:
+Virinda's UI should expose, at minimum:
 
 - `ARMED` — microphone available, wake detector active;
 - `LISTENING` — speech capture active;
@@ -141,7 +141,7 @@ Default passive mode should be:
 5. explicit diagnostic controls for enabling saved recordings;
 6. network providers opt-in and clearly identified.
 
-Dinkum Listener supports optional utterance saving for diagnostics. Marina should keep that disabled by default.
+Dinkum Listener supports optional utterance saving for diagnostics. Virinda should keep that disabled by default.
 
 ## Recommended Linux stack
 
@@ -164,7 +164,7 @@ ovos-dinkum-listener
      ovos-core/pipeline
         /         \
        /           \
-Marina skills     Marina persona
+Virinda skills     Virinda persona
                      |
               ovos-openai-plugin
                      |
@@ -187,15 +187,15 @@ Wake/VAD local, STT or LLM remote/self-hosted, TTS local.
 
 ### Satellite
 
-OVOS listener runs on a lightweight microphone device and sends voice interactions to a more capable Marina/OVOS host. HiveMind is the natural future transport rather than inventing another network protocol.
+OVOS listener runs on a lightweight microphone device and sends voice interactions to a more capable Virinda/OVOS host. HiveMind is the natural future transport rather than inventing another network protocol.
 
 ## Implementation roadmap
 
 ### Phase A — OVOS migration (current)
 
 - production ownership transferred to OVOS;
-- Marina skill created;
-- Marina persona created;
+- Virinda skill created;
+- Virinda persona created;
 - Dinkum Listener configuration documented;
 - OpenWakeWord integration documented;
 - phoonnx TTS configuration used;
@@ -205,7 +205,7 @@ OVOS listener runs on a lightweight microphone device and sends voice interactio
 
 - validate a specific Linux audio device profile;
 - choose and package the local STT plugin/model;
-- provide a tested `hey_marina` wake model;
+- provide a tested `hey_virinda` wake model;
 - benchmark first-audio/turn latency;
 - add privacy diagnostics.
 

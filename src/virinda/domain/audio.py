@@ -51,7 +51,7 @@ class VoiceActivity:
 
 @dataclass(frozen=True, slots=True)
 class AudioPolicy:
-    wake_word: str = "hey marina"
+    wake_word: str = "hey virinda"
     wake_threshold: float = 0.5
     pre_roll_ms: int = 300
     min_speech_ms: int = 250

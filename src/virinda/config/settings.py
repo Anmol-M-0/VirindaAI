@@ -61,9 +61,9 @@ class Settings:
 
     def validate(self) -> None:
         if not self.provider.strip():
-            raise ValueError("VIRINDA_PROVIDER / MARINA_PROVIDER cannot be empty")
+            raise ValueError("VIRINDA_PROVIDER / VIRINDA_PROVIDER cannot be empty")
         if not self.model.strip():
-            raise ValueError("VIRINDA_MODEL / MARINA_MODEL cannot be empty")
+            raise ValueError("VIRINDA_MODEL / VIRINDA_MODEL cannot be empty")
         if self.audio_mode not in {"wake_word", "push_to_talk", "toggle_listen", "follow_up"}:
             raise ValueError(
                 "VIRINDA_AUDIO_MODE must be wake_word, push_to_talk, toggle_listen, or follow_up"
@@ -93,7 +93,7 @@ class Settings:
     @classmethod
     def from_env(cls) -> Settings:
         def _get(key: str, default: str | None = None) -> str | None:
-            return os.getenv(f"VIRINDA_{key}", os.getenv(f"MARINA_{key}", default))
+            return os.getenv(f"VIRINDA_{key}", os.getenv(f"VIRINDA_{key}", default))
 
         override = _get("DATA_DIR")
         data_dir = (

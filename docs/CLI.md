@@ -1,27 +1,27 @@
 # CLI Reference
 
-The CLI is the smallest human-facing control surface for Marina. It can run directly against the local application or through the long-lived `marinad` daemon.
+The CLI is the smallest human-facing control surface for Virinda. It can run directly against the local application or through the long-lived `virindad` daemon.
 
 ## Basic commands
 
 ```bash
-marina status
-marina ask "Hello Marina"
-marina history
-marina events
-marina sessions
-marina capabilities
-marina context
+virinda status
+virinda ask "Hello Virinda"
+virinda history
+virinda events
+virinda sessions
+virinda capabilities
+virinda context
 ```
 
 ## Context
 
 ```bash
-marina context
-marina context private
-marina context normal
-marina context focus
-marina context quiet
+virinda context
+virinda context private
+virinda context normal
+virinda context focus
+virinda context quiet
 ```
 
 Context changes are policy changes, not merely UI state changes. Private mode changes persistence/memory behavior; quiet/focus modes affect proactive and voice behavior.
@@ -29,11 +29,11 @@ Context changes are policy changes, not merely UI state changes. Private mode ch
 ## Diagnostics
 
 ```bash
-marina doctor
-marina doctor --audio
-marina doctor --services
-marina doctor --audio --services
-marina doctor --json
+virinda doctor
+virinda doctor --audio
+virinda doctor --services
+virinda doctor --audio --services
+virinda doctor --json
 ```
 
 `--json` is designed for scripts/CI and should be preferred over parsing human-oriented output.
@@ -43,15 +43,15 @@ marina doctor --json
 Start the local daemon:
 
 ```bash
-marinad
+virindad
 ```
 
 Then use the same service over the Unix socket:
 
 ```bash
-marina --socket "$MARINA_SOCKET" status
-marina --socket "$MARINA_SOCKET" ask "hello"
-marina --socket "$MARINA_SOCKET" ask-stream "hello"
+virinda --socket "$VIRINDA_SOCKET" status
+virinda --socket "$VIRINDA_SOCKET" ask "hello"
+virinda --socket "$VIRINDA_SOCKET" ask-stream "hello"
 ```
 
 The socket is local and created with mode `0600`.

@@ -2,6 +2,6 @@
 name = "virinda-audio-core"
 version = "0.1.0"
 edition = "2021"
-description = "Migration seam for MarinaAI real-time audio primitives"
+description = "Migration seam for VirindaAI real-time audio primitives"
 
 [dependencies]

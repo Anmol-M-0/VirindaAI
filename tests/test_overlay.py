@@ -51,7 +51,7 @@ def test_overlay_serves_routine_editor_and_lifecycle_api(tmp_path):
             {
                 "name": "Morning",
                 "trigger": "event:morning",
-                "action": "notify:Marina|Good morning",
+                "action": "notify:Virinda|Good morning",
             },
         )
         routine_id = created["id"]
@@ -83,12 +83,12 @@ def test_overlay_run_now_executes_selected_routine(tmp_path):
             {
                 "name": "Immediate",
                 "trigger": "event:manual",
-                "action": "notify:Marina|Run now",
+                "action": "notify:Virinda|Run now",
             },
         )
         result = post(base, "/api/routine-run-now", {"id": created["id"]})
         assert result["status"] == "succeeded"
-        assert service.notification_summary() == "Marina: Run now"
+        assert service.notification_summary() == "Virinda: Run now"
     finally:
         overlay.stop()
         service.close()

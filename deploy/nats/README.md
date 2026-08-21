@@ -1,19 +1,19 @@
-# Marina NATS JetStream deployment
+# Virinda NATS JetStream deployment
 
-Marina uses NATS JetStream as its only durable job backend. OVOS MessageBus remains the interactive assistant bus.
+Virinda uses NATS JetStream as its only durable job backend. OVOS MessageBus remains the interactive assistant bus.
 
 ## Single-node development server
 
-The checked-in `marina-nats.conf` is a simple single-node configuration intended for a local development/desktop deployment.
+The checked-in `virinda-nats.conf` is a simple single-node configuration intended for a local development/desktop deployment.
 
-Start a NATS server with JetStream enabled, then configure Marina:
+Start a NATS server with JetStream enabled, then configure Virinda:
 
 ```bash
-export MARINA_JOB_BROKER=nats
-export MARINA_NATS_URL=nats://127.0.0.1:4222
-export MARINA_NATS_STREAM=marina_jobs
-export MARINA_NATS_SUBJECT_PREFIX=marina.jobs
-export MARINA_NATS_DURABLE=marina-workers
+export VIRINDA_JOB_BROKER=nats
+export VIRINDA_NATS_URL=nats://127.0.0.1:4222
+export VIRINDA_NATS_STREAM=virinda_jobs
+export VIRINDA_NATS_SUBJECT_PREFIX=virinda.jobs
+export VIRINDA_NATS_DURABLE=virinda-workers
 ```
 
 ## Live acceptance
@@ -30,7 +30,7 @@ Exit codes:
 - `2`: NATS is not provisioned or is unreachable. This is not a source-code failure.
 - `1`: NATS was reachable but the acceptance contract failed.
 
-The acceptance test uses a temporary stream and subject and does not touch Marina's production stream.
+The acceptance test uses a temporary stream and subject and does not touch Virinda's production stream.
 
 ## Production guidance
 
@@ -38,7 +38,7 @@ For networked deployments, enable TLS and use scoped NATS credentials. Keep JetS
 
 ## Supported version target
 
-Marina currently targets NATS Server 2.14.x with JetStream enabled. The compatibility target is NATS Server 2.14.x; the current recommended patch is 2.14.5. Verify the installed server with `nats-server -v`. The Python client target is `nats-py` 2.15.x.
+Virinda currently targets NATS Server 2.14.x with JetStream enabled. The compatibility target is NATS Server 2.14.x; the current recommended patch is 2.14.5. Verify the installed server with `nats-server -v`. The Python client target is `nats-py` 2.15.x.
 
 For a durable crash/recovery check, run:
 

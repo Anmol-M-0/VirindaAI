@@ -1,6 +1,6 @@
 # Documentation Policy
 
-Documentation is part of the implementation contract in MarinaAI.
+Documentation is part of the implementation contract in VirindaAI.
 
 ## Required documentation for public behavior
 

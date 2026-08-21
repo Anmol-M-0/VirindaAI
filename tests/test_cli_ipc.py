@@ -34,7 +34,7 @@ def test_cli_can_target_daemon_socket(tmp_path: Path):
             text=True,
             check=True,
         )
-        assert result.stdout.strip() == "Marina received: hello daemon"
+        assert result.stdout.strip() == "Virinda received: hello daemon"
     finally:
         server.shutdown()
         service.close()

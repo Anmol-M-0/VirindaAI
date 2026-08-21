@@ -1,5 +1,5 @@
 [Unit]
-Description=Marina OVOS message bus
+Description=Virinda OVOS message bus
 After=network.target
 
 [Service]

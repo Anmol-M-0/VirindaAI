@@ -37,7 +37,7 @@ Never log raw microphone samples by default.
 
 ## Experiment protocol
 
-Run at least 30 short turns for each hardware/configuration profile. Report p50/p95 rather than averages alone. Test with Marina speaking, background music, keyboard noise, and normal room conditions.
+Run at least 30 short turns for each hardware/configuration profile. Report p50/p95 rather than averages alone. Test with Virinda speaking, background music, keyboard noise, and normal room conditions.
 
 ## Live OVOS benchmark harness
 

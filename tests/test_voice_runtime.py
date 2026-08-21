@@ -102,7 +102,7 @@ def test_voice_turn_uses_same_service_and_serialized_tts(tmp_path: Path):
     messages = service.store.load_messages(service.snapshot().session_id)
     assert [m.role for m in messages] == ["user", "assistant"]
     assert messages[0].content == "hello from voice"
-    assert tts.texts == ["Marina received: hello from voice"]
+    assert tts.texts == ["Virinda received: hello from voice"]
     assert output.played
     runtime.close()
     service.close()

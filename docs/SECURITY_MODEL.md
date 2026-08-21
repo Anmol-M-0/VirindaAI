@@ -1,12 +1,12 @@
 # Security Model
 
-Marina is a local-first assistant, but local does not mean untrusted code should receive unrestricted authority. The security model is therefore built around **local boundaries, explicit authority, bounded data access, and auditable actions**.
+Virinda is a local-first assistant, but local does not mean untrusted code should receive unrestricted authority. The security model is therefore built around **local boundaries, explicit authority, bounded data access, and auditable actions**.
 
 ## Trust zones
 
 ```text
 Trusted local control plane
-    ├─ Marina application service
+    ├─ Virinda application service
     ├─ SQLite
     └─ local Unix socket (0600)
 
@@ -32,7 +32,7 @@ External systems
 
 ## IPC
 
-Marina's local Unix socket is permissioned `0600`. It should not be replaced with an unauthenticated TCP server.
+Virinda's local Unix socket is permissioned `0600`. It should not be replaced with an unauthenticated TCP server.
 
 The OVOS message bus is treated as a local/private control boundary. Do not expose it directly to untrusted networks. OVOS documents the bus as the central local IPC mechanism for its services.
 
@@ -55,7 +55,7 @@ This prevents common SSRF and credential-leak patterns but does not make arbitra
 
 ## Filesystem safety
 
-The default write root is Marina's own data directory. Additional write roots are explicitly configured.
+The default write root is Virinda's own data directory. Additional write roots are explicitly configured.
 
 Avoid broad roots such as `/`, `/home`, removable volumes, or secrets directories unless the deployment intentionally requires that authority.
 
@@ -97,4 +97,4 @@ Future cross-device transports must authenticate and replay-protect messages. Th
 
 ## Broker trust boundary
 
-The OVOS MessageBus and the Marina JobBroker are separate trust domains. The local OVOS bus is not a remote transport. If NATS is enabled across hosts, use TLS and scoped credentials, limit subjects per worker, and never place secrets or arbitrary shell commands into job payloads. Every consequential job must carry an idempotency key and approval state where required.
+The OVOS MessageBus and the Virinda JobBroker are separate trust domains. The local OVOS bus is not a remote transport. If NATS is enabled across hosts, use TLS and scoped credentials, limit subjects per worker, and never place secrets or arbitrary shell commands into job payloads. Every consequential job must carry an idempotency key and approval state where required.

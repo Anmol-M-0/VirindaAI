@@ -1,9 +1,9 @@
-# Marina Product North Star
+# Virinda Product North Star
 
 ## Purpose
 
-MarinaAI is a **local-first personal desktop voice assistant for Linux**.
-The product goal is not to maximize infrastructure. The goal is to make Marina feel fast,
+VirindaAI is a **local-first personal desktop voice assistant for Linux**.
+The product goal is not to maximize infrastructure. The goal is to make Virinda feel fast,
 private, useful, predictable, and pleasant to talk to.
 
 ## Product hierarchy
@@ -12,11 +12,11 @@ private, useful, predictable, and pleasant to talk to.
 
 This is the product-critical path.
 
-- "Hey Marina" passive listening.
+- "Hey Virinda" passive listening.
 - Fast wake → listening feedback.
 - Natural multi-turn conversation.
 - Low-latency streaming responses and speech.
-- Barge-in while Marina is speaking.
+- Barge-in while Virinda is speaking.
 - Private / Focus / Quiet modes.
 - Robust offline/typed fallback when voice services fail.
 - Clear visible listening/speaking/privacy state.
@@ -55,7 +55,7 @@ P3 must never make the P0 realtime voice path depend on NATS availability.
 - Distributed workers.
 - Optional remote integrations.
 
-P4 is an extension of Marina, not the definition of Marina.
+P4 is an extension of Virinda, not the definition of Virinda.
 
 ## Hard product rules
 
@@ -63,7 +63,7 @@ P4 is an extension of Marina, not the definition of Marina.
 2. **OVOS owns realtime voice/audio lifecycle in production.**
 3. **OVOS MessageBus owns interactive assistant traffic.**
 4. **NATS JetStream owns durable asynchronous work only.**
-5. **SQLite owns Marina-local durable product state.**
+5. **SQLite owns Virinda-local durable product state.**
 6. **There is one authoritative application coordinator.**
 7. **Consequential tools require explicit policy/approval.**
 8. **Private mode must not persist or inject durable personal context.**
@@ -94,7 +94,7 @@ microphone
   → wake word
   → VAD
   → STT
-  → Marina context/persona
+  → Virinda context/persona
   → streaming response
   → TTS
   → playback

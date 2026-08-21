@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify Marina's stable OVOS profile against the checked-in OVOS lock."""
+"""Verify Virinda's stable OVOS profile against the checked-in OVOS lock."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def main():
     policy = matrix.get("reliability_policy", {})
     tier_a = set(policy.get("tier_a_production", []))
     tier_b = set(policy.get("tier_b_stable_local_fallback", []))
-    tier_c = set(policy.get("tier_c_marina_addons", []))
+    tier_c = set(policy.get("tier_c_virinda_addons", []))
     tier_d = set(policy.get("tier_d_experimental_or_legacy", []))
     if len(tier_a | tier_b | tier_c | tier_d) != len(tier_a) + len(tier_b) + len(tier_c) + len(
         tier_d
@@ -63,7 +63,7 @@ def main():
         print("\n".join(failures))
         return 1
     print("OVOS compatibility: PASS")
-    print("Stable OVOS lock + Marina audio overrides are internally consistent.")
+    print("Stable OVOS lock + Virinda audio overrides are internally consistent.")
     return 0
 
 

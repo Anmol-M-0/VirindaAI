@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "marina_version": "0.19.0",
+  "virinda_version": "0.19.0",
   "stable_channel": {
     "constraints_file": "config/ovos/constraints-stable.txt",
     "source": "https://raw.githubusercontent.com/OpenVoiceOS/ovos-releases/main/constraints-stable.txt",
@@ -61,7 +61,7 @@
     "tier_b_stable_local_fallback": [
       "ovos-stt-plugin-vosk"
     ],
-    "tier_c_marina_addons": [
+    "tier_c_virinda_addons": [
       "ovos-stt-plugin-whispercpp",
       "phoonnx"
     ],

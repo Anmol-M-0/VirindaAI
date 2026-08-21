@@ -1,18 +1,18 @@
 # Observability
 
-Marina's observability model is intentionally local-first and structured around lifecycle events rather than verbose application logs.
+Virinda's observability model is intentionally local-first and structured around lifecycle events rather than verbose application logs.
 
 ## Health
 
 Use:
 
 ```bash
-marina doctor --json
+virinda doctor --json
 ```
 
 Health should answer:
 
-- is Marina configured?
+- is Virinda configured?
 - is the SQLite store healthy?
 - which provider is active?
 - which OVOS profile is selected?
@@ -21,7 +21,7 @@ Health should answer:
 
 ## Semantic events
 
-Marina emits events for lifecycle changes, user turns, response deltas, completion, cancellation, errors, context changes, feature actions, and voice lifecycle boundaries.
+Virinda emits events for lifecycle changes, user turns, response deltas, completion, cancellation, errors, context changes, feature actions, and voice lifecycle boundaries.
 
 Events should be bounded and persistable without containing secrets.
 
@@ -62,7 +62,7 @@ When debugging a voice turn, correlate these layers in order:
 
 1. Listener state.
 2. Utterance event.
-3. Marina context update.
+3. Virinda context update.
 4. Provider request/first token.
 5. TTS start.
 6. TTS end.

@@ -196,11 +196,13 @@ def test_nats_consumer_uses_single_message_next_msg_and_acks(monkeypatch):
 def test_nats_consumer_info_projection_is_stable(monkeypatch):
     import asyncio
 
-    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="marina_jobs", durable="worker")
+    broker = NatsJetStreamJobBroker(
+        "nats://127.0.0.1:4222", stream="virinda_jobs", durable="worker"
+    )
 
     class Info:
         name = "worker"
-        stream_name = "marina_jobs"
+        stream_name = "virinda_jobs"
         created = "2026-08-21T10:00:00Z"
         num_ack_pending = 2
         num_redelivered = 3
@@ -210,7 +212,7 @@ def test_nats_consumer_info_projection_is_stable(monkeypatch):
 
     class JS:
         async def consumer_info(self, stream, durable):
-            assert stream == "marina_jobs"
+            assert stream == "virinda_jobs"
             assert durable == "worker"
             return Info()
 
@@ -377,7 +379,7 @@ def test_nats_startup_waits_for_ready_event(monkeypatch) -> None:
 def test_nats_existing_incompatible_stream_is_rejected() -> None:
     import asyncio
 
-    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="marina_jobs")
+    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="virinda_jobs")
 
     class Config:
         subjects = ["other.>"]
@@ -499,7 +501,7 @@ def test_nats_publish_keeps_immediate_jobs_unscheduled() -> None:
 def test_nats_existing_stream_must_enable_message_schedules() -> None:
     import asyncio
 
-    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="marina_jobs")
+    broker = NatsJetStreamJobBroker("nats://127.0.0.1:4222", stream="virinda_jobs")
 
     class Config:
         subjects = ["virinda.jobs.>"]
@@ -564,7 +566,7 @@ def test_nats_existing_consumer_delivery_policy_is_validated() -> None:
 
     class JS:
         async def consumer_info(self, stream, durable):
-            assert stream == "marina_jobs"
+            assert stream == "virinda_jobs"
             assert durable == "worker"
             return Info()
 

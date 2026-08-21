@@ -9,15 +9,15 @@ export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 python - <<'PY'
 import json
 from pathlib import Path
-import marina
+import virinda
 
 root = Path.cwd()
-assert marina.__version__ == json.loads((root / 'skills/skill-virinda-ai/skill.json').read_text())['version']
+assert virinda.__version__ == json.loads((root / 'skills/skill-virinda-ai/skill.json').read_text())['version']
 assert json.loads((root / "config/ovos/mycroft.conf.example.json").read_text())['stt']['module'] == 'ovos-stt-plugin-whispercpp'
 p = json.loads((root / "config/ovos/virinda-persona.json").read_text())
 assert p['solvers'] == ['ovos-solver-openai-plugin']
 skill = json.loads((root / "skills/skill-virinda-ai/skill.json").read_text())
-assert skill['version'] == marina.__version__
+assert skill['version'] == virinda.__version__
 print('release metadata: OK')
 PY
 

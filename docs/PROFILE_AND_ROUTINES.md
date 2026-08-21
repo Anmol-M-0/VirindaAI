@@ -2,7 +2,7 @@
 
 ## User profiles
 
-Marina stores a single local user profile in SQLite. The profile is deliberately small and explicit:
+Virinda stores a single local user profile in SQLite. The profile is deliberately small and explicit:
 
 - `display_name`
 - `locale`
@@ -11,16 +11,16 @@ Marina stores a single local user profile in SQLite. The profile is deliberately
 - `preferred_model`
 - `preferred_voice`
 
-Profile values are inserted into provider context only when configured. The default profile is empty; Marina does not invent a user identity or inject a default locale into prompts.
+Profile values are inserted into provider context only when configured. The default profile is empty; Virinda does not invent a user identity or inject a default locale into prompts.
 
 Private mode blocks profile writes. Clearing the profile removes the durable record but does not erase conversation history or other feature stores.
 
 ### CLI
 
 ```bash
-marina profile
-marina profile update --json '{"display_name":"Marina User","timezone":"Asia/Kolkata"}'
-marina profile clear
+virinda profile
+virinda profile update --json '{"display_name":"Virinda User","timezone":"Asia/Kolkata"}'
+virinda profile clear
 ```
 
 ### IPC
@@ -44,16 +44,16 @@ A scheduled routine executes once when its due time is reached and is then disab
 Supported action kinds remain deliberately narrow:
 
 - `notify:<title>|<body>`
-- `tool:<tool-name>|<json-arguments>` (subject to Marina's normal tool approval policy)
+- `tool:<tool-name>|<json-arguments>` (subject to Virinda's normal tool approval policy)
 
 Quiet mode suppresses routine execution. Routine execution errors are emitted as feature events and do not terminate the main assistant service.
 
 ### CLI
 
 ```bash
-marina routines
-marina routines schedule morning 1770000000 'notify:Good morning|Stand up and stretch'
-marina routines run-due
+virinda routines
+virinda routines schedule morning 1770000000 'notify:Good morning|Stand up and stretch'
+virinda routines run-due
 ```
 
 ### IPC
@@ -116,7 +116,7 @@ An approval checkpoint can be required for a step:
 approve:tool:browser.open|{"url":"https://example.com"}
 ```
 
-The routine engine never executes shell strings. Every tool step still enters Marina's normal capability and approval boundary.
+The routine engine never executes shell strings. Every tool step still enters Virinda's normal capability and approval boundary.
 
 ### Retries
 
@@ -130,17 +130,17 @@ Every execution is recorded in `routine_runs`, including status, attempt count, 
 
 ### Approval flow
 
-A consequential routine can pause in `pending_approval` instead of executing a tool. The UI/CLI can then approve the specific run and Marina resumes it through the same permission boundary.
+A consequential routine can pause in `pending_approval` instead of executing a tool. The UI/CLI can then approve the specific run and Virinda resumes it through the same permission boundary.
 
 The raw approval token is never required to be spoken or rendered to the user.
 
 ### CLI
 
 ```bash
-marina routines list
-marina routines runs
-marina routines event voice.utterance '{"text":"hello"}'
-marina routines approve <run-id>
+virinda routines list
+virinda routines runs
+virinda routines event voice.utterance '{"text":"hello"}'
+virinda routines approve <run-id>
 ```
 
 ### IPC
@@ -161,4 +161,4 @@ The application currently forwards these useful events into the automation layer
 - `desktop.context`
 - feature events emitted by the local runtime
 
-OVOS listener/audio events are bridged into Marina's live context first; event-driven routines can consume those normalized application events without depending directly on an OVOS message-bus topic name.
+OVOS listener/audio events are bridged into Virinda's live context first; event-driven routines can consume those normalized application events without depending directly on an OVOS message-bus topic name.

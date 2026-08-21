@@ -6,7 +6,7 @@
 - Add idempotent-close and late-event regression coverage.
 ## Unreleased — v0.26.4-next9
 
-- Fenced Marina TTS output by `AssistantService` generation so queued or in-flight audio from a cancelled response is discarded before playback.
+- Fenced Virinda TTS output by `AssistantService` generation so queued or in-flight audio from a cancelled response is discarded before playback.
 - Added a public `AssistantService.is_generation_current()` boundary for realtime workers instead of reaching into application internals.
 - Added regression coverage for stale TTS synthesis after cancellation and fixed queue accounting under stale-item discard.
 
@@ -42,7 +42,7 @@
 
 ### Changed
 
-- Aligned the Rust `audio-core` generation-fencing API with Marina's Python cancellation contract using explicit `current`, `start`, and `invalidate` operations.
+- Aligned the Rust `audio-core` generation-fencing API with Virinda's Python cancellation contract using explicit `current`, `start`, and `invalidate` operations.
 - Kept `next()` as a deprecated compatibility alias for existing Rust callers.
 
 ### Tests
@@ -61,7 +61,7 @@
 
 ### JobBroker correctness hardening
 
-- Reject NATS jobs outside Marina's configured stream subject namespace before publishing.
+- Reject NATS jobs outside Virinda's configured stream subject namespace before publishing.
 - Validate an existing durable JetStream consumer's delivery policy before accepting it, preventing stale `ack_wait`, `max_deliver`, `max_ack_pending`, or filter settings from silently changing runtime semantics.
 
 ### P0 voice acceptance hardening
@@ -101,7 +101,7 @@
 ## 0.25.1
 
 - Made OVOS MessageBus + `ovos-gui` the production desktop/UI transport.
-- Added `OVOSGuiBridge` for Marina state publication and GUI command/response messages.
+- Added `OVOSGuiBridge` for Virinda state publication and GUI command/response messages.
 - Kept the HTTP overlay as a loopback-only developer/diagnostics surface.
 - Added GUI bridge regression tests and documented the UI transport/security model.
 
@@ -124,7 +124,7 @@
 ### Changed
 - User profile context is injected into provider requests only when explicitly configured.
 - Default locale is no longer treated as personalized data, preventing hidden prompt noise.
-- OVOS voice events are normalized into Marina automation events instead of binding routines directly to bus topic names.
+- OVOS voice events are normalized into Virinda automation events instead of binding routines directly to bus topic names.
 
 ## 0.24.1
 
@@ -148,18 +148,18 @@
 - Hardened URL/network tools against SSRF and unsafe redirects.
 - Added one-time, expiring approval tokens for consequential tools.
 - Added replay/staleness validation to satellite envelopes.
-- Restricted filesystem tool roots to Marina data plus explicit `MARINA_TOOL_ROOTS`.
+- Restricted filesystem tool roots to Virinda data plus explicit `VIRINDA_TOOL_ROOTS`.
 - Aligned the stable OVOS extra with GUI, PHAL, message bus, Alerts, diagnostics, camera, screenshot, volume and application-launcher components in the current stable constraints.
 
 ## 0.21.0
 
-Feature-complete application layer for the roadmap. Adds durable memory and semantic ranking, alerts/notifications, routines, safe tools and audit logs, desktop overlay, voice profiles and benchmarking, proactive context, meeting mode, multimodal screen/camera hooks, OVOS GUI/Alerts/PHAL adapter boundaries, satellite transport primitives, provider management, and Marina-specific OVOS intents.
+Feature-complete application layer for the roadmap. Adds durable memory and semantic ranking, alerts/notifications, routines, safe tools and audit logs, desktop overlay, voice profiles and benchmarking, proactive context, meeting mode, multimodal screen/camera hooks, OVOS GUI/Alerts/PHAL adapter boundaries, satellite transport primitives, provider management, and Virinda-specific OVOS intents.
 
 ## [0.19.0]
 
-- Installer now provisions Marina systemd units transactionally.
+- Installer now provisions Virinda systemd units transactionally.
 - Added safe uninstall script and first-boot provisioning wrapper.
-- Preserved the Marina virtualenv/database during uninstall by default.
+- Preserved the Virinda virtualenv/database during uninstall by default.
 
 # Changelog
 
@@ -176,17 +176,17 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 
 - Added a live `scripts/ovos-runtime-smoke.py` probe for the OVOS message-bus/core path without microphone hardware.
 - Added explicit stable/local-voice installer profiles.
-- Installer now installs Marina’s OVOS skill into the user XDG skill directory.
-- Fixed the skill dependency to the exact Marina release instead of an impossible range.
+- Installer now installs Virinda’s OVOS skill into the user XDG skill directory.
+- Fixed the skill dependency to the exact Virinda release instead of an impossible range.
 
 ### Fixed
 
-- Removed the mismatch where the OVOS installer could provision the runtime but never install the Marina skill.
+- Removed the mismatch where the OVOS installer could provision the runtime but never install the Virinda skill.
 - Kept the optional Whisper.cpp/phoonnx overlay out of the stable OVOS base install.
 
 ## 0.15.0
 
-- Added an explicit OVOS reliability matrix: stable core, stable local fallback, separately validated Marina add-ons, and experimental/legacy exclusions.
+- Added an explicit OVOS reliability matrix: stable core, stable local fallback, separately validated Virinda add-ons, and experimental/legacy exclusions.
 - Split the Python package extras so `ovos` means the stable stack while `ovos-local-voice` contains separately validated Whisper.cpp/phooNNX add-ons.
 - Added `docs/OVOS_SUPPORTED_STACK.md` and machine-readable reliability policy.
 
@@ -195,8 +195,8 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 ## 0.13.0
 
 - Added a checked-in snapshot of the current OVOS stable constraints.
-- Split Marina-selected voice add-ons from the OVOS stable dependency lock.
-- Pinned stable Marina audio add-ons: openWakeWord 0.4.1, Silero VAD 0.0.5, Whisper.cpp STT 0.0.1, and phoonnx 1.3.3.
+- Split Virinda-selected voice add-ons from the OVOS stable dependency lock.
+- Pinned stable Virinda audio add-ons: openWakeWord 0.4.1, Silero VAD 0.0.5, Whisper.cpp STT 0.0.1, and phoonnx 1.3.3.
 - Added a machine-readable OVOS compatibility profile.
 - Added `scripts/verify-ovos-compatibility.py` to prevent incompatible OVOS generations from being combined.
 - Updated the installer to use the checked-in compatibility snapshot and add-on pins.
@@ -227,18 +227,18 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 ## 0.8.0
 
 - Made OpenVoiceOS the recommended production voice runtime.
-- Added `marina.ovos` integration layer.
+- Added `virinda.ovos` integration layer.
 - Added deployable `skill-marin-ai.openvoiceos` package with status/stop intents.
 - Added OVOS Persona configuration using `ovos-openai-plugin`.
 - Added Dinkum Listener / OpenWakeWord / Silero VAD configuration template.
-- Added explicit custom `hey_marina` model path instead of pretending a bundled model exists.
+- Added explicit custom `hey_virinda` model path instead of pretending a bundled model exists.
 - Migrated TTS configuration guidance toward `ovos-tts-plugin-phoonnx` after the legacy Piper plugin was archived.
 - Added `docs/OVOS.md` and `docs/REFERENCES.md`.
 - Added validation tests for OVOS skill assets and config files.
-- Corrected Marina Persona configuration to the current handler/agent shape.
-- Added `marina doctor` for OVOS environment, persona, and wake-model diagnostics.
+- Corrected Virinda Persona configuration to the current handler/agent shape.
+- Added `virinda doctor` for OVOS environment, persona, and wake-model diagnostics.
 - Added additive SQLite migrations for pre-0.8 session schemas.
-- Kept the standalone Marina service as a compatibility runtime for non-OVOS environments.
+- Kept the standalone Virinda service as a compatibility runtime for non-OVOS environments.
 
 ## 0.6.0
 
@@ -258,7 +258,7 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 ## 0.11.0 - 2026-08-20
 
 - Added read-only Linux PipeWire/WirePlumber and ALSA audio diagnostics.
-- Added `marina doctor --audio` and JSON diagnostics for desktop provisioning.
+- Added `virinda doctor --audio` and JSON diagnostics for desktop provisioning.
 - Aligned OVOS core/audio/listener/ALSA compatibility with the current stable 1.3.x/0.4.x channel targets.
 - Enabled `instant_listen` in the example voice profile for lower wake-to-command latency.
 - Made release tests derive skill version from the package version instead of hard-coding it.
@@ -266,9 +266,9 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 ## 0.15.0
 
 - Split OVOS smoke verification into `stable` and `local-voice` profiles.
-- Made `marina doctor` determine selected STT/TTS plugin requirements from OVOS configuration.
+- Made `virinda doctor` determine selected STT/TTS plugin requirements from OVOS configuration.
 - Removed duplicate OVOS dependency declarations from the packaging metadata.
-- Kept Whisper.cpp and phoonnx explicitly classified as Marina local-voice add-ons rather than upstream-stable requirements.
+- Kept Whisper.cpp and phoonnx explicitly classified as Virinda local-voice add-ons rather than upstream-stable requirements.
 - Added release checks for the new compatibility profile behavior.
 
 ## 0.20.0
@@ -278,7 +278,7 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 - Added a permissioned tool broker for future browser, system, filesystem, and automation tools.
 - Added IPC and CLI capability discovery plus context mode control.
 - Added `docs/ROADMAP.md` covering voice, memory, tools, desktop UI, multimodal, proactive, and distributed features.
-- Fixed OVOS systemd units to render the configured custom Marina virtualenv path.
+- Fixed OVOS systemd units to render the configured custom Virinda virtualenv path.
 
 ## 0.24.0
 
@@ -286,7 +286,7 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 - Added canonical OVOS listener/audio lifecycle bridging for record start/end and audio output start/end.
 - Added live context IPC endpoints for UI/runtime consumers.
 - Meeting mode now consumes finalized OVOS utterances without duplicating ordinary conversation history.
-- Stop events from the Marina OVOS skill now flow through Marina generation cancellation.
+- Stop events from the Virinda OVOS skill now flow through Virinda generation cancellation.
 - Added regression coverage for the live session context bridge and canonical OVOS lifecycle topics.
 
 ## 0.26.1

@@ -102,6 +102,7 @@ class VoiceTurnRuntime:
 
     def stop(self, reason: str = "user") -> None:
         with self._turn_lock:
+            self._generation += 1
             if self._current_trace is not None:
                 self._current_trace.mark_barge_in()
         self._stop_tts()

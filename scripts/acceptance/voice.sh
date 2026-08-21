@@ -2,20 +2,23 @@
 set -euo pipefail
 
 echo "============================================================"
-echo "          VirindaAI Voice Acceptance Suite (v0.27.0-rc1)    "
+echo "          VirindaAI Voice Acceptance Suite (v0.27.0-rc2)    "
 echo "============================================================"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT"
 
-echo "--> [1/3] Running Full Test Suite..."
+echo "--> [1/4] Running Full Test Suite..."
 uv run pytest -q
 
-echo "--> [2/3] Running Doctor & Audio Diagnostics..."
+echo "--> [2/4] Running Doctor & Audio Diagnostics..."
 uv run virinda doctor --audio || true
 
-echo "--> [3/3] Running Voice Benchmark & UX Gate Evaluation..."
+echo "--> [3/4] Running Voice Benchmark & UX Gate Evaluation..."
 uv run virinda benchmark --mock --turns 10
 
+echo "--> [4/4] Running End-to-End Acceptance Scenarios (A through E)..."
+uv run virinda acceptance voice
+
 echo ""
-echo "✔ All voice acceptance criteria passed successfully for v0.27.0-rc1!"
+echo "✔ All voice acceptance criteria and end-to-end scenarios passed successfully for v0.27.0-rc2!"

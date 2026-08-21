@@ -111,6 +111,19 @@ def _parser() -> argparse.ArgumentParser:
     benchmark.add_argument(
         "--json", dest="benchmark_json", action="store_true", help="emit machine-readable JSON"
     )
+    acceptance = sub.add_parser(
+        "acceptance", help="run end-to-end acceptance scenarios (v0.27.0-rc2)"
+    )
+    acceptance.add_argument("target", choices=["voice"], default="voice", nargs="?")
+    acceptance.add_argument(
+        "--scenario",
+        choices=["A", "B", "C", "D", "E", "all"],
+        default="all",
+        help="acceptance scenario to run (default: all)",
+    )
+    acceptance.add_argument(
+        "--json", dest="acceptance_json", action="store_true", help="emit machine-readable JSON"
+    )
     sub.add_parser("features-json")
     return parser
 
@@ -464,8 +477,52 @@ def main() -> None:
                 overlay_server.stop()
         elif args.command == "benchmark":
             _handle_benchmark(args, service)
+        elif args.command == "acceptance":
+            _handle_acceptance(args)
     finally:
         service.close()
+
+
+def _handle_acceptance(args: argparse.Namespace) -> None:
+    from virinda.core.acceptance import run_all_scenarios, run_scenario
+
+    scenario = getattr(args, "scenario", "all")
+    if scenario == "all":
+        results = run_all_scenarios()
+    else:
+        results = [run_scenario(scenario)]
+
+    overall_passed = all(r.passed for r in results)
+
+    if getattr(args, "acceptance_json", False):
+        print(json.dumps([r.to_dict() for r in results], indent=2))
+        if not overall_passed:
+            raise SystemExit(1)
+        return
+
+    print("=" * 65)
+    print("      VirindaAI End-to-End Voice Acceptance Report (v0.27.0-rc2)")
+    print("=" * 65)
+    for r in results:
+        status = "[PASS]" if r.passed else "[FAIL]"
+        print(f"\n{status} {r.scenario} ({r.to_dict()['duration_ms']}ms)")
+        for a in r.assertions:
+            astat = "  ✔" if a.passed else "  ✖"
+            print(f"  {astat} {a.name:32} [expected: {a.expected}]")
+            if not a.passed and a.details:
+                print(f"      Details: {a.details}")
+        if r.resources_before and r.resources_after:
+            d_rss = (r.resources_after.rss_bytes - r.resources_before.rss_bytes) / (1024 * 1024)
+            d_th = r.resources_after.thread_count - r.resources_before.thread_count
+            d_fd = r.resources_after.fd_count - r.resources_before.fd_count
+            print(f"    Resources: ΔRSS={d_rss:+.2f}MB | ΔThreads={d_th:+d} | ΔFDs={d_fd:+d}")
+
+    print("\n" + "=" * 65)
+    final_text = "ALL SCENARIOS PASSED" if overall_passed else "SOME SCENARIOS FAILED"
+    print(f"Final Acceptance Status: {final_text}")
+    print("=" * 65)
+    if not overall_passed:
+        raise SystemExit(1)
 
 
 def _handle_benchmark(args: argparse.Namespace, service) -> None:

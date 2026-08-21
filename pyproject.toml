@@ -79,6 +79,9 @@ job-backbone = [
 providers = [
   "httpx>=0.27",
 ]
+ask = [
+  "ask",
+]
 dev = [
   "pytest>=8.0",
   "ruff>=0.6",
@@ -128,3 +131,6 @@ conflicts = [
     { extra = "ovos-experimental-agent" },
   ],
 ]
+
+[tool.uv.sources]
+ask = { path = "../chatgpt-cli", editable = true }

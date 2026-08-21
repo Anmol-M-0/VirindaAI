@@ -4,7 +4,9 @@ from marina.application.service import AssistantService
 from marina.config.settings import Settings
 from marina.core.events import InMemoryEventBus
 from marina.domain.audio import AudioInteractionMode, AudioPolicy
+from marina.domain.contracts import CompletionProvider
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
+from marina.infrastructure.providers.ask_adapter import AskCompletionProvider
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.openai_compatible import OpenAICompatibleProvider
 from marina.infrastructure.providers.router import StaticProviderRouter
@@ -15,7 +17,13 @@ def build_service(settings: Settings | None = None) -> AssistantService:
     settings.validate()
     bus = InMemoryEventBus()
     store = SQLiteConversationStore(settings.data_dir / "marina.sqlite3")
-    providers = {"echo": EchoProvider()}
+    providers: dict[str, CompletionProvider] = {
+        "echo": EchoProvider(),
+        "ask": AskCompletionProvider(name="ask", default_model=settings.model or "meta/llama-3.3-70b-instruct"),
+        "nim": AskCompletionProvider(name="nim", default_model="meta/llama-3.3-70b-instruct", ask_provider="nim"),
+        "groq": AskCompletionProvider(name="groq", default_model="groq/compound-mini", ask_provider="groq"),
+        "openrouter": AskCompletionProvider(name="openrouter", default_model="openrouter/free", ask_provider="openrouter"),
+    }
     if settings.openai_base_url and settings.openai_api_key:
         providers["openai"] = OpenAICompatibleProvider(
             name="openai",

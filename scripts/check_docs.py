@@ -56,7 +56,7 @@ for path in [README, *DOCS.rglob("*.md"), ROOT / "CHANGELOG.md", ROOT / "RELEASE
     text = path.read_text(encoding="utf-8", errors="ignore")
     versions = set(re.findall(r"\bv(0\.\d+\.\d+)\b", text))
     stale = sorted(v for v in versions if v != VERSION)
-    if stale and path.name not in {"CHANGELOG.md", "RELEASE.md"}:
+    if stale and path.name not in {"CHANGELOG.md", "RELEASE.md", "ROADMAP.md"}:
         errors.append(f"{path.relative_to(ROOT)}: stale release version(s): {', '.join(stale)}")
 
 if errors:

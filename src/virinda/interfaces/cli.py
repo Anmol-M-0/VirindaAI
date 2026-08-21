@@ -122,6 +122,17 @@ def _parser() -> argparse.ArgumentParser:
     acceptance.add_argument(
         "--json", dest="acceptance_json", action="store_true", help="emit machine-readable JSON"
     )
+    voice = sub.add_parser("voice", help="interactive live voice conversation loop")
+    voice.add_argument(
+        "--mode",
+        "-m",
+        choices=["ptt", "wake", "continuous"],
+        default="ptt",
+        help="interaction mode (default: ptt)",
+    )
+    voice.add_argument(
+        "--no-tts", action="store_true", help="disable spoken audio synthesis output"
+    )
     sub.add_parser("features-json")
     return parser
 
@@ -312,6 +323,11 @@ def main() -> None:
         else:
             print(render_report(report))
         raise SystemExit(0 if report.ok else 1)
+    if args.command == "voice":
+        from virinda.interfaces.voice_cli import main as voice_main
+
+        voice_main()
+        return
 
     from virinda.application.runtime import build_service
 

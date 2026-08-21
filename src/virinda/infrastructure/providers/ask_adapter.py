@@ -16,6 +16,7 @@ from virinda.domain.models import ProviderRequest
 _ASK_AVAILABLE = False
 try:
     from ask.providers import BaseProvider, ProviderEvent, get_provider
+
     _ASK_AVAILABLE = True
 except ImportError:
     cli_src = Path(__file__).resolve().parents[5] / "chatgpt-cli" / "src"
@@ -23,6 +24,7 @@ except ImportError:
         sys.path.insert(0, str(cli_src))
     try:
         from ask.providers import BaseProvider, ProviderEvent, get_provider
+
         _ASK_AVAILABLE = True
     except ImportError:
         BaseProvider = object  # type: ignore

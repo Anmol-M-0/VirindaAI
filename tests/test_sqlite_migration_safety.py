@@ -32,9 +32,7 @@ def test_fresh_database_migration(tmp_path: Path):
     # Verify tables created
     tables = {
         row[0]
-        for row in conn.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'"
-        ).fetchall()
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
     }
     assert "sessions" in tables
     assert "messages" in tables
@@ -95,7 +93,14 @@ def test_legacy_v1_migration_to_v2(tmp_path: Path):
     )
     conn.execute(
         "INSERT INTO events (session_id, generation_id, sequence, event_type, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-        ("sess_legacy_001", 1, 1, "TranscriptFinal", json.dumps({"text": "What is the time?"}), 1700000001.0),
+        (
+            "sess_legacy_001",
+            1,
+            1,
+            "TranscriptFinal",
+            json.dumps({"text": "What is the time?"}),
+            1700000001.0,
+        ),
     )
     conn.commit()
 
@@ -107,7 +112,9 @@ def test_legacy_v1_migration_to_v2(tmp_path: Path):
     assert get_schema_version(conn) == CURRENT_SCHEMA_VERSION
 
     # Verify existing data is 100% preserved
-    session_row = conn.execute("SELECT id, provider, model, mode, created_at, updated_at FROM sessions WHERE id = 'sess_legacy_001'").fetchone()
+    session_row = conn.execute(
+        "SELECT id, provider, model, mode, created_at, updated_at FROM sessions WHERE id = 'sess_legacy_001'"
+    ).fetchone()
     assert session_row[0] == "sess_legacy_001"
     assert session_row[1] == "echo"  # default value applied
     assert session_row[2] == "offline-demo"  # default value applied
@@ -115,12 +122,16 @@ def test_legacy_v1_migration_to_v2(tmp_path: Path):
     assert session_row[4] == 1700000000.0
     assert session_row[5] == 1700000010.0
 
-    messages = conn.execute("SELECT role, content FROM messages WHERE session_id = 'sess_legacy_001' ORDER BY id ASC").fetchall()
+    messages = conn.execute(
+        "SELECT role, content FROM messages WHERE session_id = 'sess_legacy_001' ORDER BY id ASC"
+    ).fetchall()
     assert len(messages) == 2
     assert messages[0] == ("user", "What is the time?")
     assert messages[1] == ("assistant", "It is 12:00 PM.")
 
-    events = conn.execute("SELECT event_type, generation_id, sequence FROM events WHERE session_id = 'sess_legacy_001'").fetchall()
+    events = conn.execute(
+        "SELECT event_type, generation_id, sequence FROM events WHERE session_id = 'sess_legacy_001'"
+    ).fetchall()
     assert len(events) == 1
     assert events[0] == ("TranscriptFinal", 1, 1)
 
@@ -134,13 +145,26 @@ def test_sqlite_conversation_store_integration(tmp_path: Path):
     assert store.schema_version == CURRENT_SCHEMA_VERSION
 
     # Write sessions, messages, events through store API
-    session = Session(id="sess_live_100", provider="openai", model="gpt-4o", mode=InteractionMode.CONVERSATION)
+    session = Session(
+        id="sess_live_100", provider="openai", model="gpt-4o", mode=InteractionMode.CONVERSATION
+    )
     store.ensure_session(session)
     store.append_message("sess_live_100", Message("user", "Hello Virinda", 100.0))
     store.append_message("sess_live_100", Message("assistant", "Hello! How can I help?", 101.0))
-    store.append_event("sess_live_100", LifecycleChanged(generation_id=1, sequence=1, state="thinking", created_at=100.0))
-    store.append_event("sess_live_100", ResponseDelta(generation_id=1, sequence=2, text="Hello! How can I help?", created_at=101.0))
-    store.append_event("sess_live_100", ResponseCompleted(generation_id=1, sequence=3, text="Hello! How can I help?", created_at=102.0))
+    store.append_event(
+        "sess_live_100",
+        LifecycleChanged(generation_id=1, sequence=1, state="thinking", created_at=100.0),
+    )
+    store.append_event(
+        "sess_live_100",
+        ResponseDelta(generation_id=1, sequence=2, text="Hello! How can I help?", created_at=101.0),
+    )
+    store.append_event(
+        "sess_live_100",
+        ResponseCompleted(
+            generation_id=1, sequence=3, text="Hello! How can I help?", created_at=102.0
+        ),
+    )
 
     # Re-open database with a new SQLiteConversationStore instance (testing idempotent load)
     store2 = SQLiteConversationStore(db_path)

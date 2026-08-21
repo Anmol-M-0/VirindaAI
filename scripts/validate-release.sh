@@ -12,11 +12,11 @@ from pathlib import Path
 import marina
 
 root = Path.cwd()
-assert marina.__version__ == json.loads((root / 'skills/skill-marin-ai/skill.json').read_text())['version']
+assert marina.__version__ == json.loads((root / 'skills/skill-virinda-ai/skill.json').read_text())['version']
 assert json.loads((root / "config/ovos/mycroft.conf.example.json").read_text())['stt']['module'] == 'ovos-stt-plugin-whispercpp'
-p = json.loads((root / "config/ovos/marina-persona.json").read_text())
+p = json.loads((root / "config/ovos/virinda-persona.json").read_text())
 assert p['solvers'] == ['ovos-solver-openai-plugin']
-skill = json.loads((root / "skills/skill-marin-ai/skill.json").read_text())
+skill = json.loads((root / "skills/skill-virinda-ai/skill.json").read_text())
 assert skill['version'] == marina.__version__
 print('release metadata: OK')
 PY

@@ -23,7 +23,7 @@
     }
   },
   "audio_addons": {
-    "constraints_file": "config/ovos/marina-audio-overrides.txt",
+    "constraints_file": "config/ovos/virinda-audio-overrides.txt",
     "stable_plugin_pins": {
       "ovos-vad-plugin-silero": "==0.0.5",
       "ovos-ww-plugin-openwakeword": "==0.4.1"
@@ -34,7 +34,7 @@
     }
   },
   "experimental_agent": {
-    "profile": "config/ovos/experimental-agent/marina-persona.json",
+    "profile": "config/ovos/experimental-agent/virinda-persona.json",
     "requires": {
       "ovos-persona": ">=0.9.0a1",
       "ovos-plugin-manager": ">=2.2.3a1",

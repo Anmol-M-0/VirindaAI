@@ -6,23 +6,23 @@ The Marina installer installs these units by default. For a manual installation,
 
 ```bash
 mkdir -p ~/.config/systemd/user
-cp deploy/ovos/marina-*.service ~/.config/systemd/user/
+cp deploy/ovos/virinda-*.service ~/.config/systemd/user/
 systemctl --user daemon-reload
-systemctl --user enable --now marina-messagebus.service
-systemctl --user enable --now marina-core.service
-systemctl --user enable --now marina-listener.service
-systemctl --user enable --now marina-audio.service
+systemctl --user enable --now virinda-messagebus.service
+systemctl --user enable --now virinda-core.service
+systemctl --user enable --now virinda-listener.service
+systemctl --user enable --now virinda-audio.service
 ```
 
 The units intentionally keep the service topology explicit. They do not attempt to hide OVOS failures behind Marina-specific process management.
 
-The installer places the Marina skill under `${XDG_DATA_HOME:-$HOME/.local/share}/mycroft/skills/skill-marin-ai.openvoiceos`. Override with `MARINA_OVOS_SKILL_DIR` when your deployment uses a different skill root.
+The installer places the Marina skill under `${XDG_DATA_HOME:-$HOME/.local/share}/mycroft/skills/skill-virinda-ai.openvoiceos`. Override with `MARINA_OVOS_SKILL_DIR` when your deployment uses a different skill root.
 
 Profiles:
 
 ```bash
-MARINA_OVOS_PROFILE=stable ./scripts/install-ovos.sh
-MARINA_OVOS_PROFILE=local-voice ./scripts/install-ovos.sh
+VIRINDA_OVOS_PROFILE=stable ./scripts/install-ovos.sh
+VIRINDA_OVOS_PROFILE=local-voice ./scripts/install-ovos.sh
 ```
 
 The stable profile uses only the upstream OVOS stable lock. The local-voice profile additionally installs Marina's separately validated Whisper.cpp and phoonnx add-ons.
@@ -32,11 +32,11 @@ The stable profile uses only the upstream OVOS stable lock. The local-voice prof
 Start the runtime in layers:
 
 ```bash
-systemctl --user enable --now marina-ovos-core.target
-systemctl --user enable --now marina-voice.target
+systemctl --user enable --now virinda-ovos-core.target
+systemctl --user enable --now virinda-voice.target
 ```
 
-`marina-ovos-core.target` starts the message bus and `ovos-core`. `marina-voice.target` adds Dinkum Listener and OVOS Audio, making it the hardware-facing profile.
+`virinda-ovos-core.target` starts the message bus and `ovos-core`. `virinda-voice.target` adds Dinkum Listener and OVOS Audio, making it the hardware-facing profile.
 
 Probe the stages independently:
 

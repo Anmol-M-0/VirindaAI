@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "marina-audio-core"
+name = "virinda-audio-core"
 version = "0.1.0"

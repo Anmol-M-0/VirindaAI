@@ -234,5 +234,5 @@ def validate_skill_layout(root: Path) -> None:
     if missing:
         raise FileNotFoundError("missing OVOS skill assets: " + ", ".join(missing))
     manifest = json.loads((root / "skill.json").read_text(encoding="utf-8"))
-    if manifest.get("skill_id") != "skill-marin-ai.openvoiceos":
+    if manifest.get("skill_id") != "skill-virinda-ai.openvoiceos":
         raise ValueError("unexpected Marina skill_id")

@@ -179,8 +179,8 @@ def run_doctor(
         ),
         _module_check("phoonnx-tts", "phoonnx", required=tts_module == "ovos-tts-plugin-phoonnx"),
         _file_check("OVOS config template", config_path),
-        _persona_check(config_dir / "marina-persona.json"),
-        _experimental_persona_check(config_dir / "experimental-agent/marina-persona.json"),
+        _persona_check(config_dir / "virinda-persona.json"),
+        _experimental_persona_check(config_dir / "experimental-agent/virinda-persona.json"),
     ]
     if config_path.is_file():
         checks.append(_wake_model_check(config_path))
@@ -217,10 +217,10 @@ def run_doctor(
     if check_services:
         checks.extend(
             [
-                _user_service_check("messagebus-service", "marina-messagebus.service"),
-                _user_service_check("core-service", "marina-core.service"),
-                _user_service_check("listener-service", "marina-listener.service"),
-                _user_service_check("audio-service", "marina-audio.service"),
+                _user_service_check("messagebus-service", "virinda-messagebus.service"),
+                _user_service_check("core-service", "virinda-core.service"),
+                _user_service_check("listener-service", "virinda-listener.service"),
+                _user_service_check("audio-service", "virinda-audio.service"),
             ]
         )
     return DoctorReport(tuple(checks))

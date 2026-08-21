@@ -47,12 +47,12 @@ def main() -> int:
         return 2
 
     preset_services = {
-        "core": ["marina-messagebus.service", "marina-core.service"],
+        "core": ["virinda-messagebus.service", "virinda-core.service"],
         "voice": [
-            "marina-messagebus.service",
-            "marina-core.service",
-            "marina-listener.service",
-            "marina-audio.service",
+            "virinda-messagebus.service",
+            "virinda-core.service",
+            "virinda-listener.service",
+            "virinda-audio.service",
         ],
     }
     required_services = (

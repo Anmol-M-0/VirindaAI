@@ -1,7 +1,0 @@
-[Unit]
-Description=Marina OVOS voice runtime
-Requires=marina-ovos-core.target marina-listener.service marina-audio.service
-After=marina-ovos-core.target marina-listener.service marina-audio.service
-
-[Install]
-WantedBy=default.target

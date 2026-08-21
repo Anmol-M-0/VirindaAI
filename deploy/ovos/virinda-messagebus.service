@@ -1,13 +1,12 @@
 [Unit]
-Description=Marina OVOS voice listener
-After=marina-messagebus.service
-Requires=marina-messagebus.service
+Description=Marina OVOS message bus
+After=network.target
 
 [Service]
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONIOENCODING=utf-8
 Type=simple
-ExecStart=@MARINA_VENV@/bin/ovos-dinkum-listener
+ExecStart=@VIRINDA_VENV@/bin/ovos-messagebus
 Restart=on-failure
 RestartSec=2
 

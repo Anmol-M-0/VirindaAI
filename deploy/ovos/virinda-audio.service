@@ -1,13 +1,13 @@
 [Unit]
 Description=Marina OVOS audio service
-After=marina-messagebus.service
-Requires=marina-messagebus.service
+After=virinda-messagebus.service
+Requires=virinda-messagebus.service
 
 [Service]
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONIOENCODING=utf-8
 Type=simple
-ExecStart=@MARINA_VENV@/bin/ovos-audio
+ExecStart=@VIRINDA_VENV@/bin/ovos-audio
 Restart=on-failure
 RestartSec=2
 

@@ -1,12 +1,13 @@
 [Unit]
-Description=Marina OVOS message bus
-After=network.target
+Description=Marina OVOS voice listener
+After=virinda-messagebus.service
+Requires=virinda-messagebus.service
 
 [Service]
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONIOENCODING=utf-8
 Type=simple
-ExecStart=@MARINA_VENV@/bin/ovos-messagebus
+ExecStart=@VIRINDA_VENV@/bin/ovos-dinkum-listener
 Restart=on-failure
 RestartSec=2
 

@@ -7,8 +7,8 @@ cd "$ROOT"
 PYTHON="${PYTHON:-python3}"
 VENV="${MARINA_VENV:-$ROOT/.venv}"
 CONSTRAINTS_FILE="${MARINA_OVOS_CONSTRAINTS:-$ROOT/config/ovos/constraints-stable.txt}"
-ADDONS_FILE="$ROOT/config/ovos/marina-audio-overrides.txt"
-PROFILE="${MARINA_OVOS_PROFILE:-stable}"
+ADDONS_FILE="$ROOT/config/ovos/virinda-audio-overrides.txt"
+PROFILE="${VIRINDA_OVOS_PROFILE:-stable}"
 SKILL_DIR="${MARINA_OVOS_SKILL_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mycroft/skills}"
 OVOS_CONFIG_DIR="${MARINA_OVOS_CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/mycroft}"
 PERSONA_DIR="${MARINA_PERSONA_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/ovos_persona}"
@@ -17,7 +17,7 @@ INSTALL_CONFIG="${MARINA_INSTALL_CONFIG:-0}"
 INSTALL_SERVICES="${MARINA_INSTALL_SERVICES:-1}"
 
 if [[ "$PROFILE" != "stable" && "$PROFILE" != "local-voice" ]]; then
-  echo "Unsupported MARINA_OVOS_PROFILE: $PROFILE" >&2
+  echo "Unsupported VIRINDA_OVOS_PROFILE: $PROFILE" >&2
   exit 2
 fi
 
@@ -35,11 +35,11 @@ if [[ "$PROFILE" == "local-voice" ]]; then
 fi
 
 mkdir -p "$SKILL_DIR" "$PERSONA_DIR"
-SKILL_TARGET="$SKILL_DIR/skill-marin-ai.openvoiceos"
+SKILL_TARGET="$SKILL_DIR/skill-virinda-ai.openvoiceos"
 rm -rf "$SKILL_TARGET"
 mkdir -p "$SKILL_TARGET"
-cp -a "$ROOT/skills/skill-marin-ai/." "$SKILL_TARGET/"
-cp "$ROOT/config/ovos/marina-persona.json" "$PERSONA_DIR/Marina.json"
+cp -a "$ROOT/skills/skill-virinda-ai/." "$SKILL_TARGET/"
+cp "$ROOT/config/ovos/virinda-persona.json" "$PERSONA_DIR/Marina.json"
 
 if [[ "$INSTALL_CONFIG" == "1" ]]; then
   mkdir -p "$OVOS_CONFIG_DIR"
@@ -61,7 +61,7 @@ if [[ "$INSTALL_SERVICES" == "1" ]]; then
     backup="$(mktemp -d)"
     cleanup() { rm -rf "$stage" "$backup"; }
     trap cleanup EXIT
-    for unit in "$ROOT"/deploy/ovos/marina-*.service "$ROOT"/deploy/ovos/marina-*.target; do
+    for unit in "$ROOT"/deploy/ovos/virinda-*.service "$ROOT"/deploy/ovos/virinda-*.target; do
       install -m 0644 "$unit" "$stage/$(basename "$unit")"
     done
     for unit in "$stage"/marina-*; do
@@ -70,8 +70,8 @@ if [[ "$INSTALL_SERVICES" == "1" ]]; then
     done
     # Render the actual venv path into ExecStart so MARINA_VENV works for both
     # the default checkout-local venv and custom deployment locations.
-    for unit in "$stage"/marina-*.service; do
-      sed -i "s#@MARINA_VENV@#$VENV#g" "$unit"
+    for unit in "$stage"/virinda-*.service; do
+      sed -i "s#@VIRINDA_VENV@#$VENV#g" "$unit"
     done
     install -m 0644 "$stage"/* "$SYSTEMD_DIR/"
     if ! systemctl --user daemon-reload; then
@@ -79,7 +79,7 @@ if [[ "$INSTALL_SERVICES" == "1" ]]; then
         [[ -e "$old" ]] || continue
         install -m 0644 "$old" "$SYSTEMD_DIR/$(basename "$old")"
       done
-      rm -f "$SYSTEMD_DIR"/marina-*.service "$SYSTEMD_DIR"/marina-*.target 2>/dev/null || true
+      rm -f "$SYSTEMD_DIR"/virinda-*.service "$SYSTEMD_DIR"/virinda-*.target 2>/dev/null || true
       for old in "$backup"/marina-*; do [[ -e "$old" ]] && install -m 0644 "$old" "$SYSTEMD_DIR/"; done
       systemctl --user daemon-reload || true
       echo "Failed to reload user systemd manager; previous Marina units restored." >&2
@@ -93,8 +93,8 @@ printf '%s\n' "Virtualenv: $VENV"
 printf '%s\n' "Skill: $SKILL_TARGET"
 printf '%s\n' "Persona: $PERSONA_DIR/Marina.json"
 [[ "$INSTALL_CONFIG" == "1" ]] && printf '%s\n' "OVOS config: $OVOS_CONFIG_DIR/mycroft.conf"
-[[ "$INSTALL_SERVICES" == "1" ]] && printf '%s\n' "User services: $SYSTEMD_DIR/marina-*.service"
+[[ "$INSTALL_SERVICES" == "1" ]] && printf '%s\n' "User services: $SYSTEMD_DIR/virinda-*.service"
 printf '%s\n' 'Run: .venv/bin/marina doctor --services'
-printf '%s\n' 'Core runtime: systemctl --user enable --now marina-ovos-core.target'
-printf '%s\n' 'Full voice runtime: systemctl --user enable --now marina-voice.target'
+printf '%s\n' 'Core runtime: systemctl --user enable --now virinda-ovos-core.target'
+printf '%s\n' 'Full voice runtime: systemctl --user enable --now virinda-voice.target'
 printf '%s\n' 'Remove: scripts/uninstall-ovos.sh'

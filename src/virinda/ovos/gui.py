@@ -31,7 +31,7 @@ class OVOSGuiBridge:
     COMMAND_TOPIC = "virinda.gui.command"
     RESPONSE_TOPIC = "virinda.gui.response"
 
-    def __init__(self, bus: Any, *, source: str = "skill-marin-ai.openvoiceos") -> None:
+    def __init__(self, bus: Any, *, source: str = "skill-virinda-ai.openvoiceos") -> None:
         self.bus = bus
         self.source = source
 

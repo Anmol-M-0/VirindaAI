@@ -1,12 +1,12 @@
 [Unit]
 Description=Marina OVOS core
-After=marina-messagebus.service
-Requires=marina-messagebus.service
+After=virinda-messagebus.service
+Requires=virinda-messagebus.service
 
 [Service]
 Type=simple
 Environment=PYTHONUNBUFFERED=1
-ExecStart=@MARINA_VENV@/bin/ovos-core
+ExecStart=@VIRINDA_VENV@/bin/ovos-core
 Restart=on-failure
 RestartSec=2
 

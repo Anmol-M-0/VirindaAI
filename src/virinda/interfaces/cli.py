@@ -104,6 +104,13 @@ def _parser() -> argparse.ArgumentParser:
     )
     overlay.add_argument("--host", default="127.0.0.1")
     overlay.add_argument("--port", type=int, default=8765)
+    benchmark = sub.add_parser("benchmark", help="run latency and voice interaction benchmarks")
+    benchmark.add_argument("target", choices=["voice"], default="voice", nargs="?")
+    benchmark.add_argument("--turns", type=int, default=5, help="number of benchmark turns")
+    benchmark.add_argument("--mock", action="store_true", help="run in simulated offline mode")
+    benchmark.add_argument(
+        "--json", dest="benchmark_json", action="store_true", help="emit machine-readable JSON"
+    )
     sub.add_parser("features-json")
     return parser
 
@@ -455,5 +462,123 @@ def main() -> None:
                 pass
             finally:
                 overlay_server.stop()
+        elif args.command == "benchmark":
+            _handle_benchmark(args, service)
     finally:
         service.close()
+
+
+def _handle_benchmark(args: argparse.Namespace, service) -> None:
+    from time import sleep
+
+    from virinda.core.benchmark import evaluate_benchmark
+    from virinda.core.tokenizer import StreamingSentenceTokenizer
+    from virinda.core.trace import VoiceTurnResult
+    from virinda.core.voice import VoiceInteractionController
+    from virinda.core.voice_runtime import VoiceTurnRuntime
+    from virinda.domain.audio import AudioFrame, AudioPolicy, VoiceActivity
+    from virinda.infrastructure.providers.echo import EchoProvider
+
+    if getattr(args, "mock", False) or "echo" not in service.router.available():
+        service.router.register(EchoProvider())
+    if getattr(args, "mock", False):
+        service.select_provider("echo")
+
+    class BenchVad:
+        def reset(self):
+            pass
+
+        def process(self, frame):
+            return VoiceActivity(True)
+
+    class BenchRecognizer:
+        def __init__(self):
+            self.turn = 0
+
+        def transcribe(self, frames):
+            self.turn += 1
+            return f"benchmark prompt number {self.turn}"
+
+    class BenchTTS:
+        def synthesize(self, text):
+            return [AudioFrame(b"benchmark_audio")]
+
+    class BenchOutput:
+        def play_interruptible(self, frames, *, cancel_event):
+            for _ in range(3):
+                if cancel_event.is_set():
+                    return
+                sleep(0.005)
+
+        def stop(self):
+            pass
+
+    results: list[VoiceTurnResult] = []
+    turns = max(1, getattr(args, "turns", 5))
+
+    controller = VoiceInteractionController(
+        policy=AudioPolicy(min_speech_ms=0, end_silence_ms=0),
+        vad=BenchVad(),
+    )
+    runtime = VoiceTurnRuntime(
+        service=service,
+        controller=controller,
+        recognizer=BenchRecognizer(),
+        synthesizer=BenchTTS(),
+        output=BenchOutput(),
+        tokenizer=StreamingSentenceTokenizer(),
+        on_turn_result=results.append,
+    )
+
+    for i in range(turns):
+        controller.arm()
+        controller.trigger_listening("test")
+        controller.on_audio(AudioFrame(b"x"), now=0.0)
+        controller.push_to_talk_released()
+        for _ in range(100):
+            if len(results) > i:
+                break
+            sleep(0.01)
+
+    runtime.close()
+    report = evaluate_benchmark(results)
+
+    if getattr(args, "benchmark_json", False):
+        print(json.dumps(report.to_dict(), indent=2))
+        return
+
+    print("=" * 60)
+    print("         VirindaAI Voice Benchmark Report (v0.27.0-rc1)")
+    print("=" * 60)
+    print(f"Total Turns:       {report.total_turns}")
+    print(f"Completed Turns:   {report.completed_turns}")
+    print(f"Interrupted Turns: {report.interrupted_turns}")
+    print(f"Failed Turns:      {report.failed_turns}")
+    print("-" * 60)
+    if report.stt_metrics:
+        print(
+            f"STT Duration:      p50={report.stt_metrics.p50_ms}ms  p95={report.stt_metrics.p95_ms}ms  (avg={report.stt_metrics.avg_ms}ms)"
+        )
+    if report.llm_first_token_metrics:
+        print(
+            f"LLM First Token:   p50={report.llm_first_token_metrics.p50_ms}ms  p95={report.llm_first_token_metrics.p95_ms}ms"
+        )
+    if report.tts_first_audio_metrics:
+        print(
+            f"TTS First Audio:   p50={report.tts_first_audio_metrics.p50_ms}ms  p95={report.tts_first_audio_metrics.p95_ms}ms"
+        )
+    if report.wake_to_first_audio_metrics:
+        print(
+            f"Wake to Audio:     p50={report.wake_to_first_audio_metrics.p50_ms}ms  p95={report.wake_to_first_audio_metrics.p95_ms}ms"
+        )
+    print("-" * 60)
+    print("Gate Results:")
+    for g in report.gates:
+        status = "[PASS]" if g.passed else "[FAIL]"
+        print(
+            f"  {status} {g.name:25} p50: {g.actual_p50_ms}ms (<= {g.target_p50_ms}ms) | p95: {g.actual_p95_ms}ms (<= {g.target_p95_ms}ms)"
+        )
+    print("=" * 60)
+    overall_status = "PASS" if report.overall_passed else "FAIL"
+    print(f"Overall Status: {overall_status}")
+    print("=" * 60)

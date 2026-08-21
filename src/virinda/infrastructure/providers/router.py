@@ -21,5 +21,8 @@ class StaticProviderRouter:
         except KeyError as exc:
             raise ProviderNotConfiguredError(f"provider not configured: {name}") from exc
 
+    def register(self, provider) -> None:
+        self._providers[provider.name] = provider
+
     def available(self) -> tuple[str, ...]:
         return tuple(sorted(self._providers))

@@ -1,3 +1,3 @@
-from .main import VirindaSkill, VirindaSkill
+from .main import VirindaSkill
 
 __all__ = ["VirindaSkill", "VirindaSkill"]

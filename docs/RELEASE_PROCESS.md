@@ -7,8 +7,8 @@ Virinda releases are designed to be reproducible, testable, and easy to audit.
 The Python package version is defined in `src/virinda/__init__.py` and must match:
 
 - `pyproject.toml`
-- `skills/skill-marin-ai/skill.json`
-- `skills/skill-marin-ai/requirements.txt`
+- `skills/skill-virinda-ai/skill.json`
+- `skills/skill-virinda-ai/requirements.txt`
 - release documentation
 - built wheel metadata
 

@@ -7,7 +7,7 @@ VirindaAI is a local-first ambient desktop assistant for Linux built on OpenVoic
 - Passive local wake-word interaction with bounded pre-roll and VAD turn detection
 - Push-to-talk, toggle listening, follow-up conversation, and TTS barge-in policy
 - OpenVoiceOS-first production voice integration: OVOS listener, message bus, Persona, and audio services
-- Deployable `skill-marin-ai.openvoiceos` skill and Virinda Persona configuration
+- Deployable `skill-virinda-ai.openvoiceos` skill and Virinda Persona configuration
 
 - Single authoritative `AssistantService` coordinator
 - Protocol-based provider, persistence, cancellation, tokenization, and event boundaries

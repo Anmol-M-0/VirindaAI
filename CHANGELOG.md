@@ -228,7 +228,7 @@ Feature-complete application layer for the roadmap. Adds durable memory and sema
 
 - Made OpenVoiceOS the recommended production voice runtime.
 - Added `virinda.ovos` integration layer.
-- Added deployable `skill-marin-ai.openvoiceos` package with status/stop intents.
+- Added deployable `skill-virinda-ai.openvoiceos` package with status/stop intents.
 - Added OVOS Persona configuration using `ovos-openai-plugin`.
 - Added Dinkum Listener / OpenWakeWord / Silero VAD configuration template.
 - Added explicit custom `hey_virinda` model path instead of pretending a bundled model exists.

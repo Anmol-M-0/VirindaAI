@@ -11,10 +11,11 @@ from virinda.core.tokenizer import StreamingSentenceTokenizer
 from virinda.infrastructure.audio.player import LinuxAudioPlayer
 from virinda.infrastructure.audio.recorder import LinuxAudioRecorder
 from virinda.infrastructure.audio.speech import GroqWhisperSTT, NativeTTS
+from virinda.infrastructure.audio.streaming_tts import StreamingTTSWorker
 
 
 class VoiceController:
-    """Coordinates physical microphone capture, STT, LLM generation, and TTS audio playback
+    """Coordinates physical microphone capture, STT, concurrent LLM generation, and streaming TTS playback
 
     with monotonic generation token invalidation for safe, race-free barge-in.
     """
@@ -26,12 +27,14 @@ class VoiceController:
         player: Optional[LinuxAudioPlayer] = None,
         tts: Optional[NativeTTS] = None,
         stt: Optional[GroqWhisperSTT] = None,
+        streaming_tts: Optional[StreamingTTSWorker] = None,
     ) -> None:
         self.service = service
         self.recorder = recorder or LinuxAudioRecorder()
         self.player = player or LinuxAudioPlayer()
         self.tts = tts or NativeTTS()
         self.stt = stt or GroqWhisperSTT()
+        self.streaming_tts = streaming_tts or StreamingTTSWorker(tts=self.tts)
         self.tokenizer = StreamingSentenceTokenizer()
         self._lock = threading.RLock()
         self._state: TurnState = TurnState.CREATED
@@ -52,6 +55,7 @@ class VoiceController:
         with self._lock:
             self.cancel_playback()
             self._generation += 1
+            self.streaming_tts.set_generation(self._generation)
             self._state = TurnState.LISTENING
             return self.recorder.start_recording()
 
@@ -61,7 +65,7 @@ class VoiceController:
         stream_stdout: bool = True,
         speak_output: bool = True,
     ) -> str:
-        """Finalize microphone recording, run STT, evaluate AssistantService, and speak response."""
+        """Finalize microphone recording, run STT, stream LLM tokens, feed concurrent TTS, and finalize."""
         wav_path = self.recorder.stop_recording()
         try:
             with self._lock:
@@ -87,7 +91,8 @@ class VoiceController:
             current_gen = self.generation
             response_chunks: list[str] = []
 
-            # Stream LLM tokens
+            # Stream LLM tokens and feed sentences concurrently to TTS
+            tokenizer = StreamingSentenceTokenizer()
             for event in (
                 self.service.events_stream(transcription)
                 if hasattr(self.service, "events_stream")
@@ -103,6 +108,19 @@ class VoiceController:
                         sys.stdout.write(text_chunk)
                         sys.stdout.flush()
 
+                    if speak_output:
+                        for sentence in tokenizer.feed(text_chunk):
+                            with self._lock:
+                                self._state = TurnState.SPEAKING
+                            self.streaming_tts.feed(current_gen, sentence)
+
+            # Flush remaining sentence from tokenizer buffer
+            if speak_output:
+                for sentence in tokenizer.flush():
+                    with self._lock:
+                        self._state = TurnState.SPEAKING
+                    self.streaming_tts.feed(current_gen, sentence)
+
             full_response = "".join(response_chunks).strip()
             if not full_response:
                 # Fallback to direct ask
@@ -110,22 +128,18 @@ class VoiceController:
                 if stream_stdout and not response_chunks:
                     sys.stdout.write(full_response)
                     sys.stdout.flush()
+                if speak_output and full_response:
+                    with self._lock:
+                        self._state = TurnState.SPEAKING
+                    self.streaming_tts.feed(current_gen, full_response)
 
             if stream_stdout:
                 sys.stdout.write("\n")
                 sys.stdout.flush()
 
-            # Speak output sentence by sentence
-            if speak_output and full_response and self.generation == current_gen:
-                with self._lock:
-                    self._state = TurnState.SPEAKING
-
-                sentences = list(self.tokenizer.feed(full_response))
-                sentences.extend(self.tokenizer.flush())
-                for sentence in sentences:
-                    if self.generation != current_gen:
-                        break
-                    self.tts.speak(sentence, block=True)
+            # Wait for queued audio sentences to finish playing
+            if speak_output:
+                self.streaming_tts.flush_and_wait(current_gen, timeout=20.0)
 
             with self._lock:
                 if self.generation == current_gen:
@@ -142,13 +156,18 @@ class VoiceController:
 
     def cancel_playback(self) -> None:
         """Cancel TTS playback and audio player immediately."""
+        self.streaming_tts.cancel()
         self.tts.stop()
         self.player.stop()
 
     def barge_in(self) -> None:
-        """Hard barge-in: cancel current turn, stop playback/recording, and return to CREATED/IDLE."""
+        """Hard barge-in: cancel current turn, stop playback/recording, and return to CANCELLED."""
         with self._lock:
             self._generation += 1
             self.cancel_playback()
             self.recorder.cancel_recording()
             self._state = TurnState.CANCELLED
+
+    def close(self) -> None:
+        self.cancel_playback()
+        self.streaming_tts.close()

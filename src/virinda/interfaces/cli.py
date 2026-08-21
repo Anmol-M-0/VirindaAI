@@ -133,6 +133,16 @@ def _parser() -> argparse.ArgumentParser:
     voice.add_argument(
         "--no-tts", action="store_true", help="disable spoken audio synthesis output"
     )
+    ovos_cmd = sub.add_parser("ovos", help="OpenVoiceOS bridge and service control")
+    ovos_cmd.add_argument(
+        "action",
+        choices=["bridge", "status"],
+        default="bridge",
+        nargs="?",
+        help="action to execute (default: bridge)",
+    )
+    ovos_cmd.add_argument("--host", default="127.0.0.1", help="OVOS MessageBus host")
+    ovos_cmd.add_argument("--port", type=int, default=8181, help="OVOS MessageBus port")
     sub.add_parser("features-json")
     return parser
 
@@ -328,6 +338,32 @@ def main() -> None:
 
         voice_main()
         return
+    if args.command == "ovos":
+        from virinda.application.runtime import build_service
+
+        service = build_service(settings)
+        if args.action == "status":
+            from virinda.ovos.doctor import render_report, run_doctor
+
+            report = run_doctor(Path(__file__).parents[3], check_services=True, check_audio=True)
+            print(render_report(report))
+            return
+        elif args.action == "bridge":
+            from virinda.ovos.bridge import OVOSMessageBusBridge
+
+            bridge = OVOSMessageBusBridge(service, host=args.host, port=args.port)
+            print(f"Connecting to OVOS MessageBus at ws://{args.host}:{args.port}/core...")
+            bridge.connect()
+            print("✔ Connected to OVOS MessageBus. Listening for utterances. Press Ctrl+C to stop.")
+            try:
+                import time
+
+                while True:
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                bridge.close()
+                print("\nOVOS Bridge disconnected.")
+                return
 
     from virinda.application.runtime import build_service
 

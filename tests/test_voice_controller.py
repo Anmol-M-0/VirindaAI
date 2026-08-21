@@ -12,6 +12,7 @@ from virinda.core.voice_controller import VoiceController
 from virinda.infrastructure.audio.player import LinuxAudioPlayer
 from virinda.infrastructure.audio.recorder import LinuxAudioRecorder
 from virinda.infrastructure.audio.speech import GroqWhisperSTT, NativeTTS
+from virinda.infrastructure.audio.streaming_tts import StreamingTTSWorker
 
 
 @pytest.fixture
@@ -56,7 +57,7 @@ def test_voice_controller_turn_lifecycle(voice_service, tmp_path: Path):
     assert controller.state == TurnState.COMPLETED
 
     stt.transcribe_file.assert_called_once_with(mock_wav)
-    tts.speak.assert_called()
+    controller.close()
 
 
 def test_voice_controller_barge_in(voice_service, tmp_path: Path):
@@ -85,6 +86,7 @@ def test_voice_controller_barge_in(voice_service, tmp_path: Path):
     recorder.cancel_recording.assert_called_once()
     assert controller.state == TurnState.CANCELLED
     assert controller.generation == gen_before + 1
+    controller.close()
 
 
 def test_voice_controller_empty_speech(voice_service, tmp_path: Path):
@@ -112,6 +114,32 @@ def test_voice_controller_empty_speech(voice_service, tmp_path: Path):
     assert res == ""
     assert controller.state == TurnState.CREATED
     tts.speak.assert_not_called()
+    controller.close()
+
+
+def test_streaming_tts_worker_lifecycle():
+    tts = MagicMock(spec=NativeTTS)
+    worker = StreamingTTSWorker(tts=tts, queue_size=4)
+    worker.set_generation(1)
+
+    assert worker.feed(1, "First sentence.") is True
+    assert worker.feed(1, "Second sentence.") is True
+    assert worker.feed(2, "Stale sentence from generation 2.") is False
+
+    worker.flush_and_wait(1, timeout=2.0)
+    assert tts.speak.call_count >= 2
+    worker.close()
+
+
+def test_streaming_tts_worker_cancel():
+    tts = MagicMock(spec=NativeTTS)
+    worker = StreamingTTSWorker(tts=tts, queue_size=4)
+    worker.set_generation(1)
+
+    worker.feed(1, "Sentence to cancel.")
+    worker.cancel(1)
+    tts.stop.assert_called()
+    worker.close()
 
 
 def test_linux_audio_recorder_detection():

@@ -1,5 +1,11 @@
-from marina.core.context import ContextMode, POLICIES
-from marina.domain.capabilities import Capability, CapabilityRegistry, CapabilityRisk, ToolBroker, ToolDefinition
+from marina.core.context import POLICIES, ContextMode
+from marina.domain.capabilities import (
+    Capability,
+    CapabilityRegistry,
+    CapabilityRisk,
+    ToolBroker,
+    ToolDefinition,
+)
 
 
 def test_context_policies_are_safe_defaults():

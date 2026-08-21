@@ -18,7 +18,7 @@ class IPCProtocolError(ValueError):
 
 
 class _UnixRPCHandler(socketserver.StreamRequestHandler):
-    server: "LocalRPCServer"
+    server: LocalRPCServer
 
     def handle(self) -> None:
         for raw_line in self.rfile:

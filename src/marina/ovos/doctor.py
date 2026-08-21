@@ -7,7 +7,6 @@ import shutil
 import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 from marina.ovos.audio_diagnostics import inspect_linux_audio
 

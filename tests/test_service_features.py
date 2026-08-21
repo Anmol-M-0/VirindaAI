@@ -1,11 +1,11 @@
-from pathlib import Path
 import time
+from pathlib import Path
 
 from marina.application.service import AssistantService
+from marina.core.events import InMemoryEventBus
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.router import StaticProviderRouter
-from marina.core.events import InMemoryEventBus
 
 
 def build_service(tmp_path: Path):

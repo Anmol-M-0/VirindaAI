@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Iterator
 from typing import Protocol
 
-from marina.domain.events import AssistantEvent, EventSink
+from marina.domain.events import AssistantEvent
 from marina.domain.models import Message, ProviderRequest, Session
 
 

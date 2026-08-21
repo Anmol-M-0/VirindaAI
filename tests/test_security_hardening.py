@@ -2,8 +2,14 @@ from pathlib import Path
 
 import pytest
 
+from marina.domain.capabilities import (
+    Capability,
+    CapabilityRegistry,
+    CapabilityRisk,
+    ToolBroker,
+    ToolDefinition,
+)
 from marina.features import _validate_public_url, fetch_url
-from marina.domain.capabilities import Capability, CapabilityRegistry, CapabilityRisk, ToolBroker, ToolDefinition
 
 
 def test_private_and_loopback_urls_are_rejected():

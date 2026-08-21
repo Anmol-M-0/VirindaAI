@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
 import inspect
 import json
 import threading
 import time
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Callable, Protocol
+from datetime import UTC, datetime
+from typing import Any, Protocol
 from uuid import uuid4
 
 
@@ -241,7 +242,7 @@ class NatsJetStreamJobBroker:
     stream and explicit acknowledgements so failed jobs remain available for redelivery.
 
     `nats-py` is imported lazily, allowing the default in-process profile to remain
-    dependency-free. The current NATS Python client exposes JetStream support directly. 
+    dependency-free. The current NATS Python client exposes JetStream support directly.
     See https://github.com/nats-io/nats.py for the client/JetStream API.
     """
 
@@ -336,7 +337,7 @@ class NatsJetStreamJobBroker:
         headers = {"Nats-Msg-Id": job.id}
         publish_subject = job.subject
         if job.available_at > time.time():
-            when = datetime.fromtimestamp(job.available_at, tz=timezone.utc).isoformat().replace("+00:00", "Z")
+            when = datetime.fromtimestamp(job.available_at, tz=UTC).isoformat().replace("+00:00", "Z")
             headers["Nats-Schedule"] = f"@at {when}"
             headers["Nats-Schedule-Target"] = job.subject
             publish_subject = self._schedule_subject(job.id)
@@ -484,7 +485,7 @@ class NatsJetStreamJobBroker:
                     while not heartbeat_stop.is_set():
                         try:
                             await asyncio.wait_for(heartbeat_stop.wait(), timeout=interval)
-                        except asyncio.TimeoutError:
+                        except TimeoutError:
                             try:
                                 await message.in_progress()
                                 self._last_heartbeat_at = time.time()

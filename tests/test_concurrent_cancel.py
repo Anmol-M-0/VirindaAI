@@ -3,8 +3,8 @@ from pathlib import Path
 
 from marina.application.service import AssistantService
 from marina.core.events import InMemoryEventBus
-from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.domain.models import ProviderRequest
+from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.router import StaticProviderRouter
 
 

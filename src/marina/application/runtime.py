@@ -3,12 +3,11 @@ from __future__ import annotations
 from marina.application.service import AssistantService
 from marina.config.settings import Settings
 from marina.core.events import InMemoryEventBus
-from marina.infrastructure.events.persistent import PersistentEventSink
+from marina.domain.audio import AudioInteractionMode, AudioPolicy
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.openai_compatible import OpenAICompatibleProvider
 from marina.infrastructure.providers.router import StaticProviderRouter
-from marina.domain.audio import AudioInteractionMode, AudioPolicy
 
 
 def build_service(settings: Settings | None = None) -> AssistantService:

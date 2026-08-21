@@ -1,33 +1,73 @@
 from __future__ import annotations
 
-from pathlib import Path
-from datetime import datetime
-import time
 import os
 import re
+import time
+from dataclasses import asdict
+from datetime import datetime
+from pathlib import Path
 from threading import Event, RLock, Thread
+from typing import Any
 from uuid import uuid4
 
+from marina.config.settings import Settings
 from marina.core.cancellation import GenerationController
-from marina.core.context import ContextMode, POLICIES
+from marina.core.context import POLICIES, ContextMode
 from marina.core.live_context import LiveContextStore
-from marina.core.natural_commands import NaturalCommandParser, AutomationPlan, parse_due_time, parse_recurrence, plan_automation
-from marina.domain.capabilities import ApprovalTokenStore, Capability, CapabilityRegistry, CapabilityRisk, ToolBroker, ToolDefinition
+from marina.core.natural_commands import (
+    AutomationPlan,
+    NaturalCommandParser,
+    parse_due_time,
+    parse_recurrence,
+    plan_automation,
+)
 from marina.core.state import AssistantStateMachine
+from marina.domain.capabilities import (
+    ApprovalTokenStore,
+    Capability,
+    CapabilityRegistry,
+    CapabilityRisk,
+    ToolBroker,
+    ToolDefinition,
+)
 from marina.domain.events import Cancelled, Error, ResponseCompleted, ResponseDelta, TranscriptFinal
 from marina.domain.models import LifecycleState, Message, ProviderRequest, Session
-from marina.config.settings import Settings
-from marina.infrastructure.jobs import InProcessJobBroker, NatsJetStreamJobBroker, JobEnvelope
-from marina.infrastructure.events.persistent import PersistentEventSink
-from dataclasses import asdict
-
 from marina.features import (
-    AlertScheduler, ContextSignals, MemoryStore, Notification, ProactiveEngine, Routine, RoutineStore, UserProfile, UserProfileStore,
-    ToolExecutionAudit, VoiceBenchmark, VoiceProfile, VoiceProfileStore, MeetingStore, ContextSignals, system_info, open_application,
-    open_url, fetch_url, safe_read, safe_write, clipboard_get, clipboard_set, screenshot, capture_screen_input,
-    SpeakerIdentifier, RoutineRunner, BrowserSearch, DesktopContextCollector, list_audio_devices, choose_audio_device, summarize_notifications, briefing,
-    capture_camera_input, OVOSBusAdapter, OVOSAlertsAdapter, OVOSGuiAdapter, SecureSatelliteClient, SatelliteEnvelope,
+    AlertScheduler,
+    BrowserSearch,
+    ContextSignals,
+    DesktopContextCollector,
+    MeetingStore,
+    MemoryStore,
+    ProactiveEngine,
+    Routine,
+    RoutineRunner,
+    RoutineStore,
+    SatelliteEnvelope,
+    SecureSatelliteClient,
+    SpeakerIdentifier,
+    ToolExecutionAudit,
+    UserProfileStore,
+    VoiceBenchmark,
+    VoiceProfile,
+    VoiceProfileStore,
+    briefing,
+    capture_camera_input,
+    capture_screen_input,
+    choose_audio_device,
+    clipboard_get,
+    clipboard_set,
+    fetch_url,
+    list_audio_devices,
+    open_application,
+    open_url,
+    safe_read,
+    safe_write,
+    summarize_notifications,
+    system_info,
 )
+from marina.infrastructure.events.persistent import PersistentEventSink
+from marina.infrastructure.jobs import InProcessJobBroker, JobEnvelope, NatsJetStreamJobBroker
 
 
 class AssistantService:
@@ -111,7 +151,7 @@ class AssistantService:
         self.proactive = ProactiveEngine(lambda title, body: self.alerts.notify(title, body))
         self.browser_search = BrowserSearch()
         self.desktop_context = DesktopContextCollector()
-        
+
         configured_roots = [self.store.path.parent]
         for raw in os.environ.get("MARINA_TOOL_ROOTS", "").split(os.pathsep):
             if raw.strip():
@@ -382,12 +422,12 @@ class AssistantService:
             return "I won't store passwords, PINs, API keys, tokens, or other secrets in durable memory."
         if command.kind == "remember_private":
             key, value = command.args
-            key = re.sub(r"^my\s+", "", key, flags=re.I).strip()
+            key = re.sub(r"^my\s+", "", key, flags=re.IGNORECASE).strip()
             self.memory_fact(key, value, sensitivity="sensitive")
             return f"I'll remember that privately as a sensitive fact: your {key} is stored."
         if command.kind in {"remember_fact", "remember_fact_uncertain"}:
             key, value = command.args
-            key = re.sub(r"^my\s+", "", key, flags=re.I).strip()
+            key = re.sub(r"^my\s+", "", key, flags=re.IGNORECASE).strip()
             confidence = 0.6 if command.kind == "remember_fact_uncertain" else 1.0
             self.memory_fact(key, value, confidence=confidence)
             suffix = " with medium confidence" if confidence < 1.0 else ""

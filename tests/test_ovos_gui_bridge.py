@@ -1,4 +1,4 @@
-import marina.ovos.gui as gui
+from marina.ovos import gui
 
 
 class FakeMessage:

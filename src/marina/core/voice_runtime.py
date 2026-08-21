@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from queue import Empty, Queue
 from threading import Event, Lock, Thread, current_thread
-from typing import Callable
 
 from marina.application.service import AssistantService
 from marina.core.voice import VoiceInteractionController, VoiceSignal

@@ -1,6 +1,4 @@
 from __future__ import annotations
-from marina.infrastructure.jobs import JobBroker, JobEnvelope
-
 
 import hashlib
 import ipaddress
@@ -14,12 +12,14 @@ import subprocess
 import time
 import urllib.parse
 import urllib.request
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from threading import RLock, Thread, Event
-from typing import Any, Callable, Protocol
+from threading import Event, RLock, Thread
+from typing import Any, Protocol
 from uuid import uuid4
 
+from marina.infrastructure.jobs import JobBroker, JobEnvelope
 
 # ---------- Memory ----------
 
@@ -340,7 +340,7 @@ class AlertScheduler:
                         self.conn.execute("UPDATE alerts SET active=0 WHERE id=?", (row[0],))
                 self.conn.commit()
             for row in rows:
-                payload = json.loads(row[5]);
+                payload = json.loads(row[5])
                 if self.emit: self.emit("alert.fired", {"id": row[0], "kind": row[1], "title": row[2], "payload": payload})
             self._stop.wait(0.25)
 
@@ -528,7 +528,7 @@ class OVOSGuiAdapter:
 
 
 @dataclass(frozen=True, slots=True)
-class MeetingTranscript: 
+class MeetingTranscript:
     id: str
     started_at: float
     ended_at: float | None
@@ -1225,7 +1225,7 @@ class RoutineRunner:
         import re as _re
         last = self.store.last_success(routine.id)
         # Interval schedule: every N minutes/hours/days/weeks.
-        interval_match = _re.fullmatch(r"every\s+(\d+)\s+(minutes?|hours?|days?|weeks?)", expression, _re.I)
+        interval_match = _re.fullmatch(r"every\s+(\d+)\s+(minutes?|hours?|days?|weeks?)", expression, _re.IGNORECASE)
         if interval_match:
             amount = int(interval_match.group(1))
             multiplier = {
@@ -1239,7 +1239,7 @@ class RoutineRunner:
                 return False
             return now >= last.finished_at + interval
 
-        clock_match = _re.fullmatch(r"every\s+(day|weekday|week)(?:\s+at\s+(.+))?", expression, _re.I)
+        clock_match = _re.fullmatch(r"every\s+(day|weekday|week)(?:\s+at\s+(.+))?", expression, _re.IGNORECASE)
         if not clock_match:
             return False
         unit, clock = clock_match.group(1).lower(), clock_match.group(2)
@@ -1500,7 +1500,7 @@ class BrowserSearch:
         if not query.strip(): raise ValueError("query is required")
         url = self.endpoint + "?" + urllib.parse.urlencode({"q": query})
         html = fetch_url(url, 512_000)
-        matches = re.findall(r'<a[^>]+class="result__a"[^>]+href="([^"]+)"[^>]*>(.*?)</a>', html, re.I | re.S)
+        matches = re.findall(r'<a[^>]+class="result__a"[^>]+href="([^"]+)"[^>]*>(.*?)</a>', html, re.IGNORECASE | re.DOTALL)
         results=[]
         for href,title in matches[:limit]:
             title = re.sub(r"<[^>]+>", "", title)

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from enum import StrEnum
 import secrets
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
+from enum import StrEnum
 from threading import RLock
-from typing import Any, Callable
+from typing import Any
 
 
 class CapabilityRisk(StrEnum):

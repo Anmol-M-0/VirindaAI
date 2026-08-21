@@ -1,3 +1,5 @@
+import threading
+import time
 from pathlib import Path
 
 from marina.application.service import AssistantService
@@ -6,8 +8,6 @@ from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.router import StaticProviderRouter
 from marina.interfaces.ipc import LocalRPCClient, LocalRPCServer
-import threading
-import time
 
 
 def _service(tmp_path: Path) -> AssistantService:

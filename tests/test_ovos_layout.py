@@ -1,8 +1,7 @@
 import json
-
-import marina
 from pathlib import Path
 
+import marina
 from marina.ovos.skill import validate_skill_layout
 
 

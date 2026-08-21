@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
-from time import monotonic
 from threading import Event
-from typing import Protocol, Sequence
+from time import monotonic
+from typing import Protocol
 
 
 class AudioInteractionMode(StrEnum):

@@ -1,9 +1,9 @@
-from pathlib import Path
 import time
+from pathlib import Path
 
 from marina.application.service import AssistantService
 from marina.core.events import InMemoryEventBus
-from marina.features import WakeWordEvaluator, WakeWordResult, ContextSignals, VoiceProfile
+from marina.features import ContextSignals, VoiceProfile, WakeWordEvaluator, WakeWordResult
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.router import StaticProviderRouter
@@ -144,10 +144,10 @@ def test_multimodal_and_satellite_validation(tmp_path):
 
 
 def test_profile_and_schedule_are_exposed_over_ipc(tmp_path):
-    from marina.interfaces.ipc import LocalRPCServer
     from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
     from marina.infrastructure.providers.echo import EchoProvider
     from marina.infrastructure.providers.router import StaticProviderRouter
+    from marina.interfaces.ipc import LocalRPCServer
     store = SQLiteConversationStore(tmp_path / "ipc-profile.sqlite3")
     service = AssistantService(
         router=StaticProviderRouter({"echo": EchoProvider()}, "echo"),

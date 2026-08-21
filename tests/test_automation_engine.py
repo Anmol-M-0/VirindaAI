@@ -1,10 +1,10 @@
 import sqlite3
-import tempfile
 import time
 import unittest
+from datetime import UTC
 from threading import RLock
 
-from marina.features import Routine, RoutineRun, RoutineStore, RoutineRunner
+from marina.features import Routine, RoutineRunner, RoutineStore
 
 
 class AutomationEngineTests(unittest.TestCase):
@@ -84,19 +84,19 @@ if __name__ == "__main__":
 
 
 def test_schedule_trigger_preserves_weekday_semantics():
-    from datetime import datetime, timezone
+    from datetime import datetime
     routine = self = None
     conn = sqlite3.connect(":memory:")
     store = RoutineStore(conn, RLock())
     notices = []
     runner = RoutineRunner(store, lambda title, body: notices.append((title, body)), lambda name, **kwargs: None)
     routine = store.save(Routine("weekday", "Weekday", "schedule:every weekday at 9 am", "notify:Marina|stand up"))
-    friday = datetime(2026, 8, 21, 10, 0, tzinfo=timezone.utc).timestamp()
+    friday = datetime(2026, 8, 21, 10, 0, tzinfo=UTC).timestamp()
     # The runner's local timezone is the host timezone; this assertion only checks that
     # a Friday occurrence is eligible and a Saturday occurrence is not re-fired.
     assert runner._due_match(routine, friday) is True
     runner.execute(routine, trigger_context={"now": friday})
-    saturday = datetime(2026, 8, 22, 10, 0, tzinfo=timezone.utc).timestamp()
+    saturday = datetime(2026, 8, 22, 10, 0, tzinfo=UTC).timestamp()
     assert runner._due_match(routine, saturday) is False
 
 

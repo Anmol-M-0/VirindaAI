@@ -241,7 +241,9 @@ def main() -> None:
             host, port = overlay_server.start()
             print(f"Marina diagnostics overlay (localhost only): http://{host}:{port}/")
             try:
-                import threading; threading.Event().wait()
+                import threading
+
+                threading.Event().wait()
             except KeyboardInterrupt:
                 pass
             finally:

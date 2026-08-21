@@ -5,8 +5,13 @@ import time
 
 import pytest
 
-from marina.infrastructure.jobs import InProcessJobBroker, JobEnvelope, NatsJetStreamJobBroker, _subject_matches
 from marina.config.settings import Settings
+from marina.infrastructure.jobs import (
+    InProcessJobBroker,
+    JobEnvelope,
+    NatsJetStreamJobBroker,
+    _subject_matches,
+)
 
 
 def test_subject_matches_supports_wildcards_and_tail() -> None:
@@ -82,9 +87,10 @@ def test_nats_broker_keeps_delivery_policy() -> None:
 
 
 def test_redelivered_succeeded_routine_is_idempotent(tmp_path):
-    from threading import RLock
     import sqlite3
-    from marina.features import Routine, RoutineRun, RoutineRunner, RoutineStore
+    from threading import RLock
+
+    from marina.features import Routine, RoutineRunner, RoutineStore
 
     conn = sqlite3.connect(':memory:')
     store = RoutineStore(conn, RLock())
@@ -100,8 +106,9 @@ def test_redelivered_succeeded_routine_is_idempotent(tmp_path):
 
 
 def test_pending_approval_persists_for_resume(tmp_path):
-    from threading import RLock
     import sqlite3
+    from threading import RLock
+
     from marina.features import Routine, RoutineRunner, RoutineStore
 
     conn = sqlite3.connect(':memory:')
@@ -222,6 +229,7 @@ def test_inprocess_broker_status_counts_processed_jobs() -> None:
 def test_routine_store_reports_stale_active_runs() -> None:
     import sqlite3
     from threading import RLock
+
     from marina.features import RoutineRun, RoutineStore
 
     store = RoutineStore(sqlite3.connect(":memory:"), RLock())

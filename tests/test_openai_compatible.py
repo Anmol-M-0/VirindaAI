@@ -7,7 +7,7 @@ from marina.infrastructure.providers.openai_compatible import OpenAICompatiblePr
 
 
 class Handler(BaseHTTPRequestHandler):
-    def do_POST(self):  # noqa: N802
+    def do_POST(self):
         length = int(self.headers["Content-Length"])
         payload = json.loads(self.rfile.read(length))
         if payload["stream"]:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from time import sleep
 from threading import Event
+from time import sleep
 
 from marina.application.service import AssistantService
 from marina.core.events import InMemoryEventBus

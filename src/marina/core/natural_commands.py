@@ -1,11 +1,35 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import datetime, timedelta, time as dt_time
-import re
 import json
-from typing import Callable
+import re
+from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
+from datetime import time as dt_time
+from datetime import timezone as dt_timezone
 from zoneinfo import ZoneInfo
+
+
+def _resolve_timezone(timezone: str | dt_timezone | ZoneInfo | None, default_tz: dt_timezone | None = None) -> dt_timezone | ZoneInfo | None:
+    if timezone is None:
+        return default_tz
+    if isinstance(timezone, (dt_timezone, ZoneInfo)):
+        return timezone
+    tz_str = str(timezone).strip()
+    if tz_str.startswith(("+", "-")):
+        try:
+            sign = -1 if tz_str[0] == "-" else 1
+            parts = tz_str[1:].split(":")
+            hours = int(parts[0])
+            minutes = int(parts[1]) if len(parts) > 1 else 0
+            return dt_timezone(sign * timedelta(hours=hours, minutes=minutes))
+        except Exception:
+            return default_tz
+    if tz_str.upper() == "UTC":
+        return UTC
+    try:
+        return ZoneInfo(tz_str)
+    except Exception:
+        return default_tz
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,7 +48,6 @@ class AutomationPlan:
     summary: str
 
 
-
 class NaturalCommandParser:
     """Deterministic parser for high-confidence Marina commands.
 
@@ -33,32 +56,32 @@ class NaturalCommandParser:
     ``None`` and continue through the normal provider path.
     """
 
-    _REMEMBER_PRIVATE = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?:this\s+is\s+)?private(?:ly)?\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.I)
-    _REMEMBER_SECRET = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?:my\s+)?(?P<key>password|passcode|pin|otp|api key|api token|secret|private key|credit card|bank account)\s+(?:is|=)\s+(?P<value>.+)$", re.I)
-    _REMEMBER_UNCERTAIN = re.compile(r"^(?:please\s+)?(?:i think|i believe)\s+(?:my\s+)?(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.I)
-    _REMEMBER = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.I)
-    _MY_FACT = re.compile(r"^(?:please\s+)?my\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.I)
-    _CALL_ME = re.compile(r"^(?:please\s+)?(?:call me|my name is)\s+(?P<name>.+)$", re.I)
-    _GET_FACT = re.compile(r"^(?:what(?:'s| is)|tell me)\s+my\s+(?P<key>.+?)[?!.]*$", re.I)
-    _GET_NAME = re.compile(r"^(?:what(?:'s| is)|who is)\s+my name[?!.]*$", re.I)
-    _PRIVATE_ON = re.compile(r"^(?:go|turn)\s+(?:into\s+)?private(?:\s+mode)?[.!?]*$", re.I)
-    _PRIVATE_OFF = re.compile(r"^(?:leave|exit|turn off)\s+private(?:\s+mode)?[.!?]*$", re.I)
-    _QUIET_ON = re.compile(r"^(?:go|turn)\s+(?:into\s+)?quiet(?:\s+mode)?[.!?]*$", re.I)
-    _QUIET_OFF = re.compile(r"^(?:leave|exit|turn off)\s+quiet(?:\s+mode)?[.!?]*$", re.I)
-    _NORMAL = re.compile(r"^(?:go|switch)\s+(?:back\s+)?(?:to\s+)?normal(?:\s+mode)?[.!?]*$", re.I)
-    _REMINDER = re.compile(r"^(?:please\s+)?remind me(?: to)?\s+(?P<task>.+?)\s+(?P<when>in\s+\d+\s+(?:second|seconds|minute|minutes|hour|hours)|at\s+.+)$", re.I)
-    _RECURRING_REMINDER = re.compile(r"^(?:please\s+)?remind me(?: to)?\s+(?P<task>.+?)\s+(?P<repeat>every\s+(?:day|weekday|week|\d+\s+(?:minute|minutes|hour|hours|day|days|week|weeks))(?:\s+at\s+.+)?)$", re.I)
-    _PROVIDER = re.compile(r"^(?:please\s+)?(?:use|switch to|select)\s+(?P<provider>[a-zA-Z0-9_.-]+)(?:\s+provider)?[.!?]*$", re.I)
-    _MODEL = re.compile(r"^(?:please\s+)?(?:use|switch to)\s+(?:model\s+)?(?P<model>[a-zA-Z0-9_.:/-]+)[.!?]*$", re.I)
-    _OPEN_URL = re.compile(r"^(?:please\s+)?(?:open|visit)\s+(?P<url>https?://\S+)[.!?]*$", re.I)
-    _WEB_SEARCH = re.compile(r"^(?:please\s+)?(?:search the web for|search for)\s+(?P<query>.+)$", re.I)
-    _BRIEFING = re.compile(r"^(?:give me|show me|what(?:\'s| is)|tell me)\s+(?:my\s+)?(?:daily\s+|morning\s+)?briefing[.!?]*$", re.I)
-    _CONFIRM = re.compile(r"^(?:yes|yeah|yep|approve|approved|go ahead|do it|confirm)(?:[.!?]*)$", re.I)
-    _CREATE_AUTOMATION = re.compile(r"^(?:please\s+)?(?:create|make|set up|schedule)\s+(?:a\s+)?(?:routine|automation)\s+(?P<body>.+)$", re.I)
-    _DISABLE_ROUTINE = re.compile(r"^(?:please\s+)?disable\s+(?:the\s+)?routine\s+(?P<name>.+)$", re.I)
-    _DELETE_ROUTINE = re.compile(r"^(?:please\s+)?delete\s+(?:the\s+)?routine\s+(?P<name>.+)$", re.I)
-    _PREVIEW_ROUTINE = re.compile(r"^(?:please\s+)?(?:preview|dry[- ]run|what will)\s+(?:the\s+)?routine\s+(?P<name>.+?)(?:\s+do)?[.!?]*$", re.I)
-    _EDIT_ROUTINE = re.compile(r"^(?:please\s+)?(?:change|edit|update)\s+(?:the\s+)?routine\s+(?P<name>.+?)\s+to\s+(?P<body>.+)$", re.I)
+    _REMEMBER_PRIVATE = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?:this\s+is\s+)?private(?:ly)?\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.IGNORECASE)
+    _REMEMBER_SECRET = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?:my\s+)?(?P<key>password|passcode|pin|otp|api key|api token|secret|private key|credit card|bank account)\s+(?:is|=)\s+(?P<value>.+)$", re.IGNORECASE)
+    _REMEMBER_UNCERTAIN = re.compile(r"^(?:please\s+)?(?:i think|i believe)\s+(?:my\s+)?(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.IGNORECASE)
+    _REMEMBER = re.compile(r"^(?:please\s+)?remember(?:\s+that)?\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.IGNORECASE)
+    _MY_FACT = re.compile(r"^(?:please\s+)?my\s+(?P<key>.+?)\s+(?:is|=)\s+(?P<value>.+)$", re.IGNORECASE)
+    _CALL_ME = re.compile(r"^(?:please\s+)?(?:call me|my name is)\s+(?P<name>.+)$", re.IGNORECASE)
+    _GET_FACT = re.compile(r"^(?:what(?:'s| is)|tell me)\s+my\s+(?P<key>.+?)[?!.]*$", re.IGNORECASE)
+    _GET_NAME = re.compile(r"^(?:what(?:'s| is)|who is)\s+my name[?!.]*$", re.IGNORECASE)
+    _PRIVATE_ON = re.compile(r"^(?:go|turn)\s+(?:into\s+)?private(?:\s+mode)?[.!?]*$", re.IGNORECASE)
+    _PRIVATE_OFF = re.compile(r"^(?:leave|exit|turn off)\s+private(?:\s+mode)?[.!?]*$", re.IGNORECASE)
+    _QUIET_ON = re.compile(r"^(?:go|turn)\s+(?:into\s+)?quiet(?:\s+mode)?[.!?]*$", re.IGNORECASE)
+    _QUIET_OFF = re.compile(r"^(?:leave|exit|turn off)\s+quiet(?:\s+mode)?[.!?]*$", re.IGNORECASE)
+    _NORMAL = re.compile(r"^(?:go|switch)\s+(?:back\s+)?(?:to\s+)?normal(?:\s+mode)?[.!?]*$", re.IGNORECASE)
+    _REMINDER = re.compile(r"^(?:please\s+)?remind me(?: to)?\s+(?P<task>.+?)\s+(?P<when>in\s+\d+\s+(?:second|seconds|minute|minutes|hour|hours)|at\s+.+)$", re.IGNORECASE)
+    _RECURRING_REMINDER = re.compile(r"^(?:please\s+)?remind me(?: to)?\s+(?P<task>.+?)\s+(?P<repeat>every\s+(?:day|weekday|week|\d+\s+(?:minute|minutes|hour|hours|day|days|week|weeks))(?:\s+at\s+.+)?)$", re.IGNORECASE)
+    _PROVIDER = re.compile(r"^(?:please\s+)?(?:use|switch to|select)\s+(?P<provider>[a-zA-Z0-9_.-]+)(?:\s+provider)?[.!?]*$", re.IGNORECASE)
+    _MODEL = re.compile(r"^(?:please\s+)?(?:use|switch to)\s+(?:model\s+)?(?P<model>[a-zA-Z0-9_.:/-]+)[.!?]*$", re.IGNORECASE)
+    _OPEN_URL = re.compile(r"^(?:please\s+)?(?:open|visit)\s+(?P<url>https?://\S+)[.!?]*$", re.IGNORECASE)
+    _WEB_SEARCH = re.compile(r"^(?:please\s+)?(?:search the web for|search for)\s+(?P<query>.+)$", re.IGNORECASE)
+    _BRIEFING = re.compile(r"^(?:give me|show me|what(?:\'s| is)|tell me)\s+(?:my\s+)?(?:daily\s+|morning\s+)?briefing[.!?]*$", re.IGNORECASE)
+    _CONFIRM = re.compile(r"^(?:yes|yeah|yep|approve|approved|go ahead|do it|confirm)(?:[.!?]*)$", re.IGNORECASE)
+    _CREATE_AUTOMATION = re.compile(r"^(?:please\s+)?(?:create|make|set up|schedule)\s+(?:a\s+)?(?:routine|automation)\s+(?P<body>.+)$", re.IGNORECASE)
+    _DISABLE_ROUTINE = re.compile(r"^(?:please\s+)?disable\s+(?:the\s+)?routine\s+(?P<name>.+)$", re.IGNORECASE)
+    _DELETE_ROUTINE = re.compile(r"^(?:please\s+)?delete\s+(?:the\s+)?routine\s+(?P<name>.+)$", re.IGNORECASE)
+    _PREVIEW_ROUTINE = re.compile(r"^(?:please\s+)?(?:preview|dry[- ]run|what will)\s+(?:the\s+)?routine\s+(?P<name>.+?)(?:\s+do)?[.!?]*$", re.IGNORECASE)
+    _EDIT_ROUTINE = re.compile(r"^(?:please\s+)?(?:change|edit|update)\s+(?:the\s+)?routine\s+(?P<name>.+?)\s+to\s+(?P<body>.+)$", re.IGNORECASE)
 
     def parse(self, text: str) -> LocalCommand | None:
         value = " ".join(text.strip().split())
@@ -98,7 +121,6 @@ class NaturalCommandParser:
         return None
 
 
-
 def plan_automation(text: str, *, now: datetime, timezone: str | None = None) -> AutomationPlan:
     """Create a safe automation plan from a narrow deterministic grammar.
 
@@ -111,18 +133,18 @@ def plan_automation(text: str, *, now: datetime, timezone: str | None = None) ->
     """
     value = " ".join(text.strip().split())
     body = value
-    m = re.match(r"^(?:every|at|when)\b.+", body, re.I)
+    m = re.match(r"^(?:every|at|when)\b.+", body, re.IGNORECASE)
     if not m:
         raise ValueError("automation must start with a supported trigger such as 'every 2 hours', 'at 8 pm', or 'when I open VS Code'")
     trigger_text, action_text = None, None
     # Event/app trigger.
-    m = re.match(r"^when\s+(?:i\s+)?(?:open|start|launch|switch to)\s+(?P<app>.+?)\s*,\s*(?P<action>.+)$", body, re.I)
+    m = re.match(r"^when\s+(?:i\s+)?(?:open|start|launch|switch to)\s+(?P<app>.+?)\s*,\s*(?P<action>.+)$", body, re.IGNORECASE)
     if m:
         trigger_text = f"app:{m.group('app').strip()}"
         action_text = m.group('action').strip()
     else:
         # Time/interval trigger.
-        m = re.match(r"^(?P<when>every\s+.+?|at\s+.+?)\s*,\s*(?P<action>.+)$", body, re.I)
+        m = re.match(r"^(?P<when>every\s+.+?|at\s+.+?)\s*,\s*(?P<action>.+)$", body, re.IGNORECASE)
         if not m:
             raise ValueError("automation must use '<trigger>, <actions>'")
         trigger_text = m.group('when').strip()
@@ -130,16 +152,16 @@ def plan_automation(text: str, *, now: datetime, timezone: str | None = None) ->
 
     steps: list[str] = []
     needs_approval = False
-    for raw in re.split(r"\s+and\s+", action_text, flags=re.I):
+    for raw in re.split(r"\s+and\s+", action_text, flags=re.IGNORECASE):
         step = raw.strip().strip(".,")
         if not step:
             continue
-        url_match = re.fullmatch(r"(?:then\s+)?(?:open|visit)\s+(https?://\S+)", step, re.I)
+        url_match = re.fullmatch(r"(?:then\s+)?(?:open|visit)\s+(https?://\S+)", step, re.IGNORECASE)
         if url_match:
             steps.append(f"approve:tool:browser.open|{json.dumps({'url': url_match.group(1)})}")
             needs_approval = True
             continue
-        notify_match = re.fullmatch(r"(?:then\s+)?(?:notify me|remind me)\s+(?:to\s+)?(.+)", step, re.I)
+        notify_match = re.fullmatch(r"(?:then\s+)?(?:notify me|remind me)\s+(?:to\s+)?(.+)", step, re.IGNORECASE)
         if notify_match:
             body_text = notify_match.group(1).strip()
             steps.append(f"notify:Marina|{body_text}")
@@ -182,7 +204,7 @@ def parse_recurrence(repeat: str, *, now: datetime, timezone: str | None = None)
     current = now.astimezone(zone) if zone else now
     value = repeat.strip().lower().replace(".", "")
     daily_time = None
-    m = re.fullmatch(r"every\s+(day|weekday|week)(?:\s+at\s+(.+))?", value, re.I)
+    m = re.fullmatch(r"every\s+(day|weekday|week)(?:\s+at\s+(.+))?", value, re.IGNORECASE)
     if m:
         unit, clock = m.group(1), m.group(2)
         seconds = {"day": 86400.0, "weekday": 86400.0, "week": 604800.0}[unit]
@@ -195,7 +217,7 @@ def parse_recurrence(repeat: str, *, now: datetime, timezone: str | None = None)
                 while due.weekday() >= 5:
                     due += timedelta(days=1)
         return due.timestamp(), seconds
-    m = re.fullmatch(r"every\s+(\d+)\s+(minutes?|hours?|days?|weeks?)", value, re.I)
+    m = re.fullmatch(r"every\s+(\d+)\s+(minutes?|hours?|days?|weeks?)", value, re.IGNORECASE)
     if m:
         amount = int(m.group(1)); unit = m.group(2).lower()
         seconds_per = {
@@ -214,9 +236,9 @@ def parse_due_time(when: str, *, now: datetime, timezone: str | None = None) -> 
     optional AM/PM and ``at noon``/``at midnight``. Absolute date phrases remain
     provider/skill territory until we can parse them without ambiguity.
     """
-    zone = ZoneInfo(timezone) if timezone else now.tzinfo
+    zone = _resolve_timezone(timezone, now.tzinfo)
     current = now.astimezone(zone) if zone else now
-    relative = re.fullmatch(r"in\s+(\d+)\s+(seconds?|minutes?|hours?)", when.strip(), re.I)
+    relative = re.fullmatch(r"in\s+(\d+)\s+(seconds?|minutes?|hours?)", when.strip(), re.IGNORECASE)
     if relative:
         amount = int(relative.group(1))
         unit = relative.group(2).lower()

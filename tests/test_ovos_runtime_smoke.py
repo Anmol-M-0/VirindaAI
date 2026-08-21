@@ -15,9 +15,6 @@ def test_runtime_smoke_reports_missing_ovos_cleanly():
     assert '"status":' in result.stdout
 
 import json
-import subprocess
-import sys
-from pathlib import Path
 
 
 def test_runtime_smoke_requires_services_reports_missing_systemd_cleanly():

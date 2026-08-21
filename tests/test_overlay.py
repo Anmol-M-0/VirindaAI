@@ -1,10 +1,10 @@
+import json
 from pathlib import Path
 from urllib.request import Request, urlopen
-import json
 
 from marina.application.service import AssistantService
-from marina.desktop import OverlayServer
 from marina.core.events import InMemoryEventBus
+from marina.desktop import OverlayServer
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore
 from marina.infrastructure.providers.echo import EchoProvider
 from marina.infrastructure.providers.router import StaticProviderRouter

@@ -1,10 +1,10 @@
-from pathlib import Path
 import json
+import runpy
 import subprocess
 import sys
-import pytest
+from pathlib import Path
 
-import runpy
+import pytest
 
 from marina.features import VoiceBenchmark, VoiceEventSample, latency_sample_from_events
 from marina.infrastructure.persistence.sqlite import SQLiteConversationStore

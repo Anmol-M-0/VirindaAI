@@ -33,7 +33,7 @@ class OverlayServer:
                 self.end_headers()
                 self.wfile.write(body)
 
-            def do_GET(self) -> None:  # noqa: N802
+            def do_GET(self) -> None:
                 if self.path == "/":
                     body = OVERLAY_HTML.encode("utf-8")
                     self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body); return
@@ -47,13 +47,13 @@ class OverlayServer:
                 if self.path == "/api/routine-runs": self._json(200, service.routine_runs(None, 100)); return
                 if self.path == "/api/routines": self._json(200, service.routines_snapshot()); return
                 if self.path == "/api/routine-runs":
-                    from urllib.parse import urlparse, parse_qs
+                    from urllib.parse import parse_qs, urlparse
                     query = parse_qs(urlparse(self.path).query)
                     routine_id = query.get("routine_id", [None])[0]
                     self._json(200, service.routine_runs(routine_id, 100)); return
                 self._json(404, {"error": "not found"})
 
-            def do_POST(self) -> None:  # noqa: N802
+            def do_POST(self) -> None:
                 try:
                     length = int(self.headers.get("Content-Length", "0"))
                     if length > 256_000: self._json(413, {"error": "request too large"}); return

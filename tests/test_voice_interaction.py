@@ -1,7 +1,13 @@
 from __future__ import annotations
 
 from marina.core.voice import VoiceInteractionController
-from marina.domain.audio import AudioFrame, AudioInteractionMode, AudioPolicy, VoiceActivity, WakeDetection
+from marina.domain.audio import (
+    AudioFrame,
+    AudioInteractionMode,
+    AudioPolicy,
+    VoiceActivity,
+    WakeDetection,
+)
 
 
 class FakeWake:

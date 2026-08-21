@@ -34,7 +34,7 @@ class Settings:
     nats_max_deliver: int
     nats_max_ack_pending: int
 
-    def with_data_dir(self, data_dir: Path) -> "Settings":
+    def with_data_dir(self, data_dir: Path) -> Settings:
         return Settings(
             data_dir=Path(data_dir).expanduser().resolve(),
             provider=self.provider,
@@ -88,7 +88,7 @@ class Settings:
                 raise ValueError("MARINA_OPENAI_API_KEY is required for the openai provider")
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         override = os.getenv("MARINA_DATA_DIR")
         data_dir = Path(override).expanduser().resolve() if override else Path.home() / ".local" / "share" / "marina-ai"
         return cls(

@@ -4,9 +4,8 @@ import json
 import sqlite3
 from pathlib import Path
 from threading import RLock
-from typing import Any
 from time import time
-
+from typing import Any
 
 from marina.domain.events import EVENT_TYPES, AssistantEvent
 from marina.domain.models import Message, Session

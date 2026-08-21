@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from time import monotonic
-from typing import Callable, Sequence
 
 from marina.domain.audio import (
     AudioFrame,

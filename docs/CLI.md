@@ -56,6 +56,18 @@ virinda --socket "$VIRINDA_SOCKET" ask-stream "hello"
 
 The socket is local and created with mode `0600`.
 
+## Benchmarking & Acceptance
+```bash
+# Run voice latency benchmark across mock/live turns with UX gate evaluation
+virinda benchmark voice --turns 5
+virinda benchmark voice --mock --turns 10 --json
+
+# Run end-to-end acceptance scenarios (A through E)
+virinda acceptance voice
+virinda acceptance voice --scenario C
+virinda acceptance voice --json
+```
+
 ## Data/diagnostic operations
 
 The CLI also exposes history, semantic events, sessions, cancellation and SQLite backup operations. These are intended to be administrative application-plane operations; they do not bypass OVOS runtime policy.

@@ -81,6 +81,8 @@ virinda events
 virinda capabilities
 virinda context
 virinda context private
+virinda benchmark voice
+virinda acceptance voice
 ```
 
 The default path is fully offline and has no mandatory third-party runtime dependency.

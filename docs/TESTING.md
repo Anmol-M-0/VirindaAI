@@ -53,37 +53,39 @@ This validates the application message path:
 
 `MessageBus → ovos-core → Virinda skill → response`
 
-## Layer 6 — live voice acceptance
+## Layer 6 — voice acceptance suite
 
-On a provisioned Linux desktop:
+Execute the unified acceptance runner:
 
-1. Start `virinda-voice.target`.
-2. Verify the listener is healthy.
-3. Verify the selected microphone.
-4. Trigger the configured wake model.
-5. Speak a deterministic command.
-6. Verify the transcript event.
-7. Verify the Virinda response event.
-8. Verify audio output.
-9. Interrupt speech and verify barge-in/cancellation.
-10. Repeat in private/quiet/focus modes.
+```bash
+./scripts/acceptance/voice.sh
+# Or invoke scenarios directly via CLI:
+virinda acceptance voice
+virinda acceptance voice --scenario C
+virinda acceptance voice --json
+```
 
-This layer requires actual hardware and should be reported separately from CI.
+The suite validates:
+- **Scenario A**: Clean database cold start and first query execution.
+- **Scenario B**: 5-turn continuous conversation with durable SQLite history and bounded latency drift.
+- **Scenario C**: 30-trial barge-in torture suite across STT, LLM streaming, and active TTS playback.
+- **Scenario D**: 20-cycle resource soak and leak evaluation verifying zero thread and FD leaks.
+- **Scenario E**: Desktop Web Overlay and MessageBus legal TurnState lifecycle transitions.
 
 ## Layer 7 — performance benchmark
 
-Record:
+Run the latency percentile evaluation engine:
 
-- wake detection latency
-- speech-end detection latency
-- STT first/final token latency
-- provider first token latency
-- TTS first-audio latency
-- total turn latency
-- barge-in latency
-- dropped/cancelled turn count
+```bash
+virinda benchmark voice --turns 10
+virinda benchmark voice --mock --turns 10 --json
+```
 
-Use the `VoiceBenchmark` storage and `docs/PERFORMANCE.md` protocol.
+Record and evaluate against the roadmap UX gates:
+- STT final latency (p50 $\le 1.5$s, p95 $\le 3.0$s)
+- TTS first-audio latency (p50 $\le 500$ms, p95 $\le 1.0$s)
+- Barge-in stop latency (p50 $\le 250$ms, p95 $\le 500$ms)
+- Wake to first-audio end-to-end latency
 
 ## Test philosophy
 

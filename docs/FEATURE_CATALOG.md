@@ -58,6 +58,15 @@ Consequential tools now require explicit approval. The IPC layer supports short-
 
 The stable profile now includes the current constrained GUI, PHAL, message bus, Alerts, diagnostics, screenshot, camera, volume and application-launcher components used by Virinda's feature plane. OVOS recommends installing against the stable constraints file so these independently released repositories remain mutually compatible. https://github.com/OpenVoiceOS/OpenVoiceOS/blob/main/constraints-stable.txt
 
+## Voice UX Benchmarking & Acceptance Automation
+
+Virinda includes built-in monotonic nanosecond turn instrumentation (`VoiceInteractionTrace`), percentile statistics evaluation (`VoiceBenchmarkReport`), and automated end-to-end acceptance scenarios (`TurnState` lifecycle machine, `ResourceProbe`, `MessageBusProbe`).
+
+The suite provides:
+- Single-command performance benchmarking: `virinda benchmark voice [--mock] [--turns N] [--json]`.
+- End-to-end acceptance validation: `virinda acceptance voice [--scenario A|B|C|D|E|all] [--json]`.
+- Single unified shell runner: `./scripts/acceptance/voice.sh`.
+
 ## Explicit non-goals
 
 - raw microphone recording by default;

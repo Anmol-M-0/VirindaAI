@@ -1,0 +1,7 @@
+[Unit]
+Description=Marina OVOS core runtime
+Requires=marina-messagebus.service marina-core.service
+After=marina-messagebus.service marina-core.service
+
+[Install]
+WantedBy=default.target

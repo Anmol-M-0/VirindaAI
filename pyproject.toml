@@ -1,0 +1,106 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marina-ai"
+version = "0.26.3"
+description = "Local-first ambient desktop assistant runtime with pluggable intelligence, speech, and presentation adapters."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "MarinaAI contributors"}]
+dependencies = []
+
+[project.optional-dependencies]
+ovos-stable = [
+  "ovos-core>=1.3.1,<1.4.0",
+  "ovos-dinkum-listener>=0.4.0,<0.5.0",
+  "ovos-audio>=0.4.0,<0.5.0",
+  "ovos-workshop>=3.4.0,<3.5.0",
+  "ovos-plugin-manager>=0.9.0,<0.10.0",
+  "ovos-persona>=0.6.23,<0.7.0",
+  "ovos-openai-plugin>=2.0.3,<2.1.0",
+  "ovos-vad-plugin-silero>=0.0.5,<0.1.0",
+  "ovos-ww-plugin-openwakeword>=0.4.1,<0.5.0",
+  "ovos-microphone-plugin-alsa>=0.1.2,<0.2.0",
+  "ovos-stt-plugin-vosk>=0.2.3,<0.3.0",
+  "ovos-audio-plugin-mpv>=0.2.1,<0.3.0",
+  "ovos-bus-client>=1.3.4,<1.4.0",
+  "ovos-messagebus>=0.0.10,<0.1.0",
+  "ovos-gui>=1.3.3,<1.4.0",
+  "ovos-PHAL>=0.2.10,<0.3.0",
+  "ovos-PHAL-plugin-system>=1.3.3,<1.4.0",
+  "ovos-skill-alerts>=0.1.24,<0.2.0",
+  "ovos-skill-application-launcher>=0.5.13,<0.6.0",
+  "ovos-skill-camera>=1.0.4,<1.1.0",
+  "ovos-skill-diagnostics>=0.0.8,<0.1.0",
+  "ovos-skill-screenshot>=0.0.7,<0.1.0",
+  "ovos-skill-volume>=0.1.16,<0.2.0",
+]
+ovos = [
+  "ovos-core>=1.3.1,<1.4.0",
+  "ovos-dinkum-listener>=0.4.0,<0.5.0",
+  "ovos-audio>=0.4.0,<0.5.0",
+  "ovos-workshop>=3.4.0,<3.5.0",
+  "ovos-plugin-manager>=0.9.0,<0.10.0",
+  "ovos-persona>=0.6.23,<0.7.0",
+  "ovos-openai-plugin>=2.0.3,<2.1.0",
+  "ovos-vad-plugin-silero>=0.0.5,<0.1.0",
+  "ovos-ww-plugin-openwakeword>=0.4.1,<0.5.0",
+  "ovos-microphone-plugin-alsa>=0.1.2,<0.2.0",
+  "ovos-stt-plugin-vosk>=0.2.3,<0.3.0",
+  "ovos-audio-plugin-mpv>=0.2.1,<0.3.0",
+  "ovos-bus-client>=1.3.4,<1.4.0",
+  "ovos-messagebus>=0.0.10,<0.1.0",
+  "ovos-gui>=1.3.3,<1.4.0",
+  "ovos-PHAL>=0.2.10,<0.3.0",
+  "ovos-PHAL-plugin-system>=1.3.3,<1.4.0",
+  "ovos-skill-alerts>=0.1.24,<0.2.0",
+  "ovos-skill-application-launcher>=0.5.13,<0.6.0",
+  "ovos-skill-camera>=1.0.4,<1.1.0",
+  "ovos-skill-diagnostics>=0.0.8,<0.1.0",
+  "ovos-skill-screenshot>=0.0.7,<0.1.0",
+  "ovos-skill-volume>=0.1.16,<0.2.0",
+]
+ovos-local-voice = [
+  "ovos-stt-plugin-whispercpp==0.0.1",
+  "phoonnx==1.3.3",
+]
+ovos-experimental-agent = [
+  "ovos-core>=1.3.1",
+  "ovos-openai-plugin>=2.2.0",
+  "ovos-persona>=0.9.0a1",
+  "ovos-plugin-manager>=2.2.3a1",
+]
+job-backbone = [
+  "nats-py>=2.15,<2.16",
+]
+providers = [
+  "httpx>=0.27",
+]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+  "mypy>=1.11",
+]
+
+[project.scripts]
+marina = "marina.__main__:main"
+marinad = "marina.application.daemon:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+warn_unused_ignores = true

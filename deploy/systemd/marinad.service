@@ -1,0 +1,15 @@
+[Unit]
+Description=MarinaAI assistant daemon
+After=pipewire.service pipewire-pulse.service graphical-session.target
+Wants=pipewire.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/marinad
+Restart=on-failure
+RestartSec=1
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

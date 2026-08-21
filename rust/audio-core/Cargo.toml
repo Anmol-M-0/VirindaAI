@@ -1,0 +1,7 @@
+[package]
+name = "marina-audio-core"
+version = "0.1.0"
+edition = "2021"
+description = "Migration seam for MarinaAI real-time audio primitives"
+
+[dependencies]

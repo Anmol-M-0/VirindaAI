@@ -1,0 +1,7 @@
+# Marina audio overrides layered on top of config/ovos/constraints-stable.txt
+# Stable OVOS plugins are pinned inside the published stable ranges.
+ovos-vad-plugin-silero==0.0.5
+ovos-ww-plugin-openwakeword==0.4.1
+# These are Marina-selected add-ons not present in the published stable constraints.
+ovos-stt-plugin-whispercpp==0.0.1
+phoonnx==1.3.3

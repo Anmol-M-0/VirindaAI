@@ -1,0 +1,61 @@
+{
+  "listener": {
+    "wake_word": "hey_marina",
+    "vad_pre_wake_enabled": true,
+    "hybrid_listen": true,
+    "instant_listen": true,
+    "listen_timeout": 30,
+    "speech_begin": 0.1,
+    "silence_end": 0.75,
+    "recording_timeout": 10.0,
+    "recording_timeout_with_silence": 3.0,
+    "recording_mode_max_silence_seconds": 30.0,
+    "VAD": {
+      "module": "ovos-vad-plugin-silero"
+    },
+    "microphone": {
+      "module": "ovos-microphone-plugin-alsa"
+    }
+  },
+  "hotwords": {
+    "hey_marina": {
+      "module": "ovos-ww-plugin-openwakeword",
+      "models": [
+        "/ABSOLUTE/PATH/TO/hey_marina.tflite"
+      ],
+      "inference_framework": "tflite",
+      "threshold": 0.5,
+      "listen": true
+    }
+  },
+  "intents": {
+    "persona": {
+      "handle_fallback": true,
+      "default_persona": "Marina"
+    },
+    "pipeline": [
+      "stop_high",
+      "converse",
+      "padatious_high",
+      "adapt_high",
+      "ovos-persona-pipeline-plugin-high",
+      "ovos-persona-pipeline-plugin-low",
+      "fallback_low"
+    ]
+  },
+  "tts": {
+    "module": "ovos-tts-plugin-phoonnx",
+    "ovos-tts-plugin-phoonnx": {
+      "voice": "piper/en_GB-alan-low"
+    }
+  },
+  "AudioService": {
+    "default-backend": "simple"
+  },
+  "stt": {
+    "module": "ovos-stt-plugin-whispercpp",
+    "ovos-stt-plugin-whispercpp": {
+      "model": "base.en"
+    }
+  }
+}

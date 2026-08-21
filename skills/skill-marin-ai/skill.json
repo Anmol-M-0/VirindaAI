@@ -1,0 +1,13 @@
+{
+  "skill_id": "skill-marin-ai.openvoiceos",
+  "name": "MarinaAI",
+  "version": "0.26.3",
+  "description": "Marina-specific controls and diagnostics for OpenVoiceOS.",
+  "author": "MarinaAI contributors",
+  "license": "MIT",
+  "url": "https://github.com/Anmol-M-0/MarinaAI",
+  "requirements": [
+    "ovos-core",
+    "ovos-workshop"
+  ]
+}

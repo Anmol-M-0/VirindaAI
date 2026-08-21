@@ -12,3 +12,6 @@ __pycache__/
 /dist/
 /build/
 *.egg-info/
+/target/
+rust/audio-core/target/
+rust/audio-core/Cargo.lock

@@ -4,10 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
-from virinda.application.runtime import build_service
 from virinda.config.settings import Settings
 from virinda.interfaces.ipc import LocalRPCClient, default_socket_path
-from virinda.ovos.doctor import render_report, run_doctor
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -301,6 +299,8 @@ def main() -> None:
         return
 
     if args.command == "doctor":
+        from virinda.ovos.doctor import render_report, run_doctor
+
         report = run_doctor(
             Path(__file__).parents[3],
             check_services=args.services,
@@ -312,6 +312,8 @@ def main() -> None:
         else:
             print(render_report(report))
         raise SystemExit(0 if report.ok else 1)
+
+    from virinda.application.runtime import build_service
 
     service = build_service(settings)
     try:

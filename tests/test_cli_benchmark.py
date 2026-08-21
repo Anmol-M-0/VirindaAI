@@ -4,7 +4,8 @@ from unittest.mock import patch
 from virinda.interfaces.cli import main
 
 
-def test_cli_benchmark_mock_run(capsys):
+def test_cli_benchmark_mock_run(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("VIRINDA_DATA_DIR", str(tmp_path))
     test_args = ["virinda", "benchmark", "--mock", "--turns", "3", "--json"]
     with patch("sys.argv", test_args):
         main()

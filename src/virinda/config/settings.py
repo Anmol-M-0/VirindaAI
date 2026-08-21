@@ -96,11 +96,15 @@ class Settings:
             return os.getenv(f"VIRINDA_{key}", os.getenv(f"VIRINDA_{key}", default))
 
         override = _get("DATA_DIR")
-        data_dir = (
-            Path(override).expanduser().resolve()
-            if override
-            else Path.home() / ".local" / "share" / "virinda-ai"
-        )
+        if override:
+            data_dir = Path(override).expanduser().resolve()
+        else:
+            default_dir = Path.home() / ".local" / "share" / "virinda-ai"
+            try:
+                default_dir.mkdir(parents=True, exist_ok=True)
+                data_dir = default_dir
+            except (OSError, PermissionError):
+                data_dir = Path(".local/virinda").resolve()
         return cls(
             data_dir=data_dir,
             provider=_get("PROVIDER", "echo") or "echo",

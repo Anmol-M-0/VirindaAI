@@ -31,9 +31,9 @@ class MemoryFact:
     value: str
     source: str = "user"
     confidence: float = 1.0
+    sensitivity: str = "normal"
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
-    sensitivity: str = "normal"
 
 
 @dataclass(frozen=True, slots=True)

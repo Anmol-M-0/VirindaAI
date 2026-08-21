@@ -61,7 +61,7 @@ def main() -> None:
 
     try:
         server.start()
-        print(f"virindad listening on {server.socket_path}")
+        print(f"virindad listening on {server.socket_path}", flush=True)
         server.serve_forever()
     finally:
         server.shutdown()

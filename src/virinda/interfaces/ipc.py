@@ -8,9 +8,10 @@ import stat
 import threading
 from pathlib import Path
 from queue import Queue
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from virinda.application.service import AssistantService
+if TYPE_CHECKING:
+    from virinda.application.service import AssistantService
 
 
 class IPCProtocolError(ValueError):

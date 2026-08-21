@@ -29,39 +29,35 @@ else:
 
 
 @dataclass(frozen=True, slots=True)
-class MarinaOVOSConfig:
-    """Small configuration surface owned by the Marina skill.
+class VirindaOVOSConfig:
+    """Small configuration surface owned by the Virinda skill.
 
     Microphone, wake word, VAD, STT, TTS, audio routing, and message-bus ownership
     remain OVOS concerns and should be configured through ``ovos.conf``.
     """
 
-    display_name: str = "Marina"
+    display_name: str = "Virinda"
 
 
-class MarinaSkill(OVOSSkill):
-    """Thin OVOS skill that exposes Marina-specific controls and diagnostics.
+MarinaOVOSConfig = VirindaOVOSConfig
+
+
+class VirindaSkill(OVOSSkill):
+    """Thin OVOS skill that exposes Virinda-specific controls and diagnostics.
 
     General conversation is intentionally left to the active OVOS Persona/solver.
     This skill observes canonical OVOS lifecycle events and forwards product-specific
-    controls to the long-lived Marina daemon over local IPC.
-    """
-
-    """Thin OVOS skill for Marina-specific control and diagnostics.
-
-    General conversational responses are intentionally delegated to the active OVOS
-    Persona pipeline. This skill owns only Marina-specific commands and local state
-    observation, avoiding a second competing voice loop.
+    controls to the long-lived Virinda daemon over local IPC.
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         if _OVOS_IMPORT_ERROR is not None:
             raise RuntimeError(
-                "OVOS integration is unavailable; install `virinda-ai[ovos]` "
+                "OVOS integration is unavailable; install `virindai[ovos]` "
                 "or the OVOS runtime dependencies"
             ) from _OVOS_IMPORT_ERROR
         super().__init__(*args, **kwargs)
-        self.config = MarinaOVOSConfig()
+        self.config = VirindaOVOSConfig()
         self.gui = OVOSGuiBridge(self.bus)
 
     def initialize(self) -> None:
@@ -139,12 +135,14 @@ class MarinaSkill(OVOSSkill):
         text = str(message.data.get("utterance", ""))
         if text:
             self._rpc("ovos_speak", text=text)
-        self.log.debug("Marina speech event received: %s", text)
+        self.log.debug("Virinda speech event received: %s", text)
 
+    @intent_handler("VirindaStatusIntent")
     @intent_handler("MarinaStatusIntent")
     def handle_status(self, message: Message | None = None) -> None:
-        self.speak("Marina is online and running on OpenVoiceOS.")
+        self.speak("Virinda is online and running on OpenVoiceOS.")
 
+    @intent_handler("VirindaStopIntent")
     @intent_handler("MarinaStopIntent")
     def handle_stop(self, message: Message | None = None) -> None:
         # Use the standard OVOS stop event so audio, personas and skills all observe
@@ -152,48 +150,55 @@ class MarinaSkill(OVOSSkill):
         self._rpc("cancel", reason="ovos_stop")
         self.bus.emit(Message("mycroft.stop"))
 
+    @intent_handler("VirindaPrivateIntent")
     @intent_handler("MarinaPrivateIntent")
     def handle_private(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="private")
         self.speak("Private mode enabled.")
 
+    @intent_handler("VirindaNormalIntent")
     @intent_handler("MarinaNormalIntent")
     def handle_normal(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="normal")
         self.speak("Normal mode enabled.")
 
+    @intent_handler("VirindaFocusIntent")
     @intent_handler("MarinaFocusIntent")
     def handle_focus(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="focus")
         self.speak("Focus mode enabled.")
 
+    @intent_handler("VirindaQuietIntent")
     @intent_handler("MarinaQuietIntent")
     def handle_quiet(self, message: Message | None = None) -> None:
         self._rpc("set_context", mode="quiet")
         self.speak("Quiet mode enabled.")
 
+    @intent_handler("VirindaBriefingIntent")
     @intent_handler("MarinaBriefingIntent")
     def handle_briefing(self, message: Message | None = None) -> None:
         result = self._rpc("briefing")
         self.speak(str(result or "Nothing urgent to report."))
 
+    @intent_handler("VirindaMeetingStartIntent")
     @intent_handler("MarinaMeetingStartIntent")
     def handle_meeting_start(self, message: Message | None = None) -> None:
         self._rpc("meeting_start")
         self.speak("Meeting mode started.")
 
+    @intent_handler("VirindaMeetingStopIntent")
     @intent_handler("MarinaMeetingStopIntent")
     def handle_meeting_stop(self, message: Message | None = None) -> None:
         self._rpc("meeting_stop")
         self.speak("Meeting mode stopped.")
 
     def _rpc(self, method: str, **params: Any) -> Any:
-        data_dir = Path(os.environ.get("MARINA_DATA_DIR", Path.home() / ".local/share/virinda-ai"))
-        socket_path = Path(os.environ.get("MARINA_SOCKET", data_dir / "virinda.sock"))
+        data_dir = Path(os.environ.get("VIRINDA_DATA_DIR", os.environ.get("MARINA_DATA_DIR", Path.home() / ".local/share/virinda-ai")))
+        socket_path = Path(os.environ.get("VIRINDA_SOCKET", os.environ.get("MARINA_SOCKET", data_dir / "virinda.sock")))
         try:
             return LocalRPCClient(socket_path, timeout=3.0).call(method, **params)
         except Exception as exc:
-            self.log.warning("Marina daemon RPC unavailable: %s", exc)
+            self.log.warning("Virinda daemon RPC unavailable: %s", exc)
             return None
 
     @staticmethod
@@ -215,15 +220,15 @@ def validate_skill_layout(root: Path) -> None:
     """Validate the packaged OVOS skill assets without importing OVOS."""
 
     intent_names = [
-        "MarinaStatusIntent",
-        "MarinaStopIntent",
-        "MarinaPrivateIntent",
-        "MarinaNormalIntent",
-        "MarinaFocusIntent",
-        "MarinaQuietIntent",
-        "MarinaBriefingIntent",
-        "MarinaMeetingStartIntent",
-        "MarinaMeetingStopIntent",
+        "VirindaStatusIntent",
+        "VirindaStopIntent",
+        "VirindaPrivateIntent",
+        "VirindaNormalIntent",
+        "VirindaFocusIntent",
+        "VirindaQuietIntent",
+        "VirindaBriefingIntent",
+        "VirindaMeetingStartIntent",
+        "VirindaMeetingStopIntent",
     ]
     required = [
         root / "skill.json",
@@ -235,4 +240,8 @@ def validate_skill_layout(root: Path) -> None:
         raise FileNotFoundError("missing OVOS skill assets: " + ", ".join(missing))
     manifest = json.loads((root / "skill.json").read_text(encoding="utf-8"))
     if manifest.get("skill_id") != "skill-virinda-ai.openvoiceos":
-        raise ValueError("unexpected Marina skill_id")
+        raise ValueError("unexpected Virinda skill_id")
+
+
+MarinaSkill = VirindaSkill
+

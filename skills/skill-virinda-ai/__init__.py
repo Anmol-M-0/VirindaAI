@@ -1,3 +1,3 @@
-from .main import MarinaSkill
+from .main import MarinaSkill, VirindaSkill
 
-__all__ = ["MarinaSkill"]
+__all__ = ["VirindaSkill", "MarinaSkill"]

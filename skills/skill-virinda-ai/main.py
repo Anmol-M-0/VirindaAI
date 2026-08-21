@@ -1,3 +1,3 @@
-from marina.ovos.skill import MarinaSkill
+from virinda.ovos.skill import MarinaSkill, VirindaSkill
 
-__all__ = ["MarinaSkill"]
+__all__ = ["VirindaSkill", "MarinaSkill"]

@@ -94,16 +94,16 @@ def test_first_boot_delegates_to_installer_and_optional_autostart():
     assert "virinda-voice.target" in script
 
 
-def test_marina_voice_control_intents_are_packaged():
+def test_virinda_voice_control_intents_are_packaged():
     root = Path(__file__).parents[1] / "skills" / "skill-virinda-ai" / "locale" / "en-us"
     expected = {
-        "MarinaPrivateIntent",
-        "MarinaNormalIntent",
-        "MarinaFocusIntent",
-        "MarinaQuietIntent",
-        "MarinaBriefingIntent",
-        "MarinaMeetingStartIntent",
-        "MarinaMeetingStopIntent",
+        "VirindaPrivateIntent",
+        "VirindaNormalIntent",
+        "VirindaFocusIntent",
+        "VirindaQuietIntent",
+        "VirindaBriefingIntent",
+        "VirindaMeetingStartIntent",
+        "VirindaMeetingStopIntent",
     }
     assert all((root / f"{name}.intent").is_file() for name in expected)
 

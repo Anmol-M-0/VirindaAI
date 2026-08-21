@@ -1,10 +1,12 @@
-# VirindaAI Release Roadmap — v0.27.0 Production Path
+# VirindaAI Release Roadmap — v0.27.0 Production & Future Feature Tracks
 
-With the core application layer, universal `ask` LLM engine, and 174/174 automated tests complete, VirindaAI transitions from a feature-development phase to a **hardware validation, latency hardening, and acceptance-driven release process** for **v0.27.0**.
+VirindaAI couples a local-first ambient assistant architecture with the universal `ask` multi-model engine. This roadmap defines:
+1. The **v0.27.0 Release Path**: Hardware preflight, latency thresholds, and acceptance testing.
+2. The **Post-Release Feature Track (v0.28+)**: Advanced capabilities, distributed workers, native GUI widgets, multi-device satellites, and multimodal expansion.
 
 ---
 
-## 1. Release Milestones & Phase Gates
+## 1. Release Milestones & Phase Gates (v0.27.0)
 
 | Phase | Target Objective | Hard Release Gate |
 | :--- | :--- | :--- |
@@ -33,7 +35,7 @@ Voice assistants fail perceptually rather than functionally. These metrics are r
 
 ---
 
-## 3. Milestone Detailed Breakdown
+## 3. Milestone Detailed Breakdown (v0.27.0)
 
 ### Milestone 1: v0.27.0-rc1 — Hardware Preflight & Instrumentation
 
@@ -69,9 +71,37 @@ Voice assistants fail perceptually rather than functionally. These metrics are r
 
 ---
 
-## 4. Product-First Scope Rules
+## 4. Future Feature Tracks (v0.28+)
 
-To prevent scope creep and guarantee a timely, high-quality release:
+Following the stable v0.27.0 voice baseline, feature development will proceed along these modular tracks:
+
+### Track A: Personal Assistant & Cognitive Memory (v0.28.0)
+- [ ] **Interactive Memory Management**: User-facing memory dashboard to inspect, pin, edit, export, and delete durable facts and notes.
+- [ ] **Deterministic Semantic Ranking**: Hybrid keyword + vector embedding retrieval with confidence calibration for local memory recall.
+- [ ] **Routine Conflict Resolution**: Proactive schedule detection and conflict avoidance across overlapping user automations.
+- [ ] **Personalized Proactive Engine**: Context-aware desktop briefings triggered by idle time, calendar events, or notification volume thresholds.
+
+### Track B: Native GUI & Desktop Interaction (v0.28.0)
+- [ ] **Native OVOS GUI Client Acceptance**: Full visual skill experience with Qt/QML layouts over the OVOS MessageBus.
+- [ ] **Embedded Risk Approval Dialogs**: Live interactive confirmation modals in the GUI for `destructive` or `local_write` tool executions.
+- [ ] **Streaming Progress Widgets**: Live token streaming, active tool execution spinners, and latency diagnostic charts in the desktop interface.
+- [ ] **Desktop Context Grounding**: Active window tracking, workspace layout awareness, and smart focus-aware audio routing.
+
+### Track C: Distributed Backbone & Async Scaling (v0.29.0)
+- [ ] **Distributed NATS JetStream Cluster**: Multi-node JetStream broker support for offloading long-running automations to remote headless servers.
+- [ ] **Zero-Trust Worker Security**: Mutual TLS, scoped token credentials, and cryptographic audit log verification across worker nodes.
+- [ ] **High-Throughput Batch Processing**: Job execution pipelines for bulk audio transcription, document indexing, and background code reviews.
+- [ ] **Automatic Failover & Redelivery**: Zero-loss task recovery across worker node crashes.
+
+### Track D: Multi-Device Satellite & Multimodal Hardware (v0.30.0)
+- [ ] **HiveMind / Satellite Mesh Transport**: Cross-device encrypted voice relays allowing smart speakers and micro-satellites to route through a central Virinda daemon.
+- [ ] **Biometric Speaker Identification**: Voice profile enrollment and confidence-scored speaker verification on live microphone streams.
+- [ ] **PHAL Hardware Actions**: Hardware peripheral control via OVOS PHAL (display brightness, volume steps, battery status, power state).
+- [ ] **Continuous Screen & Camera Vision**: Multimodal visual understanding enabling users to query on-screen windows or physical camera feeds.
+
+---
+
+## 5. Product-First Scope Rules
 
 1. **Rule 1 — User-Visible Value First**: If a change does not improve *Hear $\rightarrow$ Understand $\rightarrow$ Act $\rightarrow$ Respond*, it is deferred past v0.27.0.
 2. **Rule 2 — Reliability Over Feature Count**: 10 capabilities that work every time beat 30 that occasionally fail.
@@ -80,17 +110,6 @@ To prevent scope creep and guarantee a timely, high-quality release:
 5. **Rule 5 — Cancellation Is Correctness**: Barge-in is not an optional enhancement; the assistant must stop immediately when interrupted.
 6. **Rule 6 — Optimize p95, Not Demos**: Tail latency determines user trust.
 7. **Rule 7 — One Golden Path**: Prioritize Linux + systemd + PipeWire + Groq/NIM + OVOS before expanding to exotic platforms.
-
----
-
-## 5. Explicitly Deferred Capabilities (Post-v0.27.0)
-
-The following items are intentionally deferred to post-v0.27.0 milestones:
-- Complex multi-agent persona negotiation frameworks.
-- Distributed multi-node worker clustering (NATS JetStream local single-node broker is standard for v0.27.0).
-- Remote satellite hardware relays (HiveMind cross-device transport).
-- Exotic OS and proprietary audio interface support.
-- Speculative architectural refactors of stable components.
 
 ---
 

@@ -288,7 +288,11 @@ def _rpc(args: argparse.Namespace, settings: Settings) -> None:
 
 
 def main() -> None:
-    args = _parser().parse_args()
+    parser = _parser()
+    args = parser.parse_args()
+    if args.command is None:
+        parser.print_help()
+        raise SystemExit(0)
     settings = Settings.from_env()
     if args.data_dir:
         settings = settings.with_data_dir(args.data_dir)
@@ -639,3 +643,7 @@ def _handle_benchmark(args: argparse.Namespace, service) -> None:
     overall_status = "PASS" if report.overall_passed else "FAIL"
     print(f"Overall Status: {overall_status}")
     print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()

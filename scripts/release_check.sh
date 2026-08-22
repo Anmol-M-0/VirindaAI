@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# release_check.sh - VirindaAI Production Release Validation Gate (v0.27.0)
+# release_check.sh - VirindaAI Production Release Validation Gate (v0.28.0)
 # ==============================================================================
 # Validates packaging, isolated installation, database migrations, systemd units,
 # and voice acceptance scenarios on built release artifacts.
@@ -20,7 +20,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 echo "================================================================="
-echo -e "       ${BOLD}VirindaAI Production Release Gate (v0.27.0)${NC}      "
+echo -e "       ${BOLD}VirindaAI Production Release Gate (v0.28.0)${NC}      "
 echo "================================================================="
 
 echo ""

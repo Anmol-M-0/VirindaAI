@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "============================================================"
-echo "          VirindaAI Voice Acceptance Suite (v0.27.0-rc2)    "
-echo "============================================================"
+echo "================================================================="
+echo "          VirindaAI Voice Acceptance Suite (v0.28.0)    "
+echo "================================================================="
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT"
@@ -18,7 +18,7 @@ echo "--> [3/4] Running Voice Benchmark & UX Gate Evaluation..."
 uv run virinda benchmark --mock --turns 10
 
 echo "--> [4/4] Running End-to-End Acceptance Scenarios (A through E)..."
-uv run virinda acceptance voice
+uv run virinda acceptance voice "$@"
 
 echo ""
-echo "✔ All voice acceptance criteria and end-to-end scenarios passed successfully for v0.27.0-rc2!"
+echo "✔ All voice acceptance criteria and end-to-end scenarios passed successfully for v0.28.0!"

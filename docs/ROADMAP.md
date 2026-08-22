@@ -76,28 +76,28 @@ Voice assistants fail perceptually rather than functionally. These metrics are r
 Following the stable v0.27.0 voice baseline, feature development will proceed along these modular tracks:
 
 ### Track A: Personal Assistant & Cognitive Memory (v0.28.0)
-- [ ] **Interactive Memory Management**: User-facing memory dashboard to inspect, pin, edit, export, and delete durable facts and notes.
-- [ ] **Deterministic Semantic Ranking**: Hybrid keyword + vector embedding retrieval with confidence calibration for local memory recall.
-- [ ] **Routine Conflict Resolution**: Proactive schedule detection and conflict avoidance across overlapping user automations.
-- [ ] **Personalized Proactive Engine**: Context-aware desktop briefings triggered by idle time, calendar events, or notification volume thresholds.
+- [x] **Interactive Memory Management**: User-facing memory dashboard to inspect, pin, edit, export, and delete durable facts and notes.
+- [x] **Deterministic Semantic Ranking**: Hybrid keyword + vector embedding retrieval (`HybridMemoryRetriever`, `FastEmbedProvider`) for local memory recall.
+- [x] **Routine Conflict Resolution**: Proactive schedule detection and conflict avoidance across overlapping user automations (`RoutineConflictDetector`).
+- [x] **Personalized Proactive Engine**: Context-aware desktop briefings triggered by idle time, calendar events, or notification volume thresholds (`ProactiveEngine`).
 
 ### Track B: Native GUI & Desktop Interaction (v0.28.0)
-- [ ] **Native OVOS GUI Client Acceptance**: Full visual skill experience with Qt/QML layouts over the OVOS MessageBus.
-- [ ] **Embedded Risk Approval Dialogs**: Live interactive confirmation modals in the GUI for `destructive` or `local_write` tool executions.
-- [ ] **Streaming Progress Widgets**: Live token streaming, active tool execution spinners, and latency diagnostic charts in the desktop interface.
-- [ ] **Desktop Context Grounding**: Active window tracking, workspace layout awareness, and smart focus-aware audio routing.
+- [x] **Native OVOS GUI Client Acceptance**: Full visual skill experience with Qt/QML layouts over the OVOS MessageBus (`OVOSMessageBusBridge`).
+- [x] **Embedded Risk Approval Dialogs**: Live interactive confirmation modals in the GUI for `destructive` or `local_write` tool executions (`ApprovalManager`).
+- [x] **Streaming Progress Widgets**: Live token streaming, active tool execution spinners, and latency diagnostic charts in the desktop interface (`StreamPublisher`).
+- [x] **Desktop Context Grounding**: Active window tracking, workspace layout awareness, and smart focus-aware audio routing (`DesktopProbeRegistry`).
 
-### Track C: Distributed Backbone & Async Scaling (v0.29.0)
-- [ ] **Distributed NATS JetStream Cluster**: Multi-node JetStream broker support for offloading long-running automations to remote headless servers.
-- [ ] **Zero-Trust Worker Security**: Mutual TLS, scoped token credentials, and cryptographic audit log verification across worker nodes.
-- [ ] **High-Throughput Batch Processing**: Job execution pipelines for bulk audio transcription, document indexing, and background code reviews.
-- [ ] **Automatic Failover & Redelivery**: Zero-loss task recovery across worker node crashes.
+### Track C: Distributed Backbone & Async Scaling (v0.28.0)
+- [x] **Distributed NATS JetStream Cluster**: Multi-node JetStream broker support for offloading long-running automations to remote headless servers (`NatsJetStreamJobBroker`).
+- [x] **Zero-Trust Worker Security**: Mutual TLS, scoped token credentials, and cryptographic audit log verification across worker nodes.
+- [x] **High-Throughput Batch Processing**: Job execution pipelines for bulk audio transcription, document indexing, and background code reviews (`ReviewJobHandler`, `IndexJobHandler`, `AudioTranscriptionJobHandler`).
+- [x] **Automatic Failover & Redelivery**: Zero-loss task recovery across worker node crashes.
 
-### Track D: Multi-Device Satellite & Multimodal Hardware (v0.30.0)
-- [ ] **HiveMind / Satellite Mesh Transport**: Cross-device encrypted voice relays allowing smart speakers and micro-satellites to route through a central Virinda daemon.
-- [ ] **Biometric Speaker Identification**: Voice profile enrollment and confidence-scored speaker verification on live microphone streams.
-- [ ] **PHAL Hardware Actions**: Hardware peripheral control via OVOS PHAL (display brightness, volume steps, battery status, power state).
-- [ ] **Continuous Screen & Camera Vision**: Multimodal visual understanding enabling users to query on-screen windows or physical camera feeds.
+### Track D: Multi-Device Satellite & Multimodal Hardware (v0.28.0)
+- [x] **HiveMind / Satellite Mesh Transport**: Cross-device encrypted voice relays allowing smart speakers and micro-satellites to route through a central Virinda daemon with remote barge-in (`HiveMindBridge`).
+- [x] **Biometric Speaker Identification**: Voice profile enrollment and confidence-scored speaker verification on live microphone streams (`SpeakerVerificationEngine`).
+- [x] **PHAL Hardware Actions**: Hardware peripheral control via OVOS PHAL (display brightness, volume steps, battery status, power state) (`PHALController`).
+- [x] **Continuous Screen & Camera Vision**: Multimodal visual understanding enabling users to query on-screen windows or physical camera feeds (`ScreenVisionQueryEngine`).
 
 ---
 

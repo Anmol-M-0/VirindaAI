@@ -110,7 +110,7 @@ def _parser() -> argparse.ArgumentParser:
         "--json", dest="benchmark_json", action="store_true", help="emit machine-readable JSON"
     )
     acceptance = sub.add_parser(
-        "acceptance", help="run end-to-end acceptance scenarios (v0.27.0-rc2)"
+        "acceptance", help="run end-to-end acceptance scenarios (v0.28.0)"
     )
     acceptance.add_argument("target", choices=["voice"], default="voice", nargs="?")
     acceptance.add_argument(
@@ -559,7 +559,7 @@ def _handle_acceptance(args: argparse.Namespace) -> None:
         return
 
     print("=" * 65)
-    print("      VirindaAI End-to-End Voice Acceptance Report (v0.27.0-rc2)")
+    print("      VirindaAI End-to-End Voice Acceptance Report (v0.28.0)")
     print("=" * 65)
     for r in results:
         status = "[PASS]" if r.passed else "[FAIL]"
@@ -663,7 +663,7 @@ def _handle_benchmark(args: argparse.Namespace, service) -> None:
         return
 
     print("=" * 60)
-    print("         VirindaAI Voice Benchmark Report (v0.27.0-rc1)")
+    print("         VirindaAI Voice Benchmark Report (v0.28.0)")
     print("=" * 60)
     print(f"Total Turns:       {report.total_turns}")
     print(f"Completed Turns:   {report.completed_turns}")

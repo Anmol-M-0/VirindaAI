@@ -15,10 +15,13 @@ from virinda.interfaces.tui.events import (
     UICommandKind,
     VoiceStateChanged,
 )
+from virinda.interfaces.tui.runner import TUIVoiceWorker, run_interactive_voice_tui
 
 __all__ = [
     "VirindaTUIApp",
     "run_tui",
+    "run_interactive_voice_tui",
+    "TUIVoiceWorker",
     "TUIEventBridge",
     "TUIState",
     "TUIEvent",

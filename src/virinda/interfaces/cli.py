@@ -348,9 +348,37 @@ def main() -> None:
         voice_main(args)
         return
     if args.command == "tui":
-        from virinda.interfaces.tui import run_tui
+        if getattr(args, "mock", False):
+            from virinda.interfaces.tui import run_tui
 
-        run_tui(mock_demo=getattr(args, "mock", False), mode=getattr(args, "mode", "ptt").upper())
+            run_tui(mock_demo=True, mode=getattr(args, "mode", "ptt").upper())
+            return
+
+        from virinda.application.runtime import build_service
+        from virinda.core.voice_controller import VoiceController
+        from virinda.infrastructure.audio.player import LinuxAudioPlayer
+        from virinda.infrastructure.audio.recorder import LinuxAudioRecorder
+        from virinda.infrastructure.audio.speech import NativeTTS, SpeechToText
+        from virinda.interfaces.tui import run_interactive_voice_tui
+
+        service = build_service(settings)
+        recorder = LinuxAudioRecorder()
+        player = LinuxAudioPlayer()
+        tts = NativeTTS()
+        stt = SpeechToText(mock_mode=False)
+
+        controller = VoiceController(
+            service=service,
+            recorder=recorder,
+            player=player,
+            tts=tts,
+            stt=stt,
+        )
+        run_interactive_voice_tui(
+            controller=controller,
+            no_tts=getattr(args, "no_tts", False),
+            mode=getattr(args, "mode", "ptt").upper(),
+        )
         return
     if args.command == "ovos":
         from virinda.application.runtime import build_service

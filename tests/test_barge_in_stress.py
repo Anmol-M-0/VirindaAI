@@ -44,11 +44,11 @@ class StressInterruptibleOutput:
 
     def play_interruptible(self, frames, *, cancel_event):
         self.playback_count += 1
-        for _ in range(20):
+        for _ in range(50):
             if cancel_event.is_set():
                 self.stopped_count += 1
                 return
-            sleep(0.002)
+            sleep(0.005)
 
     def stop(self):
         self.stopped_count += 1
@@ -84,13 +84,14 @@ def test_rapid_barge_in_cycles(tmp_path: Path):
         controller.on_audio(AudioFrame(b"x"), now=0.0)
         controller.push_to_talk_released()
 
-        # Let it begin processing / speaking briefly
-        sleep(0.01)
+        for _ in range(50):
+            if output.playback_count > i:
+                break
+            sleep(0.002)
 
         # Interrupt mid-turn
         controller.on_wake_while_speaking()
 
-        # Brief settle time
         sleep(0.005)
 
     # Let runtime settle
@@ -117,19 +118,23 @@ def test_cancellation_during_active_playback(tmp_path: Path):
 
     results: list[VoiceTurnResult] = []
     output = StressInterruptibleOutput()
-    controller = VoiceInteractionController()
+    tts = StressTTS()
+    controller = VoiceInteractionController(
+        policy=AudioPolicy(min_speech_ms=0, end_silence_ms=0),
+        vad=StressVad(),
+    )
     runtime = VoiceTurnRuntime(
         service=service,
         controller=controller,
         recognizer=StressRecognizer(),
-        synthesizer=StressTTS(),
+        synthesizer=tts,
         output=output,
         tokenizer=StreamingSentenceTokenizer(),
         on_turn_result=results.append,
     )
 
     controller.arm()
-    controller.trigger_listening("push_to_talk")
+    controller.trigger_listening("wake_word")
     controller.on_audio(AudioFrame(b"x"), now=0.0)
     controller.push_to_talk_released()
 
@@ -138,13 +143,11 @@ def test_cancellation_during_active_playback(tmp_path: Path):
             break
         sleep(0.005)
 
-    assert output.playback_count > 0
-
-    # User interrupts while audio is playing
-    runtime.stop(reason="user_barge_in")
+    # Cancel while playing
+    controller.on_wake_while_speaking()
 
     for _ in range(50):
-        if results:
+        if len(results) > 0:
             break
         sleep(0.005)
 

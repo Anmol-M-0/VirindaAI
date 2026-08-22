@@ -128,15 +128,26 @@ class VirindaTUIApp:
                         continue
 
                     # Enter key -> Toggle listening
-                    if ch in ("\n", "\r"):
+                    if ch in ("\n", "\r", " "):
                         if self.current_state == TUIState.LISTENING:
                             self.bridge.post_command(UICommandKind.STOP_LISTENING)
+                            if self._mock_demo:
+                                self.current_state = TUIState.THINKING
+                                threading.Thread(
+                                    target=self._simulate_mock_turn, daemon=True
+                                ).start()
                         else:
                             self.bridge.post_command(UICommandKind.START_LISTENING)
+                            if self._mock_demo:
+                                self.current_state = TUIState.LISTENING
+                                self.current_rms_dbfs = -18.5
 
                     # 'b' or ESC -> Barge-In
                     elif ch in ("b", "B", "\x1b"):
                         self.bridge.post_command(UICommandKind.BARGE_IN)
+                        if self._mock_demo:
+                            self.current_state = TUIState.IDLE
+                            self.current_rms_dbfs = -60.0
 
                     # 'c' -> Clear History
                     elif ch in ("c", "C"):
@@ -156,10 +167,7 @@ class VirindaTUIApp:
     def run(self, mock_demo: bool = False) -> None:
         """Runs the TUI event loop."""
         self._running = True
-
-        if mock_demo:
-            # Spawn mock background event generator for standalone demonstration
-            threading.Thread(target=self._run_mock_demo, daemon=True).start()
+        self._mock_demo = mock_demo
 
         self._key_thread = threading.Thread(target=self._read_keys, daemon=True)
         self._key_thread.start()
@@ -177,6 +185,20 @@ class VirindaTUIApp:
                     time.sleep(0.033)
         finally:
             self._running = False
+
+    def _simulate_mock_turn(self) -> None:
+        """Simulates interactive response when pressing ENTER in mock mode."""
+        self.current_rms_dbfs = -60.0
+        time.sleep(0.5)
+        self.conversation.add_user_message("Simulated voice command (Enter pressed)")
+        self.current_state = TUIState.SPEAKING
+        self.conversation.start_assistant_message()
+        sample = "VirindaAI received your speech input and is operating normally. Ready for next command."
+        for token in sample.split(" "):
+            self.conversation.append_assistant_token(token + " ")
+            time.sleep(0.06)
+        self.conversation.finish_assistant_message()
+        self.current_state = TUIState.IDLE
 
     def _run_mock_demo(self) -> None:
         """Simulates ambient voice interaction for visual verification."""

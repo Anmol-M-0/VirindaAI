@@ -128,12 +128,11 @@ def main(args: argparse.Namespace | None = None) -> None:
     )
 
     if getattr(args, "tui", False):
-        from virinda.interfaces.tui import run_tui
+        from virinda.interfaces.tui import run_interactive_voice_tui
 
-        run_tui(
-            mock_demo=use_mock,
-            model=getattr(stt, "engine_name", "whisper.cpp / local"),
-            backend=getattr(recorder, "backend_name", "PipeWire"),
+        run_interactive_voice_tui(
+            controller=controller,
+            no_tts=getattr(args, "no_tts", False),
             mode=getattr(args, "mode", "ptt").upper(),
         )
         return

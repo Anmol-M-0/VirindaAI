@@ -4,6 +4,8 @@ Unit tests for the VirindaAI Modular Terminal User Interface (TUI) package.
 
 from __future__ import annotations
 
+import time
+
 from rich.console import Console
 from rich.panel import Panel
 
@@ -169,3 +171,36 @@ def test_tui_app_layout_composition():
     assert len(app.conversation.messages) == 2
     assert app.conversation.messages[0].text == "Open text editor"
     assert app.conversation.messages[1].text == "Opening editor..."
+
+
+def test_tui_voice_worker_interactive_roundtrip(tmp_path):
+    from unittest.mock import MagicMock
+
+    from virinda.interfaces.tui.runner import TUIVoiceWorker
+
+    mock_controller = MagicMock()
+    mock_controller.stt.engine_name = "whisper.cpp"
+    mock_controller.recorder.stop_recording.return_value = tmp_path / "mock.wav"
+    mock_controller.service.ask.return_value = "Mock answer"
+
+    bridge = TUIEventBridge()
+    worker = TUIVoiceWorker(controller=mock_controller, bridge=bridge, no_tts=True)
+    worker.start()
+
+    try:
+        # 1. Post START_LISTENING command
+        bridge.post_command(UICommandKind.START_LISTENING)
+        time.sleep(0.15)
+        assert mock_controller.start_listening.called
+
+        # 2. Post STOP_LISTENING command
+        bridge.post_command(UICommandKind.STOP_LISTENING)
+        time.sleep(0.2)
+        assert mock_controller.recorder.stop_recording.called
+
+        # 3. Post BARGE_IN command
+        bridge.post_command(UICommandKind.BARGE_IN)
+        time.sleep(0.15)
+        assert mock_controller.barge_in.called
+    finally:
+        worker.stop()

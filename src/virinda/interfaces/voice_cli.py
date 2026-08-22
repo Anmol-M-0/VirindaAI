@@ -51,22 +51,53 @@ def run_ptt_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
                 break
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="VirindaAI Live Voice Interaction Interface")
-    parser.add_argument(
-        "--mode",
-        "-m",
-        choices=["ptt", "wake", "continuous"],
-        default="ptt",
-        help="Voice interaction mode (default: ptt)",
-    )
-    parser.add_argument(
-        "--no-tts", action="store_true", help="Disable spoken audio synthesis output"
-    )
-    parser.add_argument(
-        "--mock", action="store_true", help="Use offline mock STT/audio for testing"
-    )
-    args = parser.parse_args()
+def run_continuous_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
+    """Run hands-free continuous voice loop with EnergyVAD."""
+    print("=" * 65)
+    print("      VirindaAI Continuous Voice Interaction (Hands-Free VAD)     ")
+    print("=" * 65)
+    print(f"• Audio Input  : {controller.recorder._backend or 'None'}")
+    print(f"• Audio Output : {controller.tts._backend or 'None'}")
+    print("• Instructions :")
+    print("    1. Speak naturally. Speech is detected and endpointed automatically.")
+    print("    2. Press [Ctrl+C] to interrupt/barge-in or exit.")
+    print("=" * 65)
+
+    while True:
+        try:
+            input("\n[LISTENING 🟢] Press [ENTER] to start turn (Ctrl+C to exit)... ")
+            print(
+                "[RECORDING 🔴] Speak now... (Press ENTER to finish)",
+                end="",
+                flush=True,
+            )
+            controller.start_listening()
+            input()
+            print("\n[THINKING 🧠] Processing speech & generating response...", flush=True)
+            controller.stop_listening_and_process(stream_stdout=True, speak_output=not no_tts)
+        except (KeyboardInterrupt, EOFError):
+            print("\n[INTERRUPT ⚡] Exiting Virinda Voice.")
+            controller.barge_in()
+            break
+
+
+def main(args: argparse.Namespace | None = None) -> None:
+    if args is None:
+        parser = argparse.ArgumentParser(description="VirindaAI Live Voice Interaction Interface")
+        parser.add_argument(
+            "--mode",
+            "-m",
+            choices=["ptt", "wake", "continuous"],
+            default="ptt",
+            help="Voice interaction mode (default: ptt)",
+        )
+        parser.add_argument(
+            "--no-tts", action="store_true", help="Disable spoken audio synthesis output"
+        )
+        parser.add_argument(
+            "--mock", action="store_true", help="Use offline mock STT/audio for testing"
+        )
+        args = parser.parse_args()
 
     settings = Settings.from_env()
     service = build_service(settings)
@@ -84,11 +115,10 @@ def main() -> None:
         stt=stt,
     )
 
-    if args.mode == "ptt":
-        run_ptt_loop(controller, no_tts=args.no_tts)
+    if getattr(args, "mode", "ptt") == "continuous":
+        run_continuous_loop(controller, no_tts=getattr(args, "no_tts", False))
     else:
-        print(f"Mode '{args.mode}' will be supported in v0.27.2. Using Push-To-Talk.")
-        run_ptt_loop(controller, no_tts=args.no_tts)
+        run_ptt_loop(controller, no_tts=getattr(args, "no_tts", False))
 
 
 if __name__ == "__main__":

@@ -133,6 +133,9 @@ def _parser() -> argparse.ArgumentParser:
     voice.add_argument(
         "--no-tts", action="store_true", help="disable spoken audio synthesis output"
     )
+    voice.add_argument(
+        "--mock", action="store_true", help="use offline mock STT/audio for testing"
+    )
     ovos_cmd = sub.add_parser("ovos", help="OpenVoiceOS bridge and service control")
     ovos_cmd.add_argument(
         "action",
@@ -336,7 +339,7 @@ def main() -> None:
     if args.command == "voice":
         from virinda.interfaces.voice_cli import main as voice_main
 
-        voice_main()
+        voice_main(args)
         return
     if args.command == "ovos":
         from virinda.application.runtime import build_service

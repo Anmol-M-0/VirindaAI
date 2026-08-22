@@ -112,6 +112,24 @@ class HiveMindBridge:
 
         return response
 
+    def handle_satellite_barge_in(self, device_id: str) -> None:
+        """Processes a remote cancellation or barge-in event from a satellite device."""
+        with self._lock:
+            dev = self._devices.get(device_id)
+            if dev:
+                dev.last_seen = time.time()
+
+        if self.bus:
+            msg = Message(
+                "mycroft.stop",
+                data={"device_id": device_id},
+                context={"source": f"hivemind.{device_id}", "target": device_id},
+            )
+            try:
+                self.bus.emit(msg)
+            except Exception as exc:
+                logger.debug("Failed to emit satellite stop event: %s", exc)
+
     def active_devices(self) -> list[SatelliteDevice]:
         with self._lock:
             now = time.time()

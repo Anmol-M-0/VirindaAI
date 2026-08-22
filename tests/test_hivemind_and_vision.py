@@ -35,6 +35,12 @@ def test_hivemind_device_registration_and_routing(service):
     assert speak_msg.data["device_id"] == "pi_kitchen"
     assert len(bridge.active_devices()) == 1
 
+    # Test satellite barge in
+    bridge.handle_satellite_barge_in("pi_kitchen")
+    assert mock_bus.emit.call_count == 2
+    stop_msg = mock_bus.emit.call_args[0][0]
+    assert stop_msg.msg_type == "mycroft.stop"
+
 
 def test_screen_vision_query_engine(service, tmp_path: Path):
     fake_img = tmp_path / "fake_screen.png"

@@ -12,11 +12,15 @@ from virinda.infrastructure.audio.speech import NativeTTS
 
 def run_ptt_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
     """Run interactive Push-To-Talk conversation loop."""
+    stt_name = getattr(controller.stt, "active_engine_name", "local")
+    provider_name = getattr(getattr(controller.service, "provider", None), "name", "local")
     print("=" * 65)
     print("        VirindaAI Spoken Voice Interaction (Push-To-Talk)        ")
     print("=" * 65)
     print(f"• Audio Input  : {controller.recorder._backend or 'None'}")
     print(f"• Audio Output : {controller.tts._backend or 'None'}")
+    print(f"• Speech Recog : {stt_name}")
+    print(f"• Intelligence : {provider_name}")
     print("• Instructions :")
     print("    1. Press [ENTER] to start speaking.")
     print("    2. Press [ENTER] again when done.")
@@ -53,11 +57,15 @@ def run_ptt_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
 
 def run_continuous_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
     """Run hands-free continuous voice loop with EnergyVAD."""
+    stt_name = getattr(controller.stt, "active_engine_name", "local")
+    provider_name = getattr(getattr(controller.service, "provider", None), "name", "local")
     print("=" * 65)
     print("      VirindaAI Continuous Voice Interaction (Hands-Free VAD)     ")
     print("=" * 65)
     print(f"• Audio Input  : {controller.recorder._backend or 'None'}")
     print(f"• Audio Output : {controller.tts._backend or 'None'}")
+    print(f"• Speech Recog : {stt_name}")
+    print(f"• Intelligence : {provider_name}")
     print("• Instructions :")
     print("    1. Speak naturally. Speech is detected and endpointed automatically.")
     print("    2. Press [Ctrl+C] to interrupt/barge-in or exit.")

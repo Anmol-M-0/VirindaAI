@@ -17,10 +17,10 @@ WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Add virtual environment site-packages and sibling projects if available
 for sp in \
-    "$SCRIPT_DIR"/.venv/lib/python*/site-packages \
-    "$WORKSPACE_ROOT"/VirindAI/.venv/lib/python*/site-packages \
-    "$WORKSPACE_ROOT"/chatgpt-cli/.venv/lib/python*/site-packages \
-    "$WORKSPACE_ROOT"/nemotron-guard/.venv/lib/python*/site-packages; do
+    "$SCRIPT_DIR"/.venv/lib*/python*/site-packages \
+    "$WORKSPACE_ROOT"/VirindAI/.venv/lib*/python*/site-packages \
+    "$WORKSPACE_ROOT"/chatgpt-cli/.venv/lib*/python*/site-packages \
+    "$WORKSPACE_ROOT"/nemotron-guard/.venv/lib*/python*/site-packages; do
     if [ -d "$sp" ]; then
         export PYTHONPATH="$sp:${PYTHONPATH:-}"
     fi

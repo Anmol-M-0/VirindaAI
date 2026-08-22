@@ -92,7 +92,10 @@ class NativeTTS:
                 self._proc.stdin.write(clean_text.encode("utf-8"))
                 self._proc.stdin.close()
             if block:
-                self._proc.wait()
+                try:
+                    self._proc.wait(timeout=8.0)
+                except subprocess.TimeoutExpired:
+                    self.stop()
         except Exception as exc:
             self._proc = None
             raise SpeechError(f"Failed to speak text via {self._backend}: {exc}") from exc
@@ -223,6 +226,8 @@ class LocalVoskSTT:
 
     def _find_model(self) -> Optional[Path]:
         search_dirs = [
+            Path.cwd() / "models" / "vosk",
+            Path(__file__).parents[3] / "models" / "vosk",
             Path.home() / ".local" / "share" / "virinda" / "models" / "vosk",
             Path.home() / ".cache" / "vosk",
             Path("/usr/share/vosk"),
@@ -247,30 +252,39 @@ class LocalVoskSTT:
         if not self.is_available:
             raise SpeechError("Vosk Python package or offline model not installed.")
 
+        p = Path(wav_path).expanduser().resolve()
+        if not p.exists() or p.stat().st_size < 100:
+            return ""
+
         import vosk
 
         if not self._model:
             self._model = vosk.Model(str(self.model_path))
 
-        wf = wave.open(str(wav_path), "rb")
-        rec = vosk.KaldiRecognizer(self._model, wf.getframerate())
-        rec.SetWords(True)
+        try:
+            with wave.open(str(p), "rb") as wf:
+                framerate = wf.getframerate()
+                rec = vosk.KaldiRecognizer(self._model, framerate)
+                rec.SetWords(True)
 
-        results = []
-        while True:
-            data = wf.readframes(4000)
-            if len(data) == 0:
-                break
-            if rec.AcceptWaveform(data):
-                res = json.loads(rec.Result())
-                if "text" in res and res["text"]:
-                    results.append(res["text"])
+                results = []
+                while True:
+                    data = wf.readframes(4000)
+                    if len(data) == 0:
+                        break
+                    if rec.AcceptWaveform(data):
+                        res = json.loads(rec.Result())
+                        if "text" in res and res["text"]:
+                            results.append(res["text"])
 
-        final_res = json.loads(rec.FinalResult())
-        if "text" in final_res and final_res["text"]:
-            results.append(final_res["text"])
+                final_res = json.loads(rec.FinalResult())
+                if "text" in final_res and final_res["text"]:
+                    results.append(final_res["text"])
 
-        return " ".join(results).strip()
+                return " ".join(results).strip()
+        except Exception as exc:
+            logger.warning("Vosk audio decoding error on %s: %s", p, exc)
+            return ""
 
 
 class GroqWhisperSTT:
@@ -417,11 +431,9 @@ class SpeechToText:
             except Exception as exc:
                 logger.warning("Cloud STT fallback failed: %s", exc)
 
-        # 4. Graceful offline fallback
-        p = Path(wav_path)
-        if p.exists() and p.stat().st_size > 4000:
-            logger.info(
-                "Recorded %d bytes of speech; no local STT model configured.", p.stat().st_size
-            )
-            return "Hello Virinda, local voice turn recorded."
-        return ""
+        # 4. If no local engine was available, fail cleanly with an informative message
+        logger.warning("No local STT engine or model found on system (whisper.cpp, vosk).")
+        raise SpeechError(
+            "No local speech recognition engine or model found. "
+            "Please ensure vosk-model is present in ~/.local/share/virinda/models/vosk/ or whisper.cpp is installed."
+        )

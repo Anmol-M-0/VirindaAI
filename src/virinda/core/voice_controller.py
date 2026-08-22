@@ -105,48 +105,26 @@ class VoiceController:
             # Execute turn via AssistantService
             current_gen = self.generation
             response_chunks: list[str] = []
-
-            # Stream LLM tokens and feed sentences concurrently to TTS
             tokenizer = StreamingSentenceTokenizer()
-            for event in (
-                self.service.events_stream(transcription)
-                if hasattr(self.service, "events_stream")
-                else [transcription]
-            ):
-                if self.generation != current_gen:
-                    break
 
-                text_chunk = event if isinstance(event, str) else getattr(event, "text", "")
-                if text_chunk:
-                    response_chunks.append(text_chunk)
-                    if stream_stdout:
-                        sys.stdout.write(text_chunk)
-                        sys.stdout.flush()
+            reply = self.service.ask(transcription)
+            if self.generation == current_gen and reply:
+                response_chunks.append(reply)
+                if stream_stdout:
+                    sys.stdout.write(reply + "\n")
+                    sys.stdout.flush()
 
-                    if speak_output:
-                        for sentence in tokenizer.feed(text_chunk):
-                            with self._lock:
-                                self._state = TurnState.SPEAKING
-                            self.streaming_tts.feed(current_gen, sentence)
-
-            # Flush remaining sentence from tokenizer buffer
-            if speak_output:
-                for sentence in tokenizer.flush():
-                    with self._lock:
-                        self._state = TurnState.SPEAKING
-                    self.streaming_tts.feed(current_gen, sentence)
+                if speak_output:
+                    for sentence in tokenizer.feed(reply):
+                        with self._lock:
+                            self._state = TurnState.SPEAKING
+                        self.streaming_tts.feed(current_gen, sentence)
+                    for sentence in tokenizer.flush():
+                        with self._lock:
+                            self._state = TurnState.SPEAKING
+                        self.streaming_tts.feed(current_gen, sentence)
 
             full_response = "".join(response_chunks).strip()
-            if not full_response:
-                # Fallback to direct ask
-                full_response = self.service.ask(transcription)
-                if stream_stdout and not response_chunks:
-                    sys.stdout.write(full_response)
-                    sys.stdout.flush()
-                if speak_output and full_response:
-                    with self._lock:
-                        self._state = TurnState.SPEAKING
-                    self.streaming_tts.feed(current_gen, full_response)
 
             if stream_stdout:
                 sys.stdout.write("\n")

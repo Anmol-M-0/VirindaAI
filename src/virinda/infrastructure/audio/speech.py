@@ -138,11 +138,12 @@ class STTProvider(Protocol):
 
 
 class LocalWhisperSTT:
-    """Offline local STT using whisper.cpp (whisper-cli / main) on Linux."""
+    """Offline local STT using ultra-optimized whisper.cpp (pywhispercpp / whisper-cli)."""
 
     def __init__(self, model_path: Optional[Path] = None) -> None:
         self.model_path = model_path or self._find_model()
         self.binary_path = self._find_binary()
+        self._model: Optional[object] = None
 
     def _find_binary(self) -> Optional[str]:
         for bin_name in ("whisper-cli", "whisper-cpp", "whisper", "main"):
@@ -151,6 +152,7 @@ class LocalWhisperSTT:
                 return p
         # Check standard local compilation paths
         for candidate in (
+            Path.cwd() / "whisper-cli",
             Path.home() / ".local" / "bin" / "whisper-cli",
             Path.home() / "whisper.cpp" / "build" / "bin" / "whisper-cli",
             Path.home() / "whisper.cpp" / "main",
@@ -161,6 +163,8 @@ class LocalWhisperSTT:
 
     def _find_model(self) -> Optional[Path]:
         search_dirs = [
+            Path.cwd() / "models" / "whisper",
+            Path(__file__).parents[3] / "models" / "whisper",
             Path.home() / ".local" / "share" / "virinda" / "models" / "whisper",
             Path.home() / ".local" / "share" / "whisper.cpp" / "models",
             Path("/usr/share/whisper.cpp/models"),
@@ -170,9 +174,10 @@ class LocalWhisperSTT:
             if d.exists():
                 for m in (
                     "ggml-base.en.bin",
-                    "ggml-tiny.en.bin",
                     "ggml-small.en.bin",
+                    "ggml-tiny.en.bin",
                     "ggml-base.bin",
+                    "ggml-small.bin",
                 ):
                     p = d / m
                     if p.exists():
@@ -181,40 +186,62 @@ class LocalWhisperSTT:
 
     @property
     def is_available(self) -> bool:
-        return bool(self.binary_path and self.model_path and self.model_path.exists())
+        if self.model_path and self.model_path.exists():
+            try:
+                import pywhispercpp  # noqa: F401
+
+                return True
+            except ImportError:
+                return bool(self.binary_path)
+        return False
 
     def transcribe_file(self, wav_path: Path) -> str:
-        if not self.is_available or not self.binary_path or not self.model_path:
-            raise SpeechError("Local whisper.cpp binary or model not found on system.")
+        if not self.is_available or not self.model_path:
+            raise SpeechError("Local whisper.cpp model or binary not found on system.")
 
         p = Path(wav_path).expanduser().resolve()
-        if not p.exists():
-            raise FileNotFoundError(f"Audio file not found: {p}")
+        if not p.exists() or p.stat().st_size < 100:
+            return ""
 
-        cmd = [
-            self.binary_path,
-            "-m",
-            str(self.model_path),
-            "-f",
-            str(p),
-            "--no-timestamps",
-            "-l",
-            "en",
-        ]
-
+        # Tier 1: In-process C++ pywhispercpp inference
         try:
-            res = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=15.0,
-                check=True,
-            )
-            return res.stdout.strip()
-        except subprocess.TimeoutExpired as exc:
-            raise SpeechError("Local Whisper STT timed out during transcription.") from exc
-        except subprocess.CalledProcessError as exc:
-            raise SpeechError(f"Local Whisper STT failed: {exc.stderr.strip()}") from exc
+            from pywhispercpp.model import Model
+
+            if not self._model:
+                self._model = Model(str(self.model_path), n_threads=4)
+            segments = self._model.transcribe(str(p), language="en", print_progress=False)
+            texts = [seg.text for seg in segments if getattr(seg, "text", None)]
+            return " ".join(texts).strip()
+        except ImportError:
+            pass
+        except Exception as exc:
+            logger.warning("pywhispercpp in-process transcription error: %s; trying binary", exc)
+
+        # Tier 2: Subprocess whisper-cli / main binary
+        if self.binary_path:
+            cmd = [
+                self.binary_path,
+                "-m",
+                str(self.model_path),
+                "-f",
+                str(p),
+                "--no-timestamps",
+                "-l",
+                "en",
+            ]
+            try:
+                res = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    timeout=15.0,
+                    check=True,
+                )
+                return res.stdout.strip()
+            except Exception as exc:
+                raise SpeechError(f"whisper-cli execution failed: {exc}") from exc
+
+        return ""
 
 
 class LocalVoskSTT:

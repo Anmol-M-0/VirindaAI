@@ -132,6 +132,16 @@ def _parser() -> argparse.ArgumentParser:
         "--no-tts", action="store_true", help="disable spoken audio synthesis output"
     )
     voice.add_argument("--mock", action="store_true", help="use offline mock STT/audio for testing")
+    voice.add_argument("--tui", action="store_true", help="launch presentation TUI dashboard")
+    tui_cmd = sub.add_parser("tui", help="ambient desktop voice interaction dashboard")
+    tui_cmd.add_argument("--mock", action="store_true", help="run in simulated visual demo mode")
+    tui_cmd.add_argument(
+        "--mode",
+        "-m",
+        choices=["ptt", "wake", "continuous"],
+        default="ptt",
+        help="voice interaction mode (default: ptt)",
+    )
     ovos_cmd = sub.add_parser("ovos", help="OpenVoiceOS bridge and service control")
     ovos_cmd.add_argument(
         "action",
@@ -336,6 +346,11 @@ def main() -> None:
         from virinda.interfaces.voice_cli import main as voice_main
 
         voice_main(args)
+        return
+    if args.command == "tui":
+        from virinda.interfaces.tui import run_tui
+
+        run_tui(mock_demo=getattr(args, "mock", False), mode=getattr(args, "mode", "ptt").upper())
         return
     if args.command == "ovos":
         from virinda.application.runtime import build_service

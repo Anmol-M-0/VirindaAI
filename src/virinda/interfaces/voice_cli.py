@@ -127,6 +127,17 @@ def main(args: argparse.Namespace | None = None) -> None:
         stt=stt,
     )
 
+    if getattr(args, "tui", False):
+        from virinda.interfaces.tui import run_tui
+
+        run_tui(
+            mock_demo=use_mock,
+            model=getattr(stt, "engine_name", "whisper.cpp / local"),
+            backend=getattr(recorder, "backend_name", "PipeWire"),
+            mode=getattr(args, "mode", "ptt").upper(),
+        )
+        return
+
     if getattr(args, "mode", "ptt") == "continuous":
         run_continuous_loop(controller, no_tts=getattr(args, "no_tts", False))
     else:

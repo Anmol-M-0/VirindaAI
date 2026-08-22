@@ -5,6 +5,13 @@ usable without OVOS for tests, automation, and headless integrations.
 """
 
 from virinda.ovos.bridge import OVOSBridgeError, OVOSMessageBusBridge
+from virinda.ovos.hivemind import HiveMindBridge, SatelliteDevice
 from virinda.ovos.phal import PHALController
 
-__all__ = ["OVOSMessageBusBridge", "OVOSBridgeError", "PHALController"]
+__all__ = [
+    "OVOSMessageBusBridge",
+    "OVOSBridgeError",
+    "PHALController",
+    "HiveMindBridge",
+    "SatelliteDevice",
+]

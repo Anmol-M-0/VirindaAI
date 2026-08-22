@@ -320,7 +320,7 @@ class GroqWhisperSTT:
     def __init__(
         self, api_key: Optional[str] = None, model: str = "whisper-large-v3-turbo"
     ) -> None:
-        self.api_key = api_key or os.getenv("GROQ_API_KEY")
+        self.api_key = api_key if api_key is not None else os.getenv("GROQ_API_KEY")
         self.model = model
 
     @property

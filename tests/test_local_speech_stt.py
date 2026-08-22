@@ -45,8 +45,9 @@ def test_native_tts_backend_discovery():
         assert tts._backend in ("piper", "spd-say", "espeak-ng", "espeak", "mimic3")
 
 
-def test_groq_stt_requires_valid_key(tmp_path: Path):
-    groq = GroqWhisperSTT(api_key=None)
+def test_groq_stt_requires_valid_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    groq = GroqWhisperSTT(api_key="")
     assert groq.is_available is False
 
     dummy_wav = tmp_path / "empty.wav"

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import sys
 import threading
 from pathlib import Path
@@ -12,6 +13,8 @@ from virinda.infrastructure.audio.player import LinuxAudioPlayer
 from virinda.infrastructure.audio.recorder import LinuxAudioRecorder
 from virinda.infrastructure.audio.speech import GroqWhisperSTT, NativeTTS
 from virinda.infrastructure.audio.streaming_tts import StreamingTTSWorker
+
+logger = logging.getLogger(__name__)
 
 
 class VoiceController:
@@ -71,8 +74,20 @@ class VoiceController:
             with self._lock:
                 self._state = TurnState.TRANSCRIBING
 
-            # Transcribe audio
-            transcription = self.stt.transcribe_file(wav_path) if self.stt else ""
+            # Transcribe audio with graceful error isolation
+            transcription = ""
+            if self.stt:
+                try:
+                    transcription = self.stt.transcribe_file(wav_path) or ""
+                except Exception as exc:
+                    logger.error("STT transcription failed: %s", exc)
+                    if stream_stdout:
+                        sys.stdout.write(f"\n[STT ERROR ❌] {exc}\n")
+                        sys.stdout.flush()
+                    with self._lock:
+                        self._state = TurnState.CREATED
+                    return ""
+
             transcription = transcription.strip()
 
             if not transcription:

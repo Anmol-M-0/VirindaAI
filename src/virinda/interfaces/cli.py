@@ -109,9 +109,7 @@ def _parser() -> argparse.ArgumentParser:
     benchmark.add_argument(
         "--json", dest="benchmark_json", action="store_true", help="emit machine-readable JSON"
     )
-    acceptance = sub.add_parser(
-        "acceptance", help="run end-to-end acceptance scenarios (v0.28.0)"
-    )
+    acceptance = sub.add_parser("acceptance", help="run end-to-end acceptance scenarios (v0.28.0)")
     acceptance.add_argument("target", choices=["voice"], default="voice", nargs="?")
     acceptance.add_argument(
         "--scenario",
@@ -133,9 +131,7 @@ def _parser() -> argparse.ArgumentParser:
     voice.add_argument(
         "--no-tts", action="store_true", help="disable spoken audio synthesis output"
     )
-    voice.add_argument(
-        "--mock", action="store_true", help="use offline mock STT/audio for testing"
-    )
+    voice.add_argument("--mock", action="store_true", help="use offline mock STT/audio for testing")
     ovos_cmd = sub.add_parser("ovos", help="OpenVoiceOS bridge and service control")
     ovos_cmd.add_argument(
         "action",

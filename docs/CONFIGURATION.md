@@ -43,6 +43,7 @@ Virinda configuration is intentionally split between **environment variables**, 
 | `VIRINDA_NATS_ACK_WAIT_SECONDS` | `120` | JetStream acknowledgement window before redelivery | No |
 | `VIRINDA_NATS_MAX_DELIVER` | `5` | Maximum JetStream delivery attempts before terminal handling | No |
 | `VIRINDA_NATS_MAX_ACK_PENDING` | `32` | Maximum unacknowledged jobs allowed for the worker consumer | No |
+| `VIRINDA_STT_CLOUD_FALLBACK` | `0` | Enable opt-in cloud STT fallback when local STT is unavailable | No |
 
 ## Provider configuration
 

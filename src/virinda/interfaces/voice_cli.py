@@ -7,7 +7,7 @@ from virinda.config.settings import Settings
 from virinda.core.voice_controller import VoiceController
 from virinda.infrastructure.audio.player import LinuxAudioPlayer
 from virinda.infrastructure.audio.recorder import LinuxAudioRecorder
-from virinda.infrastructure.audio.speech import GroqWhisperSTT, NativeTTS
+from virinda.infrastructure.audio.speech import NativeTTS
 
 
 def run_ptt_loop(controller: VoiceController, *, no_tts: bool = False) -> None:
@@ -105,7 +105,11 @@ def main(args: argparse.Namespace | None = None) -> None:
     recorder = LinuxAudioRecorder()
     player = LinuxAudioPlayer()
     tts = NativeTTS()
-    stt = GroqWhisperSTT()
+
+    use_mock = getattr(args, "mock", False)
+    from virinda.infrastructure.audio.speech import SpeechToText
+
+    stt = SpeechToText(mock_mode=use_mock)
 
     controller = VoiceController(
         service=service,

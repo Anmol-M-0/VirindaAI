@@ -14,9 +14,7 @@ def format_vu_bar(rms_dbfs: float, width: int = 36) -> Text:
     Renders a colored VU meter bar across -60 dBFS to 0 dBFS.
     Green: [-60, -18 dBFS], Yellow: [-18, -6 dBFS], Red: [-6, 0 dBFS].
     """
-    # Clamp dBFS between -60 and 0
     clamped_db = max(-60.0, min(0.0, rms_dbfs))
-    # Normalized proportion from 0.0 to 1.0
     ratio = (clamped_db + 60.0) / 60.0
     fill_count = int(round(ratio * width))
 
@@ -27,13 +25,13 @@ def format_vu_bar(rms_dbfs: float, width: int = 36) -> Text:
     for i in range(width):
         if i < fill_count:
             if i < green_cap:
-                t.append("█", style="bold green")
+                t.append("█", style="#10B981")
             elif i < yellow_cap:
-                t.append("█", style="bold yellow")
+                t.append("█", style="#F59E0B")
             else:
-                t.append("█", style="bold red")
+                t.append("█", style="#EF4444")
         else:
-            t.append("░", style="dim white")
+            t.append("░", style="#1E293B")
 
     return t
 
@@ -50,16 +48,15 @@ def render_vu_meter(
     table.add_column("bar", justify="center", ratio=6)
     table.add_column("val", justify="right", ratio=2)
 
-    label_style = "bold yellow" if is_active else "dim"
-    label = Text("MIC LEVEL", style=label_style)
+    label_style = "bold #38BDF8" if is_active else "dim #64748B"
+    label = Text("SIGNAL", style=label_style)
 
     vu_bar = format_vu_bar(rms_dbfs if is_active else -60.0, width=bar_width)
 
     if is_active:
-        val_text = Text(f"{rms_dbfs:+5.1f} dBFS", style="bold cyan")
+        val_text = Text(f"{rms_dbfs:+5.1f} dBFS", style="bold #F1F5F9")
     else:
-        val_text = Text("  SILENCE", style="dim")
+        val_text = Text("  SILENT", style="dim #475569")
 
     table.add_row(label, vu_bar, val_text)
-    border_style = "yellow" if is_active else "dim blue"
-    return Panel(table, title="Audio Signal", border_style=border_style, padding=(0, 1))
+    return Panel(table, style="#334155", padding=(0, 1))

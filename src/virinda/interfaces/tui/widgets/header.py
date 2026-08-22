@@ -11,11 +11,11 @@ from rich.text import Text
 from virinda.interfaces.tui.events import TUIState
 
 STATE_BADGES = {
-    TUIState.IDLE: ("[bold white on #333333] IDLE ⚪ [/]", "Ready for voice input"),
-    TUIState.LISTENING: ("[bold white on #d70000] LISTENING 🔴 [/]", "Recording microphone..."),
-    TUIState.THINKING: ("[bold black on #ffaf00] THINKING 🧠 [/]", "Processing response..."),
-    TUIState.SPEAKING: ("[bold white on #0087d7] SPEAKING 🔊 [/]", "Streaming voice audio..."),
-    TUIState.ERROR: ("[bold white on #af0000] ERROR ⚠️ [/]", "System diagnostic issue"),
+    TUIState.IDLE: ("[bold #94A3B8 on #1E293B]  ● STANDBY  [/]", "Awaiting voice trigger"),
+    TUIState.LISTENING: ("[bold #FFFFFF on #DC2626]  ● LISTENING  [/]", "Capturing microphone..."),
+    TUIState.THINKING: ("[bold #FFFFFF on #4F46E5]  ● PROCESSING  [/]", "Inferencing response..."),
+    TUIState.SPEAKING: ("[bold #FFFFFF on #059669]  ● OUTPUT  [/]", "Streaming audio playback..."),
+    TUIState.ERROR: ("[bold #FFFFFF on #B91C1C]  ● FAULT  [/]", "Diagnostic issue detected"),
 }
 
 
@@ -33,11 +33,13 @@ def render_header(
 
     badge_markup, status_text = STATE_BADGES.get(state, STATE_BADGES[TUIState.IDLE])
 
-    left_text = Text.from_markup(f"[bold cyan]✦ VirindaAI Voice Desktop[/] [dim]({mode})[/]")
-    center_text = Text.from_markup(f"{badge_markup} [dim italic]{status_text}[/]")
+    left_text = Text.from_markup(
+        f"[bold #38BDF8]VIRINDA[/] [dim #64748B]//[/] [bold #F8FAFC]AMBIENT RUNTIME[/] [dim #64748B]({mode})[/]"
+    )
+    center_text = Text.from_markup(f"{badge_markup} [dim italic #94A3B8]{status_text}[/]")
     right_text = Text.from_markup(
-        f"[dim]Engine:[/] [bold green]{model}[/] [dim]•[/] [dim]Audio:[/] [bold blue]{backend}[/]"
+        f"[dim #64748B]MODEL:[/] [bold #34D399]{model}[/] [dim #64748B]│[/] [dim #64748B]AUDIO:[/] [bold #60A5FA]{backend}[/]"
     )
 
     table.add_row(left_text, center_text, right_text)
-    return Panel(table, style="bold bright_blue", padding=(0, 1))
+    return Panel(table, style="#334155", padding=(0, 1))

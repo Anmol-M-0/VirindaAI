@@ -52,14 +52,17 @@ class ConversationBuffer:
 
 
 def render_conversation(buffer: ConversationBuffer, height: int = 14) -> Panel:
-    """Renders the retained conversation dialogue window."""
+    """Renders the retained conversation dialogue window with clean minimalist borders."""
     if not buffer.messages:
         empty_text = Text(
-            "\n  No speech dialogue yet.\n  Press [ENTER] to start speaking or type commands below.",
-            style="dim italic",
+            "\n  No speech dialogue registered.\n  Press [ENTER] to start recording or speak ambient wake phrase.",
+            style="dim italic #64748B",
         )
         return Panel(
-            empty_text, title="Conversation Transcript", border_style="cyan", padding=(0, 1)
+            empty_text,
+            title="[bold #38BDF8]DIALOGUE TRANSCRIPT[/]",
+            border_style="#334155",
+            padding=(0, 1),
         )
 
     table = Table.grid(expand=True, padding=(0, 0, 1, 0))
@@ -69,12 +72,19 @@ def render_conversation(buffer: ConversationBuffer, height: int = 14) -> Panel:
     for msg in buffer.messages[-6:]:
         block = Text()
         if msg.speaker == "User":
-            block.append("👤 You:\n", style="bold green")
-            block.append(f"  {msg.text.strip()}\n", style="bright_white")
+            block.append("  ▸ USER ", style="bold #38BDF8")
+            block.append("│ ", style="dim #475569")
+            block.append(f"{msg.text.strip()}\n", style="#F1F5F9")
         else:
-            block.append("🤖 VirindaAI:\n", style="bold cyan")
+            block.append("  ▸ VIRINDA ", style="bold #818CF8")
+            block.append("│ ", style="dim #475569")
             stream_tag = " ▌" if msg.is_streaming else ""
-            block.append(f"  {msg.text.strip()}{stream_tag}\n", style="white")
+            block.append(f"{msg.text.strip()}{stream_tag}\n", style="#E2E8F0")
         table.add_row(block)
 
-    return Panel(table, title="Conversation Transcript", border_style="cyan", padding=(0, 1))
+    return Panel(
+        table,
+        title="[bold #38BDF8]DIALOGUE TRANSCRIPT[/]",
+        border_style="#334155",
+        padding=(0, 1),
+    )

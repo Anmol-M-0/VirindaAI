@@ -150,6 +150,42 @@ def test_widgets_rendering():
     console.print(footer_panel)
 
 
+def test_zero_presentation_emojis_in_widgets():
+    import re
+
+    console = Console(record=True, width=120)
+
+    # Test all header states
+    for state in TUIState:
+        panel = render_header(state=state)
+        console.print(panel)
+
+    # Test conversation rendering
+    convo = ConversationBuffer()
+    convo.add_user_message("Testing query")
+    convo.start_assistant_message()
+    convo.append_assistant_token("Testing reply")
+    convo.finish_assistant_message()
+    console.print(render_conversation(convo))
+
+    # Test footer
+    console.print(render_footer(TUIState.IDLE))
+    console.print(render_footer(TUIState.LISTENING))
+
+    rendered_text = console.export_text()
+    # Check for forbidden tacky emojis
+    forbidden = re.findall(
+        r"[\U0001F300-\U0001FAFF\U00002700-\U000027BF\U00002600-\U000026FF]", rendered_text
+    )
+    # Exclude standard geometric Unicode glyphs (like █, ░, ✦, ●, ▌, │, ▸)
+    filtered_forbidden = [
+        ch for ch in forbidden if ch not in ("✦", "●", "▌", "│", "▸", "█", "░", "■", "○")
+    ]
+    assert len(filtered_forbidden) == 0, (
+        f"Found forbidden emojis in rendered output: {filtered_forbidden}"
+    )
+
+
 def test_tui_app_layout_composition():
     bridge = TUIEventBridge()
     app = VirindaTUIApp(bridge=bridge, model="whisper.cpp", backend="PipeWire", mode="PTT")

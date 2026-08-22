@@ -20,17 +20,17 @@ def render_footer(state: TUIState = TUIState.IDLE) -> Panel:
     table.add_column("c4", justify="right")
 
     if state == TUIState.LISTENING:
-        k1 = Text.from_markup("[bold black on red] [ENTER] Finish Speaking [/]")
+        k1 = Text.from_markup("[bold #FFFFFF on #DC2626] [ENTER] Stop Recording [/]")
     else:
-        k1 = Text.from_markup("[bold black on green] [ENTER] Talk [/]")
+        k1 = Text.from_markup("[bold #FFFFFF on #2563EB] [ENTER] Push-To-Talk [/]")
 
     if state in (TUIState.SPEAKING, TUIState.THINKING):
-        k2 = Text.from_markup("[bold black on yellow] [B] Barge-In / Stop [/]")
+        k2 = Text.from_markup("[bold #FFFFFF on #D97706] [ESC / B] Barge-In [/]")
     else:
-        k2 = Text.from_markup("[dim] [B] Barge-In [/]")
+        k2 = Text.from_markup("[dim #64748B] [ESC / B] Barge-In [/]")
 
-    k3 = Text.from_markup("[dim] [C] Clear History [/]")
-    k4 = Text.from_markup("[bold black on bright_white] [Q] Quit [/]")
+    k3 = Text.from_markup("[dim #94A3B8] [C] Clear [/]")
+    k4 = Text.from_markup("[bold #CBD5E1 on #1E293B] [Q] Quit [/]")
 
     table.add_row(k1, k2, k3, k4)
-    return Panel(table, style="dim bright_blue", padding=(0, 1))
+    return Panel(table, style="#334155", padding=(0, 1))
